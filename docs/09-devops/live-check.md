@@ -1,0 +1,116 @@
+# Live site check — https://mystorebyme.github.io/pussya-product/
+
+Ran: 2026-10-27T05:49:32.166Z
+
+## Page
+
+| result | check |
+| --- | --- |
+| ✅ | home page 200 — HTTP 200 · 422411 bytes · 195ms |
+| ✅ | brand name page par hai |
+| ✅ | header render hua hai |
+| ✅ | header me brand-lockup hai |
+| ✅ | hero banner section hai |
+| ❌ | header logo <picture> mila |
+| ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=3 · /pussya-product/images/brand/logo-tablet.png?v=3 · /pussya-product/images/brand/logo-mobile.png?v=3 |
+| ✅ | logo img par alt text hai |
+
+## Assets
+
+| result | asset | HTTP | type | size |
+| --- | --- | --- | --- | --- |
+| ✅ | header logo (desktop) (`images/brand/logo-desktop.png`) | 200 | image/png | 123 KB |
+| ✅ | header logo (tablet) (`images/brand/logo-tablet.png`) | 200 | image/png | 93 KB |
+| ✅ | header logo (mobile) (`images/brand/logo-mobile.png`) | 200 | image/png | 67 KB |
+| ✅ | footer logo (`images/brand/logo-fluid.png`) | 200 | image/png | 219 KB |
+| ✅ | favicon 128 (`images/brand/logo-mark-128.png`) | 200 | image/png | 19 KB |
+| ✅ | apple touch 180 (`images/brand/logo-mark-180.png`) | 200 | image/png | 35 KB |
+| ✅ | PWA 192 (`images/brand/logo-mark-192.png`) | 200 | image/png | 39 KB |
+| ✅ | PWA 512 (`images/brand/logo-mark-512.png`) | 200 | image/png | 227 KB |
+| ✅ | manifest (`manifest.webmanifest`) | 200 | text | 568 B |
+| ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 284 KB |
+| ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 272 KB |
+| ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 283 KB |
+
+## CSS (logo visibility)
+
+| result | rule |
+| --- | --- |
+| ❌ | stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css |
+| ❌ | `.brand-lockup img` heights (44 → 52 → 58) |
+| ❌ | `.brand-lockup img` object-fit: contain |
+| ✅ | logo par koi display:none / visibility:hidden nahi |
+| ❌ | hero `object-fit: contain` (crop nahi) |
+
+## Copy
+
+| result | check |
+| --- | --- |
+| ✅ | purana brand (Liksha) nahi |
+| ✅ | 'free shipping' claim nahi |
+| ✅ | Diwali offer copy hai |
+
+## SEO / meta
+
+| result | check |
+| --- | --- |
+| ✅ | title — Noor Ethnic Wear | Designer Anarkali Suits, Lehenga Choli &amp; Suit S |
+| ✅ | meta description — Shop designer Anarkali suits, lehanga choli and printed suit |
+| ✅ | canonical — https://mystorebyme.github.io/pussya-product/ |
+| ✅ | lang attribute |
+| ✅ | favicon links |
+
+## Internal links (sample)
+
+| result | link | HTTP |
+| --- | --- | --- |
+| ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
+| ✅ | `/pussya-product/_next/static/chunks/0dptp36scokt4.css` | 200 |
+| ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
+| ✅ | `/pussya-product/manifest.webmanifest` | 200 |
+| ✅ | `/pussya-product/images/brand/logo-mark-512.png` | 200 |
+| ✅ | `/pussya-product/images/brand/logo-mark-128.png` | 200 |
+| ✅ | `/pussya-product/images/brand/logo-mark-192.png` | 200 |
+| ✅ | `/pussya-product/images/brand/logo-mark-180.png` | 200 |
+| ✅ | `/pussya-product/` | 200 |
+| ✅ | `/pussya-product/account/` | 200 |
+| ✅ | `/pussya-product/wishlist/` | 200 |
+| ✅ | `/pussya-product/collections/` | 200 |
+| ✅ | `/pussya-product/collections/party-wear-gown/` | 200 |
+| ✅ | `/pussya-product/collections/lehnga-choli/` | 200 |
+| ✅ | `/pussya-product/collections/printed-suit-set/` | 200 |
+| ✅ | `/pussya-product/collections/best-seller/` | 200 |
+| ✅ | `/pussya-product/collections/new-arrivals/` | 200 |
+| ✅ | `/pussya-product/collections/sale/` | 200 |
+| ✅ | `/pussya-product/pages/contact/` | 200 |
+| ✅ | `/pussya-product/collections/noors-choice/` | 200 |
+| ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
+| ✅ | `/pussya-product/products/black-masleen-silk-long-gown-ac-7003/` | 200 |
+| ✅ | `/pussya-product/products/lakhnavi-work-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/kishika-yellow-color-anarkali-suit-set-sleeves-fabric-attached/` | 200 |
+| ✅ | `/pussya-product/products/niyara-maroon-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-lakhnavi-embroidered-work-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-lakhnavi-embroidered-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/alveera-premium-quality-mustard-yellow-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/red-coloured-designer-anarkali-suit/` | 200 |
+| ✅ | `/pussya-product/products/maroon-coloured-designer-anarkali-suit/` | 200 |
+| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
+| ✅ | `/pussya-product/collections/trending/` | 200 |
+| ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
+| ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
+| ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
+| ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
+
+## Summary
+
+❌ 5 problem mili:
+
+- header logo <picture> mila
+- stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css
+- `.brand-lockup img` heights (44 → 52 → 58)
+- `.brand-lockup img` object-fit: contain
+- hero `object-fit: contain` (crop nahi)
