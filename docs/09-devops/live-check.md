@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T06:37:46.831Z
+Ran: 2026-10-27T18:04:49.880Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 414192 bytes · 215ms |
+| ✅ | home page 200 — HTTP 200 · 414192 bytes · 250ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -65,6 +65,8 @@ Ran: 2026-10-27T06:37:46.831Z
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
+| ❌ | category icon animation CSS live hai |
+| ❌ | smooth page transition CSS live hai |
 | ✅ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
 ## Copy
@@ -88,6 +90,10 @@ Ran: 2026-10-27T06:37:46.831Z
 | ✅ | `/favicon.ico` asli ICO file hai (00 00 01 00 magic) — 2054 bytes · 2 icons |
 | ✅ | favicon page par declare hai |
 | ✅ | brand mark PNGs (128/180/192/512) square + maujood — 128×128 · 180×180 · 192×192 · 512×512 |
+| ✅ | header menu (bars) icon |
+| ❌ | header Size guide (panel button) |
+| ❌ | header Our story link |
+| ❌ | category icons page par hain (unique) |
 
 ## Key pages
 
@@ -101,6 +107,8 @@ Ran: 2026-10-27T06:37:46.831Z
 | ✅ | shipping policy (`policies/shipping-policy/`) | 200 |
 | ✅ | returns policy (`policies/refund-and-return-policy/`) | 200 |
 | ✅ | search (`search/`) | 200 |
+| ✅ | size guide (`pages/size-guide/`) | 200 |
+| ✅ | our story (`pages/about-us/`) | 200 |
 
 ## Internal links (sample)
 
@@ -149,4 +157,10 @@ Ran: 2026-10-27T06:37:46.831Z
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 5 problem mili:
+
+- category icon animation CSS live hai
+- smooth page transition CSS live hai
+- header Size guide (panel button)
+- header Our story link
+- category icons page par hain (unique)
