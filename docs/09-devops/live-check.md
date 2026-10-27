@@ -148,3 +148,5 @@ Ran: 2026-10-27T06:20:55.201Z
 ## Summary
 
 ✔ Saare live checks pass.
+
+<!-- re-run after fluid-logo deploy -->
