@@ -289,6 +289,15 @@ export function UpiPayment({
           <span className="text-[11px] text-[#8a8078]">Order {orderNumber}</span>
         </div>
 
+        {/* Owner rule: direct UPI (sheet) na ho to bhi gateway se payment ho sake */}
+        <YoupiPayButton
+          orderNumber={orderNumber}
+          amount={amount}
+          onConfirmed={() => {
+            onConfirmed?.();
+            router.refresh();
+          }}
+        />
         <div className="px-4 py-4 sm:px-5" data-testid="upi-unavailable" aria-busy={!slowToLoad}>
           {slowToLoad ? (
             <>

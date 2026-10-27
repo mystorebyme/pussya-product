@@ -265,8 +265,14 @@ test("R48-5b: gateway client — youpi.js embed, sheet-driven config, server-sid
   // config na ho to kuch render na ho (purana UPI flow chalta rahe)
   assert.match(client, /if \(!configured\) return null;/);
 
-  // payment step me laga hua hai
-  assert.match(read("apps/web/src/components/upi-payment.tsx"), /<YoupiPayButton/);
+  // payment step me laga hua hai — aur UPI ID na hone par bhi gateway available rahe
+  const upi = read("apps/web/src/components/upi-payment.tsx");
+  assert.ok(
+    (upi.match(/<YoupiPayButton/g) ?? []).length >= 2,
+    "gateway button normal card aur empty-UPI (pause) card dono me ho",
+  );
+  const pauseCard = upi.slice(upi.indexOf('data-testid="upi-unavailable"') - 700, upi.indexOf('data-testid="upi-unavailable"'));
+  assert.match(pauseCard, /<YoupiPayButton/, "UPI ID na ho to bhi gateway se payment ho sake");
 
   const server = read("apps/web/src/lib/youpi.ts");
   for (const required of [
