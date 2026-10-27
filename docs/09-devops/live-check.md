@@ -152,3 +152,5 @@ Ran: 2026-10-27T06:36:05.488Z
 ❌ 1 problem mili:
 
 - hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)
+
+<!-- re-run after R46 deploy -->
