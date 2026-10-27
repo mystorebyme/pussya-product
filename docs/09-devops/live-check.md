@@ -1,19 +1,28 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T05:49:32.166Z
+Ran: 2026-10-27T05:50:22.842Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 422411 bytes · 195ms |
+| ✅ | home page 200 — HTTP 200 · 422411 bytes · 315ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
 | ✅ | hero banner section hai |
-| ❌ | header logo <picture> mila |
+| ✅ | header logo <picture> mila |
 | ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=3 · /pussya-product/images/brand/logo-tablet.png?v=3 · /pussya-product/images/brand/logo-mobile.png?v=3 |
 | ✅ | logo img par alt text hai |
+| ✅ | logo img par `hidden` / `opacity-0` jaisi class nahi |
+
+<details><summary>header markup (proof)</summary>
+
+```html
+<a aria-label="Noor Ethnic Wear home" class="col-start-2 row-start-1 flex min-w-0 shrink-0 items-center justify-center lg:col-start-2 lg:justify-center" href="/pussya-product/"><span data-size="header" data-variant="header" class="brand-lockup inline-flex items-center  "><picture data-tone="dark"><source media="(min-width:1024px)" srcSet="/pussya-product/images/brand/logo-desktop.png?v=3"/><source media="(min-width:768px)" srcSet="/pussya-product/images/brand/logo-tablet.png?v=3"/><img src="/pussya-product/images/brand/logo-mobile.png?v=3" alt="Noor Ethnic Wear" width="310" height="138" decoding="async" fetchPriority="high" class="block w-auto max-w-full object-contain"/></picture></span></a>
+```
+
+</details>
 
 ## Assets
 
@@ -36,11 +45,11 @@ Ran: 2026-10-27T05:49:32.166Z
 
 | result | rule |
 | --- | --- |
-| ❌ | stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css |
-| ❌ | `.brand-lockup img` heights (44 → 52 → 58) |
-| ❌ | `.brand-lockup img` object-fit: contain |
+| ✅ | stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css |
+| ✅ | `.brand-lockup img` heights (44 → 52 → 58) |
+| ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
-| ❌ | hero `object-fit: contain` (crop nahi) |
+| ✅ | hero `object-fit: contain` (crop nahi) |
 
 ## Copy
 
@@ -59,6 +68,19 @@ Ran: 2026-10-27T05:49:32.166Z
 | ✅ | canonical — https://mystorebyme.github.io/pussya-product/ |
 | ✅ | lang attribute |
 | ✅ | favicon links |
+
+## Key pages
+
+| result | page | HTTP |
+| --- | --- | --- |
+| ✅ | collections index (`collections/`) | 200 |
+| ✅ | cart (`cart/`) | 200 |
+| ✅ | checkout (`checkout/`) | 200 |
+| ✅ | track order (`track-order/`) | 200 |
+| ✅ | contact (`pages/contact/`) | 200 |
+| ✅ | shipping policy (`policies/shipping-policy/`) | 200 |
+| ✅ | returns policy (`policies/refund-and-return-policy/`) | 200 |
+| ✅ | search (`search/`) | 200 |
 
 ## Internal links (sample)
 
@@ -107,10 +129,4 @@ Ran: 2026-10-27T05:49:32.166Z
 
 ## Summary
 
-❌ 5 problem mili:
-
-- header logo <picture> mila
-- stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css
-- `.brand-lockup img` heights (44 → 52 → 58)
-- `.brand-lockup img` object-fit: contain
-- hero `object-fit: contain` (crop nahi)
+✔ Saare live checks pass.
