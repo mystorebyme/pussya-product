@@ -21,6 +21,9 @@ jaise `https://pay.yourdomain.com`.
 
 ---
 
+> Owner ke liye simple bhasha me poora flow (customer ko kya dikhega, failure
+> cases, pehla test): **[`payment-flow-owner-guide.md`](./payment-flow-owner-guide.md)**
+
 ## 1. Kaise kaam karta hai (hamari site par)
 
 ```
