@@ -23,8 +23,8 @@
 
 | Kaam | Kiske paas | Note |
 | --- | --- | --- |
-| Sheet ki `Settings` tab me apni values bharna (`upi_id`, `whatsapp`, `support_phone`, `announcement`) | owner | bharne ke baad site 3 second me utha leti hai |
-| Apps Script deploy (`/exec` URL) | owner ka Google account | steps: `docs/09-devops/google-sheets.md` |
+| Sheet ki `Settings` tab me asli values (abhi **demo** bhari hain) | owner | demo: `upi_id = noor.ethnicwear@upi`, phone `9876543210` — asli daalna zaroori |
+| Apps Script deploy (`/exec` URL) | owner ka Google account | 3-kaam checklist: `docs/09-devops/owner-setup-checklist.md` |
 | `GOOGLE_SHEETS_WEBAPP_URL`, `GOOGLE_SHEETS_TOKEN`, `ADMIN_PASSWORD`, `DATABASE_URL` env set | hosting dashboard | `.env.example` me poora list |
 | Asli products (photos, price, stock) catalogue me daalna | owner ka data | abhi 287 **sample** products hain (design/flow test ke liye) |
 | Domain lagana | owner | domain final hone par sirf `NEXT_PUBLIC_SITE_URL` badalna hai |
