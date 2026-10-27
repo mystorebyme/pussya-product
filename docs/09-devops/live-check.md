@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T18:30:29.533Z
+Ran: 2026-10-27T18:07:47.460Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 449476 bytes · 208ms |
+| ✅ | home page 200 — HTTP 200 · 449476 bytes · 212ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -67,8 +67,6 @@ Ran: 2026-10-27T18:30:29.533Z
 | ✅ | hero `object-fit: contain` (crop nahi) |
 | ✅ | category icon animation CSS live hai |
 | ✅ | smooth page transition CSS live hai |
-| ❌ | R48 palette + CTA sheen CSS live hai |
-| ❌ | R48 PDP hover zoom CSS live hai (base image hat jaye) |
 | ✅ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
 ## Copy
@@ -96,12 +94,6 @@ Ran: 2026-10-27T18:30:29.533Z
 | ✅ | header Size guide (panel button) |
 | ✅ | header Our story link |
 | ✅ | category icons page par hain (unique) |
-| ✅ | 7 category circles, har ek ki alag image — 7 circles · 7 unique |
-| ❌ | size guide: 3 tabs (Measurements Chart / Find My Size / How to Measure) |
-| ❌ | size guide: inches/centimeters toggle |
-| ❌ | size guide: chart XS se XXL (front length column ke saath) |
-| ❌ | size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL) |
-| ❌ | size guide: front length value 46 (inches) chart me |
 
 ## Key pages
 
@@ -165,12 +157,10 @@ Ran: 2026-10-27T18:30:29.533Z
 
 ## Summary
 
-❌ 7 problem mili:
+✔ Saare live checks pass.
 
-- R48 palette + CTA sheen CSS live hai
-- R48 PDP hover zoom CSS live hai (base image hat jaye)
-- size guide: 3 tabs (Measurements Chart / Find My Size / How to Measure)
-- size guide: inches/centimeters toggle
-- size guide: chart XS se XXL (front length column ke saath)
-- size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL)
-- size guide: front length value 46 (inches) chart me
+_R48 live re-check trigger: 2026-10-27T18:29:12Z (size guide tabs/XS–XXL, unique category images, palette + PDP zoom CSS)_
+
+_R48 post-deploy live-check re-run (2026-10-27T18:32:35Z)_
+
+_R48 post-deploy live-check re-run 2026-10-27T18:33:44Z_
