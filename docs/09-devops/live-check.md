@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T06:23:11.193Z
+Ran: 2026-10-27T06:36:05.488Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 421637 bytes · 168ms |
+| ✅ | home page 200 — HTTP 200 · 421637 bytes · 291ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -40,6 +40,7 @@ Ran: 2026-10-27T06:23:11.193Z
 | ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 279 KB |
 | ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 279 KB |
 | ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 283 KB |
+| ✅ | hero fluid (`images/banners/banner-fluid.webp`) | 200 | image/webp | 279 KB |
 | ✅ | favicon.ico (`favicon.ico`) | 200 | image/vnd.microsoft.icon | 2 KB |
 
 ## Logo per viewport (browser ka `<source>` selection)
@@ -64,6 +65,7 @@ Ran: 2026-10-27T06:23:11.193Z
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
+| ❌ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
 ## Copy
 
@@ -147,4 +149,6 @@ Ran: 2026-10-27T06:23:11.193Z
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 1 problem mili:
+
+- hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)
