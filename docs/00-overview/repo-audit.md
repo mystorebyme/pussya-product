@@ -25,7 +25,7 @@
 | sourceLines | 28027 |
 | testFiles | 52 |
 | skills | 20 |
-| docsPages | 129 |
+| docsPages | 130 |
 
 ## Skills (20/20 pass)
 

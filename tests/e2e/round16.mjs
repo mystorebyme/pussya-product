@@ -86,7 +86,16 @@ async function main() {
     "unknown order explains 'Order nahi mila'",
     /Order nahi mila/i.test(missingOrder.text) && /Try another number/i.test(missingOrder.text),
   );
-  check("not-found order offers WhatsApp support", /wa\.me\/91\d{10}/.test(missingOrder.text));
+  /**
+   * R42/R44: WhatsApp number sirf sheet se aata hai (koi hardcoded number nahi).
+   * Sheet configured na ho to page par WhatsApp row nahi hoti — dead `wa.me/91`
+   * link bhi kabhi nahi banna chahiye.
+   */
+  check(
+    "not-found order offers WhatsApp support (ya number na ho to koi dead link nahi)",
+    !/wa\.me\/91"/.test(missingOrder.text) &&
+      (!missingOrder.text.includes("wa.me") || /wa\.me\/91\d{10}/.test(missingOrder.text)),
+  );
 
   /* ── 3. reviews: no fake sample data ────────────────────────────────── */
   const catalog = JSON.parse((await get("/api/products?limit=48&sort=price-low")).text);
@@ -154,7 +163,8 @@ async function main() {
   check("server refuses COD (prepaid only)", cod.status === 400, `status ${cod.status}`);
 
   /* ── 6. truthful sale + brand copy ──────────────────────────────────── */
-  check("home says 'Up to 70% Off'", /Up to\s*(<[^>]+>)?70%/.test(home.text));
+  // R41 (owner ke Diwali posters): offer ab 75% hai
+  check("home says 'Up to 75% Off'", /Up to\s*(<[^>]+>)?75%/.test(home.text));
   check("no 'Flat 70% OFF' claim in storefront copy", !/Flat 70%\s*Off/i.test(home.text));
   check("footer spelling fixed", /CUSTOMER SUPPORT/.test(home.text) && !/CUSTMORE/.test(home.text));
   check("best sellers section is on the home page", home.text.includes('data-testid="best-sellers"'));

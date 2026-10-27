@@ -145,6 +145,33 @@ for (const [label, file] of ASSETS) {
   if (!ok) failures.push(`${label} → HTTP ${result.status} (${file})`);
 }
 
+/* ── per-viewport: kaunsi logo file + kya resolution kaafi hai ───────────── */
+say("");
+say("## Logo per viewport (browser ka `<source>` selection)");
+say("");
+say("| result | viewport | file | display height | file width | required |");
+say("| --- | --- | --- | --- | --- | --- |");
+
+const sources = [...(picture.matchAll(/<source media="\(min-width:(\d+)px\)"\s+srcSet="([^"]+)"/g) ?? [])]
+  .map(([, minWidth, href]) => ({ min: Number(minWidth), href }))
+  .sort((a, b) => b.min - a.min); // browser: pehla matching (sabse bada min-width) jeetta hai
+const fallbackImg = picture.match(/<img[^>]*src="([^"]+)"/)?.[1] ?? "";
+const logoHeights = { 0: 44, 768: 52, 1024: 58 }; // globals.css ke mutabik
+
+for (const width of [320, 375, 390, 430, 768, 1024, 1366, 1440]) {
+  const chosen = sources.find((source) => width >= source.min)?.href ?? fallbackImg;
+  const heightForWidth = width >= 1024 ? logoHeights[1024] : width >= 768 ? logoHeights[768] : logoHeights[0];
+  const file = chosen.split("?")[0];
+  const url = new URL(file, BASE).toString();
+  const meta = await asset(url);
+  const required = heightForWidth * 2; // 2× DPR
+  const ok = meta.ok && (meta.width ?? 0) >= required;
+  say(
+    `| ${ok ? "✅" : "❌"} | ${width}px | \`${file.split("/").pop()}\` | ${heightForWidth}px | ${meta.width ?? "?"}px | ≥ ${required}px |`,
+  );
+  if (!ok) failures.push(`logo @${width}px → ${file} (HTTP ${meta.status}, width ${meta.width ?? 0})`);
+}
+
 /* ── CSS: asli rules (logo visible hone ke liye) ──────────────────────────── */
 const cssHref = html.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
 /**
