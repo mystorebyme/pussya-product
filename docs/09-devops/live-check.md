@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T06:36:05.488Z
+Ran: 2026-10-27T06:37:46.831Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 421637 bytes · 291ms |
+| ✅ | home page 200 — HTTP 200 · 414192 bytes · 215ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -39,7 +39,7 @@ Ran: 2026-10-27T06:36:05.488Z
 | ✅ | manifest (`manifest.webmanifest`) | 200 | text | 572 B |
 | ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 279 KB |
 | ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 279 KB |
-| ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 283 KB |
+| ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 149 KB |
 | ✅ | hero fluid (`images/banners/banner-fluid.webp`) | 200 | image/webp | 279 KB |
 | ✅ | favicon.ico (`favicon.ico`) | 200 | image/vnd.microsoft.icon | 2 KB |
 
@@ -60,12 +60,12 @@ Ran: 2026-10-27T06:36:05.488Z
 
 | result | rule |
 | --- | --- |
-| ✅ | stylesheet load hui — /_next/static/chunks/0-p3dfmipj.qv.css |
+| ✅ | stylesheet load hui — /_next/static/chunks/11b1hcfmepb19.css |
 | ✅ | `.brand-lockup img` heights (46 → 54 → 60) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
-| ❌ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
+| ✅ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
 ## Copy
 
@@ -107,7 +107,7 @@ Ran: 2026-10-27T06:36:05.488Z
 | result | link | HTTP |
 | --- | --- | --- |
 | ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/0-p3dfmipj.qv.css` | 200 |
+| ✅ | `/pussya-product/_next/static/chunks/11b1hcfmepb19.css` | 200 |
 | ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
 | ✅ | `/pussya-product/manifest.webmanifest` | 200 |
 | ✅ | `/pussya-product/favicon.ico` | 200 |
@@ -128,14 +128,15 @@ Ran: 2026-10-27T06:36:05.488Z
 | ✅ | `/pussya-product/pages/contact/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/rani-color-premium-quality-suit-set-dt-273-copy/` | 200 |
-| ✅ | `/pussya-product/products/manvis-white-coloured-anarkali-suit-set-11-7287410360452/` | 200 |
-| ✅ | `/pussya-product/products/mustard-foil-work-gown-set-royal-anarkali/` | 200 |
-| ✅ | `/pussya-product/products/bottle-green-designer-anarkali-suit-with-pant-and-dupatta/` | 200 |
-| ✅ | `/pussya-product/products/tiana-premium-black-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/siyas-royal-purple-elegant-golden-border-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/daminis-black-coloured-anarkali-suit-set-td03/` | 200 |
-| ✅ | `/pussya-product/products/kiyara-mahendi-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/devine-maslin-anarkali-style-plazzo-suit-set-copy-1/` | 200 |
+| ✅ | `/pussya-product/products/ravisha-floral-anarkali-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/nusrat-noor-black-color-embroidered-work-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/saakshi-s-cosmo-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/siyara-pink-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/black-cosmo-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/black-cosmo-slit-anarkali-premium-suit-set-10521452478596/` | 200 |
+| ✅ | `/pussya-product/products/copy-of-creme-coloured-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-25/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -145,12 +146,7 @@ Ran: 2026-10-27T06:36:05.488Z
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
-| ✅ | `/pussya-product/products/trending-anarkali-suit-set-3-pis/` | 200 |
 
 ## Summary
 
-❌ 1 problem mili:
-
-- hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)
-
-<!-- re-run after R46 deploy -->
+✔ Saare live checks pass.
