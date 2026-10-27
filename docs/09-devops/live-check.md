@@ -166,3 +166,5 @@ Ran: 2026-10-27T18:45:49.798Z
 ## Summary
 
 ✔ Saare live checks pass.
+
+_R48 final live-check re-run 2026-10-27T18:48:20Z (YouPI server-session flow)_
