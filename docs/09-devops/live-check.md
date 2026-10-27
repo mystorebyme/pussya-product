@@ -164,3 +164,5 @@ Ran: 2026-10-27T18:04:49.880Z
 - header Size guide (panel button)
 - header Our story link
 - category icons page par hain (unique)
+
+<!-- re-run after R47 deploy -->
