@@ -4,6 +4,7 @@ import { getCollections, getProductsByCollection } from "@/lib/store";
 import { SafeImage } from "@/components/safe-image";
 import { imageUrl } from "@/lib/format";
 import { siteConfig } from "@/config/site";
+import { CategoryIcon, iconForCollection } from "@/components/category-icon";
 
 /**
  * `/collections` — "Shop" ka landing page.
@@ -53,7 +54,7 @@ export default async function CollectionsIndexPage() {
           <Link
             key={collection.handle}
             href={collection.href}
-            className="group border border-[#eee6de] bg-white transition hover:border-[#862222]"
+            className="smooth-lift group border border-[#eee6de] bg-white transition hover:border-[#862222]"
             data-testid="collection-card"
           >
             <div className="relative aspect-[3/4] overflow-hidden bg-[#f7f1e9]">
@@ -62,6 +63,16 @@ export default async function CollectionsIndexPage() {
                 alt={collection.title}
                 className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
               />
+              {/* R47: har category ka apna animated gold icon */}
+              <span
+                className="cat-badge absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/92 text-[#a67c2e] shadow-[0_2px_10px_rgba(90,50,20,.16)] ring-1 ring-[#eadfce] transition duration-500 group-hover:-translate-y-0.5 group-hover:text-[#862222]"
+                aria-hidden
+              >
+                <CategoryIcon
+                  name={iconForCollection(collection.handle, collection.title)}
+                  className="h-5 w-5"
+                />
+              </span>
             </div>
             <div className="px-3 py-3">
               <h2 className="truncate text-[13px] font-medium text-[#2f2a25]">{collection.title}</h2>

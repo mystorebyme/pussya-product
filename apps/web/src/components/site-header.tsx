@@ -14,6 +14,7 @@ import { useStoreSettings } from "@/components/store-settings-provider";
 import { SafeImage } from "@/components/safe-image";
 import { BrandLockup } from "@/components/brand-lockup";
 import { whatsappNumber } from "@/lib/phone";
+import { openSizeGuide } from "@/lib/panels";
 
 /**
  * Desktop nav — sirf wahi categories jo sach me products rakhti hain (khaali
@@ -31,6 +32,16 @@ const quickLinks = [
   { label: "SALE", href: "/collections/sale" },
   { label: "CONTACT", href: "/pages/contact" },
 ];
+
+/**
+ * R47 (owner): header me teen cheezein reference site jaisi chahiye —
+ * bars (menu) icon, **Size guide** aur **Our story**. Size guide ek slide-over
+ * kholta hai (page change nahi), Our story apna page hai.
+ */
+const guideLink = { label: "Size guide", action: "size-guide" } as const;
+// R47: story pehle se maujood `about-us` page par (naya duplicate page nahi)
+const storyLink = { label: "Our story", href: "/pages/about-us" } as const;
+const DESKTOP_SKIP = new Set(["HOME"]); // logo hi home ka link hai
 
 // Fallback copy — admin → Settings se announcement set ho to wahi dikhta hai.
 // R42 (owner: "header fix"): poori site English hai, isliye ye lines bhi English —
@@ -242,16 +253,23 @@ export function SiteHeader() {
           mobile: [menu] [LOGO] [icons] · desktop: [nav] [LOGO] [icons]
         */}
         <div className="mx-auto grid h-[66px] max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:h-[74px] sm:px-4 lg:h-[70px] lg:gap-4 lg:px-6">
+          {/*
+            R47: bars (menu) icon ab **har screen** par hai — phone par bhi, desktop
+            par bhi. Desktop par chhota "Menu" label bhi dikhta hai (owner: header
+            me bar icon chahiye). Wahi drawer khulta hai.
+          */}
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
+            aria-controls="noor-menu"
             data-testid="mobile-menu"
-            className="col-start-1 row-start-1 flex h-10 w-10 shrink-0 items-center justify-center justify-self-start lg:hidden"
+            className="group col-start-1 row-start-1 flex h-10 w-10 shrink-0 items-center justify-center justify-self-start rounded-full text-[#2f2a25] transition hover:bg-[#f6f1ec] hover:text-[#862222] lg:w-auto lg:justify-start lg:gap-2 lg:px-2"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-              <path d="M3 6h18M3 12h18M3 18h18" />
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+              <path d="M3 6h18M3 11h13M3 16h18" />
             </svg>
+            <span className="hidden text-[10.5px] font-medium tracking-[.16em] uppercase lg:inline">Menu</span>
           </button>
 
           <Link
@@ -335,8 +353,10 @@ export function SiteHeader() {
           aria-label="Primary"
           className="hidden border-t border-[#f1ebe5] lg:block"
         >
-          <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-x-5 gap-y-0.5 px-4 py-1.5 xl:gap-x-8">
-            {quickLinks.map((link) => {
+          <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-x-5 gap-y-0.5 px-4 py-1.5 xl:gap-x-7">
+            {quickLinks
+              .filter((link) => !DESKTOP_SKIP.has(link.label))
+              .map((link) => {
               /**
                * R42: collection child pages apne nav item ko highlight karein, par
                * SHOP (`/collections`) har collection page par highlight nahi hona
@@ -370,6 +390,30 @@ export function SiteHeader() {
                 </Link>
               );
             })}
+
+            {/* R47: Size guide (slide-over) + Our story (page) */}
+            <button
+              type="button"
+              onClick={openSizeGuide}
+              aria-haspopup="dialog"
+              data-testid="header-size-guide"
+              className="flex items-center gap-1.5 whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] text-[#222] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em]"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
+                <path d="M3 9h18M3 15h18M7 6v3M12 6v3M17 6v3M9 15v3M14 15v3" />
+              </svg>
+              SIZE GUIDE
+            </button>
+            <Link
+              href={storyLink.href}
+              data-testid="header-our-story"
+              aria-current={pathname === storyLink.href ? "page" : undefined}
+              className={`whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
+                pathname === storyLink.href ? "text-[#862222]" : "text-[#222]"
+              }`}
+            >
+              OUR STORY
+            </Link>
           </div>
         </nav>
 
@@ -488,9 +532,12 @@ export function SiteHeader() {
             type="button"
             aria-label="Close menu"
             onClick={() => setMobileOpen(false)}
-            className="absolute inset-0 bg-black/40"
+            className="motion-backdrop absolute inset-0 bg-black/40"
           />
-          <div className="absolute inset-y-0 left-0 flex w-[86%] max-w-[340px] flex-col bg-white shadow-xl">
+          <div
+            id="noor-menu"
+            className="motion-drawer-left absolute inset-y-0 left-0 flex w-[86%] max-w-[340px] flex-col bg-white shadow-xl"
+          >
             <div className="flex items-center justify-between border-b border-[#eee6de] px-4 py-3">
               <Link href="/" onClick={() => setMobileOpen(false)} aria-label="Noor Ethnic Wear home">
                 <BrandLockup size="compact" />
@@ -516,6 +563,25 @@ export function SiteHeader() {
                   )}
                 </Link>
               ))}
+              {/* R47: Size guide (panel) + Our story — drawer me bhi */}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  openSizeGuide();
+                }}
+                className="flex w-full items-center justify-between border-b border-[#f4efe9] px-5 py-3.5 text-left text-[12.5px] font-medium tracking-[.09em]"
+              >
+                {guideLink.label}
+                <span className="text-[9px] tracking-[.12em] text-[#a67c2e] uppercase">chart</span>
+              </button>
+              <Link
+                href={storyLink.href}
+                className="flex items-center justify-between border-b border-[#f4efe9] px-5 py-3.5 text-[12.5px] font-medium tracking-[.09em]"
+              >
+                {storyLink.label}
+                <span className="text-[#c4b8ac]">›</span>
+              </Link>
               <div className="flex divide-x divide-[#f0eae3] border-b border-[#f4efe9]">
                 <Link href="/wishlist" className="flex flex-1 items-center justify-center gap-2 py-3 text-[12px] font-medium">
                   Wishlist
@@ -598,8 +664,13 @@ function CartDrawer({
 
   return (
     <div className="fixed inset-0 z-50" data-testid="cart-drawer" role="dialog" aria-modal="true" aria-label="Cart">
-      <button type="button" aria-label="Close cart" onClick={closeCart} className="absolute inset-0 bg-black/45" />
-      <aside className="absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col bg-white shadow-2xl">
+      <button
+        type="button"
+        aria-label="Close cart"
+        onClick={closeCart}
+        className="motion-backdrop absolute inset-0 bg-black/45"
+      />
+      <aside className="motion-panel-right absolute inset-y-0 right-0 flex w-full max-w-[420px] flex-col bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-[#eee6de] px-5 py-4">
           <h2 className="text-[13px] font-semibold tracking-[.16em] uppercase">Your cart ({count})</h2>
           <button type="button" onClick={closeCart} aria-label="Close cart" className="p-1.5">

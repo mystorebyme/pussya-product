@@ -21,7 +21,8 @@ const supportLinks = [
   { label: "Shipping Policy", href: "/policies/shipping-policy" },
   { label: "Contact Information", href: "/pages/contact" },
   { label: "Track your order", href: "/track-order" },
-  { label: "About Us", href: "/pages/about-us" },
+  { label: "Our Story", href: "/pages/about-us" },
+  { label: "Size Guide", href: "/pages/size-guide" },
   { label: "Terms and Conditions", href: "/policies/terms-and-conditions" },
 ];
 

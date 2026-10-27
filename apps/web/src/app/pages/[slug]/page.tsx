@@ -5,6 +5,8 @@ import { ContactForm } from "@/components/contact-form";
 import { ContactDetails } from "@/components/contact-details";
 import { TrackOrderForm } from "@/components/track-order-form";
 import { WhatsAppLink } from "@/components/whatsapp-link";
+import { SizeChartTable } from "@/components/size-chart-table";
+import { FIT_TIPS, MEASURE_STEPS } from "@/lib/size-chart";
 
 type PageContent = {
   title: string;
@@ -187,14 +189,24 @@ const pages: Record<string, PageContent> = {
     eyebrow: "Find your fit",
     intro:
       "Most of our suits are ready-to-wear. Compare your body measurements with the chart below — when in doubt, size up or message us on WhatsApp with your bust, waist and height.",
+    /*
+     * R47: page aur header ka size-guide panel **ek hi data** se chalte hain
+     * (`lib/size-chart.ts`), isliye dono jagah numbers kabhi alag nahi honge.
+     */
     sections: [
       {
         heading: "How to measure",
+        body: MEASURE_STEPS.map((step) => `${step.title}: ${step.body} ${step.tip}`),
+      },
+      {
+        heading: "Fit tips",
+        body: [...FIT_TIPS],
+      },
+      {
+        heading: "Ready-to-wear vs unstitched",
         body: [
-          "Bust: measure around the fullest part of the bust, keeping the tape parallel to the floor.",
-          "Waist: measure around the narrowest part of your natural waist.",
-          "Hips: measure around the widest part of your hips, roughly 8 inches below your waist.",
-          "Always wear light clothing while measuring, and keep one finger between the tape and your body.",
+          "Ready-to-wear pieces size chart ke hisaab se stitched aate hain. Unstitched set me fabric metres hote hain, jise aapka tailor aapke naap par sil sakta hai.",
+          "Anarkali aur lehenga me flare hota hai, isliye bust aur length sabse pehle check karein — hip ka farq aaram se adjust ho jaata hai.",
         ],
       },
     ],
@@ -278,35 +290,8 @@ export default async function ContentPage({
           </div>
 
           {page.showSizeTable ? (
-            <div className="mt-9 overflow-x-auto">
-              <table className="w-full min-w-[460px] border-collapse text-[12.5px]">
-                <thead>
-                  <tr className="bg-[#862222] text-white">
-                    {["Size", "Bust (in)", "Waist (in)", "Hip (in)", "Bottom length"].map((head) => (
-                      <th key={head} className="px-3 py-2.5 text-left font-medium tracking-[.06em] uppercase">
-                        {head}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["S", "34", "30", "36", "38"],
-                    ["M", "36", "32", "38", "38"],
-                    ["L", "38", "34", "40", "38"],
-                    ["XL", "40", "36", "42", "38"],
-                    ["XXL", "42", "38", "44", "38"],
-                  ].map((row) => (
-                    <tr key={row[0]} className="border-b border-[#eee6de] even:bg-[#faf8f5]">
-                      {row.map((cell, index) => (
-                        <td key={index} className="px-3 py-2.5">
-                          {cell}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="mt-9" data-testid="size-guide-page-table">
+              <SizeChartTable />
             </div>
           ) : null}
 

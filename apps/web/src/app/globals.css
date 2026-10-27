@@ -363,3 +363,212 @@ table {
 
 /* R46: 768px aur 1024px par koi alag ratio nahi — wahi 1672:941 (ek poster).
    `object-fit: contain` ki wajah se kisi bhi window size par kuch nahi katta. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R47 — "smooth website" + unique animated category icons
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* sticky header ke neeche anchor/scroll target na chhupe */
+html {
+  scroll-padding-top: 118px;
+}
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: 84px;
+  }
+}
+
+/* mobile par tap par neela flash na aaye (native app jaisa feel) */
+a,
+button,
+[role="button"],
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* focus ring sirf keyboard par (mouse click par box na aaye) */
+:focus-visible {
+  outline: 2px solid #862222;
+  outline-offset: 2px;
+}
+
+/* ---------- page change: halka fade + slide (route transition) ---------- */
+@keyframes noorPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: noorPageIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---------- drawers / panels: slide + backdrop fade ---------- */
+@keyframes noorSlideFromLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes noorSlideFromRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes noorBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.motion-drawer-left {
+  animation: noorSlideFromLeft 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+.motion-panel-right {
+  animation: noorSlideFromRight 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+.motion-backdrop {
+  animation: noorBackdrop 0.25s ease both;
+}
+
+/* ---------- category icons: khud ko draw karte hain ---------- */
+@keyframes catDraw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0.15;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes catPop {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes catFloat {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1.4px);
+  }
+}
+
+@keyframes catShimmer {
+  0% {
+    transform: translateX(-140%) rotate(12deg);
+  }
+  100% {
+    transform: translateX(240%) rotate(12deg);
+  }
+}
+
+.cat-icon {
+  overflow: visible;
+  stroke: currentColor;
+}
+
+.cat-icon .cat-icon-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: catDraw 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cat-icon .cat-icon-dot {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: catPop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cat-icon .cat-icon-float {
+  animation: catFloat 3.6s ease-in-out 1.2s infinite alternate;
+}
+
+/* badge: hover par halki gold shimmer (sirf pointer devices par) */
+.cat-badge {
+  position: absolute;
+  overflow: hidden;
+}
+
+.cat-badge::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20%;
+  background: linear-gradient(90deg, transparent 0%, rgba(214, 178, 106, 0.55) 50%, transparent 100%);
+  transform: translateX(-140%) rotate(12deg);
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .group:hover .cat-badge::after {
+    opacity: 1;
+    animation: catShimmer 0.85s ease-out;
+  }
+}
+
+/* ---------- smooth hover feel (pointer devices only) ---------- */
+@media (hover: hover) {
+  .smooth-lift {
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease;
+  }
+
+  .smooth-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(90, 50, 20, 0.1);
+  }
+}
+
+/* ---------- motion kam chahiye to sab band ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .motion-drawer-left,
+  .motion-panel-right,
+  .motion-backdrop,
+  .cat-icon .cat-icon-line,
+  .cat-icon .cat-icon-dot,
+  .cat-icon .cat-icon-float {
+    animation: none !important;
+  }
+  .cat-icon .cat-icon-line {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .cat-icon .cat-icon-dot {
+    opacity: 1;
+  }
+  .cat-badge::after {
+    display: none;
+  }
+}

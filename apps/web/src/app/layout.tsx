@@ -9,6 +9,8 @@ import { WishlistProvider } from "@/components/wishlist-provider";
 import { StoreSettingsProvider } from "@/components/store-settings-provider";
 import { StoreStructuredData } from "@/components/store-structured-data";
 import { Analytics } from "@/components/analytics";
+import { SizeGuideDialog } from "@/components/size-guide-dialog";
+import { PageTransition } from "@/components/page-transition";
 import { brandAssets, logoMark, siteConfig } from "@/config/site";
 import { assetUrl } from "@/lib/format";
 
@@ -125,9 +127,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               Skip to content
             </a>
             <SiteHeader />
-            <main id="main-content" className="min-h-[60vh]">{children}</main>
+            <main id="main-content" className="min-h-[60vh]">
+              <PageTransition>{children}</PageTransition>
+            </main>
             <SiteFooter />
             <FloatingHelp />
+            {/* header / product page se khulne wala size-guide panel (ek hi instance) */}
+            <SizeGuideDialog />
         {/* traffic tracking — Vercel Analytics + optional GA4 */}
         <Analytics />
           </WishlistProvider>

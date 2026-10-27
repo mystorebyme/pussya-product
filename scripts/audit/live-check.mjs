@@ -199,6 +199,15 @@ check(
 check("`.brand-lockup img` object-fit: contain", /\.brand-lockupimg\{[^}]*object-fit:contain/.test(flatCss));
 check("logo par koi display:none / visibility:hidden nahi", !/\.brand-lockup[^{]*\{[^}]*display:none/.test(flatCss));
 check("hero `object-fit: contain` (crop nahi)", /\.hero-mediaimg\{[^}]*object-fit:contain/.test(flatCss));
+/* R47: icons khud ko draw karte hain + reduced-motion par band */
+check(
+  "category icon animation CSS live hai",
+  /\.cat-icon\.cat-icon-line\{[^}]*stroke-dashoffset:1/.test(flatCss) && flatCss.includes("prefers-reduced-motion"),
+);
+check(
+  "smooth page transition CSS live hai",
+  /\.page-enter\{[^}]*animation:/.test(flatCss) && flatCss.includes("scroll-padding-top:118px"),
+);
 /* R46 (owner): ek hi offer poster har device/window size par — ratio sab par same */
 check(
   "hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)",
@@ -255,6 +264,12 @@ check(
 );
 
 
+/* ── R47: header items + size guide page ─────────────────────────────────── */
+check("header menu (bars) icon", /aria-label="Open menu"/.test(html));
+check("header Size guide (panel button)", /data-testid="header-size-guide"/.test(html));
+check("header Our story link", /data-testid="header-our-story"/.test(html) && /\/pages\/about-us/.test(html));
+check("category icons page par hain (unique)", [...new Set([...html.matchAll(/data-icon="([a-z]+)"/g)].map((m) => m[1]))].length >= 6);
+
 /* ── key pages (cart/checkout/track/policies) ────────────────────────────── */
 say("");
 say("## Key pages");
@@ -270,6 +285,8 @@ const KEY_PAGES = [
   ["shipping policy", "policies/shipping-policy/"],
   ["returns policy", "policies/refund-and-return-policy/"],
   ["search", "search/"],
+  ["size guide", "pages/size-guide/"],
+  ["our story", "pages/about-us/"],
 ];
 for (const [label, pagePath] of KEY_PAGES) {
   const result = await get(`${BASE}${pagePath}`);

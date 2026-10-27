@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useCart } from "@/components/cart-provider";
+import { openSizeGuide } from "@/lib/panels";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { categoryHref, categoryLabel } from "@/lib/categories";
 import { colourSwatch } from "@/lib/colour";
@@ -307,9 +308,20 @@ export function ProductDetail({
             <p className="text-[11px] font-semibold tracking-[.14em] uppercase">
               Select size: <span className="text-[#862222]">{size}</span>
             </p>
-            <Link href="/pages/size-guide" className="text-[11px] text-[#862222] underline">
+            {/*
+              R47: page par jaane ke bajaye wahi slide-over khulta hai (chart,
+              naapne ka tareeqa, tips) — shopping flow tootta nahi. Panel me
+              "Full size guide" link page ke liye bhi hai.
+            */}
+            <button
+              type="button"
+              onClick={openSizeGuide}
+              aria-haspopup="dialog"
+              data-testid="pdp-size-guide"
+              className="text-[11px] text-[#862222] underline decoration-[#c9a449] underline-offset-2 transition hover:text-[#6d1b1b]"
+            >
               Size guide
-            </Link>
+            </button>
           </div>
           <div className="mt-2 flex flex-wrap gap-2">
             {active.sizes.map((option) => {
