@@ -48,11 +48,38 @@ const { width: W, height: H } = await sharp(trimmed).metadata();
  * hi detect hoti hai (ink profile), isliye letters kabhi cut nahi hote.
  */
 const wordmarkBox = await detectWordmarkBand(trimmed, W, H);
-const wordmark = await sharp(trimmed)
+const wordmarkRaw = await sharp(trimmed)
   .extract(wordmarkBox)
   .trim({ threshold: 8 })
   .png()
   .toBuffer();
+/**
+ * Upar ka kinara halka fade: emblem me figure/dupatta letters se upar tak jaata
+ * hai, isliye tight crop par upar "kata hua kapda" dikhta tha. Header me ye fade
+ * white bar me ghul jaata hai — dikhta hai jaise design ka hissa ho, kata hua nahi.
+ */
+const wordmark = await fadeTopEdge(wordmarkRaw);
+
+async function fadeTopEdge(input) {
+  const meta = await sharp(input).metadata();
+  const fadeHeight = Math.max(6, Math.round(meta.height * 0.18));
+  const mask = Buffer.from(
+    `<svg width="${meta.width}" height="${meta.height}" xmlns="http://www.w3.org/2000/svg">
+       <defs>
+         <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+           <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+           <stop offset="${(fadeHeight / meta.height).toFixed(3)}" stop-color="#fff" stop-opacity="1"/>
+         </linearGradient>
+       </defs>
+       <rect width="100%" height="100%" fill="url(#fade)"/>
+     </svg>`,
+  );
+  return sharp(input)
+    .ensureAlpha()
+    .composite([{ input: mask, blend: "dest-in" }])
+    .png()
+    .toBuffer();
+}
 
 /**
  * Row-wise ink profile se "NOOR" ka top dhoondhta hai: jahan row ki ink width
@@ -76,12 +103,12 @@ async function detectWordmarkBand(input, width, height) {
    * hai), isliye top sirf kinare wale hisson se detect karte hain — warna crop me
    * upar figure ki gardan/necklace ka kata hua tukda aa jaata tha.
    */
-  const leftEdge = Math.round(width * 0.24);
-  const rightEdge = Math.round(width * 0.76);
+  const leftEdge = Math.round(width * 0.15);
+  const rightEdge = Math.round(width * 0.85);
   let top = Math.round(height * 0.4);
   for (let y = Math.round(height * 0.35); y < height; y += 1) {
     const sideInk = ink(y, 0, leftEdge) + ink(y, rightEdge, width);
-    if (sideInk >= 14 && ink(y + 1, 0, leftEdge) + ink(y + 1, rightEdge, width) >= 14) {
+    if (sideInk >= 8 && ink(y + 1, 0, leftEdge) + ink(y + 1, rightEdge, width) >= 8) {
       top = Math.max(0, y - 4);
       break;
     }
