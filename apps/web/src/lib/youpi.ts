@@ -114,6 +114,8 @@ export class YoupiError extends Error {
     message: string,
     readonly status = 502,
     readonly code?: string,
+    /** 409 DUPLICATE_SESSION_DETECTED par gateway ka purana session id */
+    readonly sessionId?: string,
   ) {
     super(message);
     this.name = "YoupiError";
@@ -175,6 +177,8 @@ export async function createYoupiPayment(
     error?: string;
     code?: string;
     message?: string;
+    /** DuplicateSessionResponse (409) me purana session */
+    session_id?: string;
   };
 
   if (!response.ok || !payload.paymentId) {
@@ -182,6 +186,7 @@ export async function createYoupiPayment(
       payload.error ?? payload.message ?? `Gateway ne session nahi banaya (HTTP ${response.status})`,
       response.status === 409 ? 409 : 502,
       payload.code,
+      payload.session_id,
     );
   }
 

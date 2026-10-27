@@ -78,9 +78,18 @@ ye layer `hidden` rehta hai (wahan swipe/counter chalta hai).
 
 Poora setup + security model: **[`youpi-payment-gateway.md`](./youpi-payment-gateway.md)**.
 
-Short: `youpi.js` embed + `window.Youpi.pay()` (browser), HMAC webhook
-(`/api/payments/webhook/youpi`), aur static hosting ke liye server-verified
-confirm (`/api/payments/youpi/confirm`). Config sheet se live
+Short (YouPI repo ke `openapi.yaml` ke exactly hisaab se):
+
+1. **Session server se** — `/api/payments/youpi/create` → `POST {payUrl}/api/v1/payments`
+   (`X-Merchant-Id` + `Idempotency-Key`, amount order se paise me). `409
+   DUPLICATE_SESSION_DETECTED` par purana `session_id` ka wahi checkout khulta hai.
+2. **Official `youpi.js`** — `window.Youpi.pay({ checkoutUrl, paymentId, handler })`
+   se checkout modal (script gateway origin se load hota hai, vendor nahi).
+3. **Authoritative confirmation** — HMAC webhook (`/api/payments/webhook/youpi`)
+   aur static hosting ke liye server-verified confirm
+   (`/api/payments/youpi/confirm`). Browser ke success ka UI matlab hai, order
+   tabhi confirm hota hai jab server `GET /api/v1/payments/{id}` se amount +
+   status match kare. Config sheet se live
 (`youpi_enabled`, `youpi_pay_url`, `youpi_merchant_id`, `youpi_webhook_secret`) —
 redeploy nahi. Config na ho to gateway button render hi nahi hota aur owner ka
 purana UPI QR flow chalta rehta hai.

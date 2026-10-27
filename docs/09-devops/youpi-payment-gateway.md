@@ -1,7 +1,13 @@
 # YouPI PG — payment gateway integration (R48)
 
 Owner: *"YouPI gateway ko uske system ke hisaab se integrate karo — ye proper hai."*
-Contract source: <https://github.com/youpi-pg/YouPI-PG> (`openapi.yaml` + README).
+Contract source: <https://github.com/youpi-pg/YouPI-PG> (`openapi.yaml` + README),
+reviewed at commit `556bd43`.
+
+> SDK **vendor nahi** kiya gaya (YouPI ka licence "Commercial" hai) — official
+> `youpi.js` seedha aapke gateway origin (`{youpi_pay_url}/youpi.js`) se load hota
+> hai, jaisa unke README me likha hai. Session hamare server se banta hai, isliye
+> browser ko gateway API par cross-origin call hi nahi karni padti.
 
 YouPI PG ek **self-hosted UPI gateway** hai (Node 24 + SQLite WAL, WhatsApp OTP
 "Berry", Android/Gmail/SMS observers). Merchant apne domain par chalata hai,
@@ -21,7 +27,11 @@ jaise `https://pay.yourdomain.com`.
 Customer → checkout step 3
    │
    ├─ (A) YouPI gateway button  ────────────────────────────────────────────┐
-   │       youpi.js → window.Youpi.pay({order_id, amount, …})              │
+   │       POST /api/payments/youpi/create  (server → gateway)              │
+   │         POST {payUrl}/api/v1/payments                                  │
+   │         X-Merchant-Id + Idempotency-Key, amount = order.total (paise)   │
+   │         ← { paymentId, checkoutUrl }                                   │
+   │       youpi.js → window.Youpi.pay({checkoutUrl, paymentId, handler})   │
    │       modal checkout (gateway par) → UPI app → paisa                    │
    │       browser handler(res)  →  POST /api/payments/youpi/confirm        │
    │                                 └─ server: GET /api/v1/payments/{id}    │
@@ -53,6 +63,7 @@ Rules jo code me locked hain:
 | --- | --- |
 | `apps/web/src/lib/youpi.ts` | Config (env + sheet), session create, server-to-server fetch, delivery dedupe (`server-only`) |
 | `apps/web/src/lib/youpi-signature.ts` | Pure HMAC helpers (V1/V2, amount compare) — unit tested |
+| `apps/web/src/app/api/payments/youpi/create/route.ts` | **Server-side session** (`POST /api/v1/payments`) — amount order se, idempotency key, 409 duplicate par wahi session |
 | `apps/web/src/components/youpi-pay.tsx` | `youpi.js` loader + `window.Youpi.pay()` + confirm call |
 | `apps/web/src/components/upi-payment.tsx` | Payment card: gateway button + QR fallback |
 | `apps/web/src/app/api/payments/webhook/[gateway]/route.ts` | `youpi` branch — authoritative webhook |
@@ -85,6 +96,14 @@ NEXT_PUBLIC_YOUPI_MERCHANT_ID=<merchant key>
 ```
 
 Secret **kabhi** `NEXT_PUBLIC_*` me na daalein.
+
+## 3b. Endpoints (hamari site)
+
+| Endpoint | Kaam |
+| --- | --- |
+| `POST /api/payments/youpi/create` | Session banata hai. Body `{ orderNumber }`. Amount **order se** (browser se nahi), `Idempotency-Key: noor-<order>-<amount>`, `returnUrl` = checkout step 3. `409 DUPLICATE_SESSION_DETECTED` par gateway ke `session_id` ka wahi `checkoutUrl` laut-ta hai. |
+| `POST /api/payments/youpi/confirm` | Browser callback ke baad **authoritative**: gateway se `GET /api/v1/payments/{id}` → `SUCCESS` + amount match → order confirmed. |
+| `POST /api/payments/webhook/youpi` | YouPI webhook (V2/V1 HMAC, delivery-id dedupe, amount match). Server wale deploy par yahi asli rasta hai. |
 
 ## 4. Webhook (server wale deploy par — Vercel / Render)
 

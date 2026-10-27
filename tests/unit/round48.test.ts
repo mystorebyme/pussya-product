@@ -253,7 +253,8 @@ test("R48-5b: gateway client — youpi.js embed, sheet-driven config, server-sid
     "/youpi.js",
     "data-youpi-key",
     "window.Youpi",
-    "youpi_pay_url",
+    "youpiPayUrl",
+    "youpiMerchantId",
     "order_id",
     "/api/payments/youpi/confirm",
     "youpi-pay-button",
@@ -293,6 +294,21 @@ test("R48-5b: gateway client — youpi.js embed, sheet-driven config, server-sid
   assert.match(webhook, /seenYoupiDelivery/, "retry dedupe");
   assert.match(webhook, /ORDER_AMOUNT_MISMATCH/, "amount mismatch par confirm nahi");
   assert.match(webhook, /actor: "youpi-webhook"/);
+
+  // session **server se** banti hai (amount order se, browser se nahi)
+  const create = read("apps/web/src/app/api/payments/youpi/create/route.ts");
+  assert.match(create, /createYoupiPayment/, "gateway ki POST /api/v1/payments server se");
+  assert.match(create, /amountPaise: order\.total/, "amount order se aata hai");
+  assert.match(create, /`noor-\$\{order\.orderNumber\}-\$\{order\.total\}`/, "idempotency key");
+  assert.match(create, /getOrderForPayment/, "order server par verify hota hai");
+  assert.match(create, /RATE_LIMITS\.payments/);
+  assert.match(create, /existing: true/, "409 duplicate par wahi session dobara khule");
+  assert.match(client, /\/api\/payments\/youpi\/create/, "client pehle server session maangta hai");
+  assert.match(client, /checkoutUrl: session\.checkoutUrl/, "server ka checkoutUrl SDK ko jaata hai");
+  assert.doesNotMatch(client, /successUrl:/, "successUrl se page redirect na ho (SPA state bacha rahe)");
+  for (const status of ["SUCCESS", "RECONCILED", "OBSERVED_SUCCESS", "MANUAL_REVIEW", "EXPIRED", "FAILED", "CANCELLED"]) {
+    assert.ok(client.includes(status), `client ${status} handle karta hai`);
+  }
 
   // static hosting fallback: server hi gateway se verify karta hai
   const confirm = read("apps/web/src/app/api/payments/youpi/confirm/route.ts");

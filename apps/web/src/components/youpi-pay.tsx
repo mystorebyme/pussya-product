@@ -2,30 +2,32 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { postJson } from "@/lib/http-json";
-import { apiUrl } from "@/lib/api-base";
+import { API_AVAILABLE, apiUrl } from "@/lib/api-base";
 import { formatPrice } from "@/lib/format";
 import { useStoreSettings } from "@/components/store-settings-provider";
 
 /**
  * YouPI PG — browser checkout (R48).
  *
- * Owner: "YouPI ko uske system ke hisaab se integrate karo".
- * YouPI ka official integration do hisson me hai:
+ * Owner: "payment gateway integrate karo — proper repo wala".
+ * Integration bilkul YouPI-PG ke apne system (README + `openapi.yaml`, commit
+ * `556bd43`) ke hisaab se hai:
  *
- *   1. **Browser** — `youpi.js` embed (`data-youpi-key` = merchant id) aur
- *      `window.Youpi.pay({...})`. Ye sirf checkout modal kholta hai; UI ke liye.
- *   2. **Server** — authoritative proof: HMAC-signed webhook
- *      (`/api/payments/webhook/youpi`) aur server-to-server
- *      `GET /api/v1/payments/{id}`. Order tabhi confirm hota hai jab server
- *      gateway se status + amount verify kare.
+ *   1. **Session server se** — `POST /api/v1/payments` (`X-Merchant-Id` +
+ *      `Idempotency-Key`) hamare `/api/payments/youpi/create` par hota hai, amount
+ *      order se aata hai. Browser ko sirf `checkoutUrl` milta hai.
+ *   2. **Official browser SDK** — `youpi.js` (`data-youpi-key`) aur
+ *      `window.Youpi.pay({ checkoutUrl, ... })` checkout modal kholta hai.
+ *   3. **Authoritative confirmation server par** — browser ka success sirf UI
+ *      hai; order tab confirm hota hai jab server gateway se
+ *      `GET /api/v1/payments/{paymentId}` karke status + amount verify kare
+ *      (`/api/payments/youpi/confirm`) ya HMAC-verified webhook aaye
+ *      (`/api/payments/webhook/youpi`).
  *
- * Static GitHub Pages par webhook receive nahi ho sakta, isliye callback par
- * `/api/payments/youpi/confirm` call hota hai — wahan bhi **server** gateway se
- * verify karta hai (client ke "success" par bharosa nahi).
- *
- * Config sheet se live aati hai (`youpi_enabled`, `youpi_pay_url`,
- * `youpi_merchant_id`); na mile to component kuch render nahi karta aur seedha
- * UPI QR wala flow chalta rehta hai.
+ * Static GitHub Pages par hamara API nahi hota — tab SDK khud gateway par
+ * session banata hai (`apiUrl`/`portalUrl` = gateway origin) aur confirmation
+ * server deploy hone par hi possible hai. Isliye gateway button tab tak kuch
+ * nahi dikhata jab tak config na ho; purana UPI QR flow hamesha maujood hai.
  */
 type YoupiHandlerResult = {
   status?: string;
@@ -35,6 +37,8 @@ type YoupiHandlerResult = {
   payment_id?: string;
   amount_received?: number | string;
   utr?: string;
+  reason?: string;
+  raw?: Record<string, unknown>;
 };
 
 type YoupiSdk = {
@@ -47,11 +51,10 @@ declare global {
   }
 }
 
-function sdkUrl(payUrl: string): string {
-  return `${payUrl.replace(/\/+$/, "")}/youpi.js`;
-}
+/** session ke status jo "paisa aa gaya" maane jaate hain (baaki UI me explain) */
+const PAID_STATUSES = new Set(["SUCCESS", "RECONCILED", "OBSERVED_SUCCESS"]);
 
-/** script ek hi baar — `data-youpi-key` gateway ke merchant id par set hota hai */
+/** script ek hi baar — `data-youpi-key` gateway ka merchant id hai */
 function loadSdk(payUrl: string, merchantId: string): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
   if (window.Youpi) return Promise.resolve();
@@ -68,10 +71,13 @@ function loadSdk(payUrl: string, merchantId: string): Promise<void> {
 
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = sdkUrl(payUrl);
+    script.src = `${payUrl.replace(/\/+$/, "")}/youpi.js`;
     script.async = true;
     script.dataset.noorYoupi = "1";
     script.dataset.youpiKey = merchantId;
+    // SDK default apiUrl script ke origin par hota hai — gateway origin explicitly do
+    script.dataset.apiUrl = payUrl;
+    script.dataset.portalUrl = payUrl;
     script.dataset.currency = "INR";
     script.dataset.themeColor = "#862222";
     script.dataset.name = "Noor Ethnic Wear";
@@ -108,8 +114,13 @@ export function YoupiPayButton({
     };
   }, []);
 
+  /** server gateway se verify karke order confirm karta hai (authoritative) */
   const confirmOnServer = useCallback(
     async (paymentId: string) => {
+      if (!paymentId) {
+        setNote("Payment mil gaya — order confirm hone me thoda waqt lagega. Team WhatsApp par update degi.");
+        return false;
+      }
       const result = await postJson<{ ok?: boolean; paid?: boolean; alreadyPaid?: boolean; error?: string }>(
         apiUrl("/api/payments/youpi/confirm"),
         { orderNumber, paymentId },
@@ -129,14 +140,80 @@ export function YoupiPayButton({
     [orderNumber, onConfirmed],
   );
 
+  /** gateway ke saare result statuses ek hi jagah */
+  const handleResult = useCallback(
+    (result: YoupiHandlerResult, fallbackPaymentId?: string) => {
+      const status = String(result?.status ?? "").toUpperCase();
+      const rawPaymentId =
+        (result?.raw?.paymentId as string | undefined) ??
+        (result?.raw?.payment_id as string | undefined) ??
+        result?.paymentId ??
+        result?.payment_id ??
+        fallbackPaymentId ??
+        "";
+
+      if (PAID_STATUSES.has(status)) {
+        void confirmOnServer(rawPaymentId);
+        return;
+      }
+      if (status === "MANUAL_REVIEW" || status === "SUSPICIOUS") {
+        setNote(
+          "Payment security review me gaya hai. Paisa kat gaya ho to WhatsApp par screenshot bhej dein — team verify karke order confirm karegi.",
+        );
+        return;
+      }
+      if (status === "EXPIRED") {
+        setNote("Payment session expire ho gaya — dobara “Pay securely” dabaiye.");
+        return;
+      }
+      if (status === "CANCELLED") {
+        setNote("Payment cancel ho gaya. Dobara try kar sakti hain ya neeche UPI QR se pay kar sakti hain.");
+        return;
+      }
+      if (status === "FAILED") {
+        setNote(
+          result?.reason
+            ? `Payment fail hui (${result.reason}) — dobara try kariye ya neeche UPI QR se pay kariye.`
+            : "Payment fail hui — dobara try kariye ya neeche UPI QR se pay kariye.",
+        );
+      }
+    },
+    [confirmOnServer],
+  );
+
   async function pay() {
     if (!configured) return;
     setBusy(true);
     setFailed(false);
     setNote(null);
+
+    let paymentId = "";
     try {
       await loadSdk(payUrl, merchantId);
-      if (!window.Youpi) throw new Error("gateway script ne Youpi nahi banaya");
+      if (!window.Youpi) throw new Error("youpi-sdk-missing");
+
+      /**
+       * Step 1 — server se session (amount order se, browser se nahi).
+       * API na ho (GitHub Pages) to SDK khud session banata hai.
+       */
+      let session: { checkoutUrl?: string; paymentId?: string } | null = null;
+      if (API_AVAILABLE) {
+        const created = await postJson<{ checkoutUrl?: string; paymentId?: string; alreadyPaid?: boolean }>(
+          apiUrl("/api/payments/youpi/create"),
+          { orderNumber },
+          { timeoutMs: 20_000 },
+        );
+        if (created.data?.alreadyPaid) {
+          setNote("Is order ka payment pehle hi confirm ho chuka hai.");
+          onConfirmed?.();
+          setBusy(false);
+          return;
+        }
+        if (created.data?.checkoutUrl) {
+          session = { checkoutUrl: created.data.checkoutUrl, paymentId: created.data.paymentId };
+          paymentId = created.data.paymentId ?? "";
+        }
+      }
 
       await window.Youpi.pay({
         key: merchantId,
@@ -146,28 +223,22 @@ export function YoupiPayButton({
         currency: "INR",
         name: "Noor Ethnic Wear",
         description: `Noor Ethnic Wear order ${orderNumber}`,
+        // SDK ko gateway origin do — warna wo apne (site ke) origin par API call karega
         apiUrl: payUrl,
         portalUrl: payUrl,
         theme: { color: "#862222" },
         metadata: { orderNumber },
-        successUrl: typeof window !== "undefined" ? `${window.location.origin}${window.location.pathname}` : undefined,
-        handler: (result: YoupiHandlerResult) => {
-          const status = String(result?.status ?? "").toUpperCase();
-          const paymentId = String(result?.paymentId ?? result?.payment_id ?? "");
-          if (status === "SUCCESS" && paymentId) {
-            void confirmOnServer(paymentId);
-          } else if (status && status !== "SUCCESS") {
-            setNote(`Payment ${status.toLowerCase()} — dobara try kar sakti hain ya UPI se pay kar sakti hain.`);
-          }
-        },
+        ...(session?.checkoutUrl ? { checkoutUrl: session.checkoutUrl, paymentId: session.paymentId } : {}),
+        handler: (result: YoupiHandlerResult) => handleResult(result, paymentId),
         onClose: () => {
           if (mounted.current) setBusy(false);
         },
       });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "";
       setFailed(true);
       setNote(
-        error instanceof Error && /load nahi hua/.test(error.message)
+        /load nahi hua|sdk-missing/i.test(message)
           ? "Payment gateway abhi khul nahi paaya — neeche UPI QR se pay kar sakti hain."
           : "Payment gateway abhi available nahi hai — neeche UPI QR se pay kar sakti hain.",
       );
