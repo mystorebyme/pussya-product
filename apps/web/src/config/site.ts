@@ -16,8 +16,8 @@ import { CANONICAL_ORIGIN } from "@/lib/domain";
  *   - `brand/logo-mark-{128,192,512}.png` square official mark (favicon, PWA, admin)
  *
  * Hero banner (owner ke diye hue Diwali posters se — koi crop nahi):
- *   - `banners/banner-desktop.webp` 1536×1024 (≥1024px)
- *   - `banners/banner-tablet.webp`  1448×1086 (768–1023px)
+ *   - `banners/banner-desktop.webp` 1672×941 (≥1024px)
+ *   - `banners/banner-tablet.webp`  1672×941 (768–1023px, wahi frame)
  *   - `banners/banner-mobile.webp`   941×1672 portrait (<768px)
  *   - `banners/banner-fluid.webp`   desktop ka fluid copy
  */
@@ -28,7 +28,8 @@ const ASSET_BASE = process.env.NEXT_PUBLIC_PAGES_BASE_PATH ?? "";
  * URL par version lagate hain — warna browser / CDN purana (kata hua) logo
  * cache se dikhata rehta hai. Naya asset banao to `?v=` badha do.
  */
-const BRAND_V = "?v=3";
+/** cache-busting version — logo/banner badle to +1 (browsers naya file lein) */
+export const BRAND_V = "?v=4";
 
 export const brandAssets = {
   /** full horizontal lockup (NOOR + ETHNIC WEAR) — desktop nav */
@@ -66,8 +67,9 @@ export const heroBanners = {
  * (`tests/unit/round41.test.ts` inhe asli file dimensions se match karta hai).
  */
 export const heroBannerSizes = {
-  desktop: { width: 1536, height: 1024 },
-  tablet: { width: 1448, height: 1086 },
+  // R45: owner ka naya clean Diwali banner (1672×941) — desktop + tablet dono
+  desktop: { width: 1672, height: 941 },
+  tablet: { width: 1672, height: 941 },
   mobile: { width: 941, height: 1672 },
 } as const;
 

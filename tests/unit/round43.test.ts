@@ -22,8 +22,9 @@ function pngSize(file: string) {
 test("R43-1: header lockup ka poora NOOR + ETHNIC WEAR band hai (kata hua nahi)", () => {
   const { width, height } = pngSize("apps/web/public/images/brand/logo-desktop.png");
   const ratio = width / height;
-  // NOOR + ETHNIC WEAR ka natural ratio ~2.2–2.4 — patti (strip) ya adhoora crop nahi
-  assert.ok(ratio > 2.0 && ratio < 2.6, `ratio ${ratio.toFixed(2)} (expected ~2.25)`);
+  // R45: naya gold-emblem lockup natural ~2.7:1 (2172×724 source) — patti (strip)
+  // ya adhoora crop nahi. Poora crown + NOOR + ETHNIC WEAR ek hi frame me.
+  assert.ok(ratio > 2.5 && ratio < 2.9, `ratio ${ratio.toFixed(2)} (expected ~2.70)`);
   assert.ok(height >= 180, `desktop lockup ki height ${height}px — 66px display ke liye kam se kam 180px chahiye`);
   assert.ok(width >= 400, `desktop lockup ki width ${width}px`);
 });
@@ -41,22 +42,25 @@ test("R43-2: teeno device lockup ek hi ratio ke hain (koi stretch nahi)", () => 
 test("R43-3: crop script me purana 0.55 hardcode nahi (letters katt-te the)", () => {
   const source = fs.readFileSync(path.join(ROOT, "scripts/brand/build-responsive-assets.mjs"), "utf8");
   assert.ok(!/H \* 0\.55|height \* 0\.55/.test(source), "0.55 crop wapas aa gaya");
-  assert.ok(source.includes("detectWordmarkBand"), "wordmark band detect hona chahiye");
+  // R45: crop hi nahi hota — poora lockup transparent-border trim hota hai
+  assert.ok(source.includes("trim({ threshold: 1 })"), "poora lockup trim hona chahiye (koi 55% crop nahi)");
+  assert.ok(source.includes("detectCrown"), "favicon ke liye crown emblem detect hona chahiye");
+  assert.ok(!/\.extract\(\{[\s\S]*?H \* 0\.(?!26)/.test(source), "lockup par extract/crop na ho");
 });
 
 test("R43-4: header logo bada hai par header bar me fit hota hai", () => {
   const css = fs.readFileSync(path.join(ROOT, "apps/web/src/app/globals.css"), "utf8");
   const heights = [...css.matchAll(/\.brand-lockup img \{[\s\S]*?height: (\d+)px/g)].map((m) => Number(m[1]));
-  assert.deepEqual(heights.slice(0, 3), [44, 52, 58], `logo heights: ${heights.join(" → ")}`);
+  assert.deepEqual(heights.slice(0, 3), [46, 54, 60], `logo heights: ${heights.join(" → ")}`);
 
   const header = fs.readFileSync(path.join(ROOT, "apps/web/src/components/site-header.tsx"), "utf8");
   const bar = header.match(/grid h-\[(\d+)px\][^"]*sm:h-\[(\d+)px\][^"]*lg:h-\[(\d+)px\]/);
   assert.ok(bar, "header bar ki heights milni chahiye");
   const [, mobile, tablet, desktop] = bar!.map(Number);
   // logo (46/56/66) + thoda padding bar me fit ho, warna logo chipak jaata hai
-  assert.ok(mobile >= 44 + 12, `mobile bar ${mobile}px chhota hai`);
-  assert.ok(tablet >= 52 + 14, `tablet bar ${tablet}px chhota hai`);
-  assert.ok(desktop >= 58 + 10, `desktop bar ${desktop}px chhota hai`);
+  assert.ok(mobile >= 46 + 12, `mobile bar ${mobile}px chhota hai`);
+  assert.ok(tablet >= 54 + 14, `tablet bar ${tablet}px chhota hai`);
+  assert.ok(desktop >= 60 + 8, `desktop bar ${desktop}px chhota hai`);
 });
 
 test("R43-5: logo URL par cache-bust version hai (purana kata logo cache se na aaye)", () => {

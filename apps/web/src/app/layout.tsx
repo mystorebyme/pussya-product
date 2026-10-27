@@ -22,7 +22,9 @@ export const metadata: Metadata = {
       { url: brandAssets.mark192, sizes: "192x192", type: "image/png" },
       { url: logoMark, sizes: "512x512", type: "image/png" },
     ],
-    shortcut: [{ url: logoMark }],
+    /* R45: root `/favicon.ico` bhi declare — browsers usse seedha maangte hain.
+       File `app/favicon.ico` se aati hai (crown mark, 32+48 px). */
+    shortcut: [{ url: assetUrl("/favicon.ico"), type: "image/x-icon" }, { url: logoMark }],
     apple: [{ url: brandAssets.mark180, sizes: "180x180", type: "image/png" }],
   },
   appleWebApp: { capable: true, title: "Noor Ethnic Wear", statusBarStyle: "default" },

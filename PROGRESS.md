@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R44: logo kabhi invisible nahi + poora site audit, live verified)
+**Last updated:** 2026-10-27 (R45: owner ka naya gold logo + naya Diwali banner + favicon/manifest bugs)
 
 ## Kya ready hai
 
@@ -23,8 +23,12 @@
 | **R43 — header logo** | ✅ asli bug: crop script image ki 55% height se kaat raha tha (N/O ke curve kat rahe the) → ab top row image se detect hoti hai; logo 44 → 52 → 58px, `?v=3` cache-bust | `scripts/brand/build-responsive-assets.mjs`, `globals.css` |
 | **R44 — logo kabhi invisible nahi** | ✅ `BrandMark` (onError → NOOR/ETHNIC WEAR text lockup, eager+high priority), apple icon 180×180 asli, `/contact` 404 fix | `brand-mark.tsx`, `layout.tsx`, `account/page.tsx` |
 | **R44 — site audit pipeline** | ✅ static audit (486 pages / 34k refs, 0 broken) + **live** audit har push par (`docs/09-devops/live-check.md`), report: `docs/09-devops/logo-and-site-audit.md` | `scripts/audit/*`, `.github/workflows/live-check.yml` |
+| **R45 — naya logo (owner ka gold emblem)** | ✅ poora lockup trim hota hai (koi crop nahi) → 514×190 / 444×164 / 374×138 (2.70:1), header me 46 → 54 → 60px, `?v=4` cache-bust | `assets/source/logo-gold.png`, `scripts/brand/build-responsive-assets.mjs`, `globals.css`, `brand-mark.tsx` |
+| **R45 — naya Diwali banner** | ✅ desktop + tablet wahi 1672×941 frame, mobile 941×1672 portrait; hero CSS/config ratios update; 3-up mockup sheet (1983×793) use **nahi** hoti | `scripts/brand/build-hero-banners.mjs`, `config/site.ts`, `globals.css` |
+| **R45 — favicon + PWA** | ✅ root `/favicon.ico` asli ICO (32+48, pehle 404 tha), crown mark tile ki 92% width bharta hai (16px par dikhta hai), manifest splash cream (pehle kaala) | `app/favicon.ico`, `build-responsive-assets.mjs`, `manifest.ts` |
+| **R45 — chhote bugs** | ✅ footer ka saal hydration-safe (`suppressHydrationWarning`), manifest icons base path ke saath, live-check me favicon/ICO/mark checks | `site-footer.tsx`, `manifest.ts`, `scripts/audit/live-check.mjs` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
-| Unit tests | ✅ 287 pass | `npm run test:unit` |
+| Unit tests | ✅ 323 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |
 | Brand assets (logo ke saare sizes + banners + favicon) | ✅ aapke logo se bane | `node scripts/brand/build-responsive-assets.mjs` |
 

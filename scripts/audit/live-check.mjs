@@ -133,6 +133,7 @@ const ASSETS = [
   ["hero desktop", "images/banners/banner-desktop.webp"],
   ["hero tablet", "images/banners/banner-tablet.webp"],
   ["hero mobile", "images/banners/banner-mobile.webp"],
+  ["favicon.ico", "favicon.ico"],
 ];
 
 for (const [label, file] of ASSETS) {
@@ -156,7 +157,7 @@ const sources = [...(picture.matchAll(/<source media="\(min-width:(\d+)px\)"\s+s
   .map(([, minWidth, href]) => ({ min: Number(minWidth), href }))
   .sort((a, b) => b.min - a.min); // browser: pehla matching (sabse bada min-width) jeetta hai
 const fallbackImg = picture.match(/<img[^>]*src="([^"]+)"/)?.[1] ?? "";
-const logoHeights = { 0: 44, 768: 52, 1024: 58 }; // globals.css ke mutabik
+const logoHeights = { 0: 46, 768: 54, 1024: 60 }; // R45: globals.css ke mutabik
 
 for (const width of [320, 375, 390, 430, 768, 1024, 1366, 1440]) {
   const chosen = sources.find((source) => width >= source.min)?.href ?? fallbackImg;
@@ -190,9 +191,9 @@ say("| --- | --- |");
 check("stylesheet load hui", css.ok, cssHref || "koi css link nahi");
 check(
   "`.brand-lockup img` heights (44 → 52 → 58)",
-  /\.brand-lockupimg\{[^}]*height:44px/.test(flatCss) &&
-    /\.brand-lockupimg\{[^}]*height:52px/.test(flatCss) &&
-    /\.brand-lockupimg\{[^}]*height:58px/.test(flatCss),
+  /\.brand-lockupimg\{[^}]*height:46px/.test(flatCss) &&
+    /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss) &&
+    /\.brand-lockupimg\{[^}]*height:60px/.test(flatCss),
 );
 check("`.brand-lockup img` object-fit: contain", /\.brand-lockupimg\{[^}]*object-fit:contain/.test(flatCss));
 check("logo par koi display:none / visibility:hidden nahi", !/\.brand-lockup[^{]*\{[^}]*display:none/.test(flatCss));
@@ -223,6 +224,30 @@ check(
 check("canonical", /<link rel="canonical" href="[^"]+"/.test(html), (html.match(/<link rel="canonical" href="([^"]+)/)?.[1] ?? ""));
 check("lang attribute", /<html[^>]+lang="en"/.test(html));
 check("favicon links", (html.match(/<link rel="(?:icon|shortcut icon)"/g) ?? []).length >= 2);
+
+/* ── favicon / brand mark (R45: root /favicon.ico 404 tha) ───────────────── */
+const favicon = await asset(`${BASE}favicon.ico`);
+check(
+  "root `/favicon.ico` 200 hai (browser ka default request)",
+  favicon.ok && /icon/i.test(favicon.type),
+  `HTTP ${favicon.status} · ${favicon.type} · ${favicon.bytes} bytes`,
+);
+const ico = await fetch(`${BASE}favicon.ico`).then((r) => (r.ok ? r.arrayBuffer() : null)).catch(() => null);
+const icoBytes = ico ? Buffer.from(ico) : Buffer.alloc(0);
+check(
+  "`/favicon.ico` asli ICO file hai (00 00 01 00 magic)",
+  icoBytes.length > 600 && icoBytes.readUInt16LE(0) === 0 && icoBytes.readUInt16LE(2) === 1,
+  icoBytes.length ? `${icoBytes.length} bytes · ${icoBytes.readUInt16LE(4)} icons` : "nahi mila",
+);
+check("favicon page par declare hai", /rel="shortcut icon"[^>]*favicon\.ico/.test(html) || /favicon\.ico/.test(html));
+
+const marks = await Promise.all([128, 180, 192, 512].map((size) => asset(`${BASE}images/brand/logo-mark-${size}.png`)));
+check(
+  "brand mark PNGs (128/180/192/512) square + maujood",
+  marks.every((mark, index) => mark.ok && mark.width === [128, 180, 192, 512][index] && mark.height === mark.width),
+  marks.map((mark) => `${mark.width}×${mark.height}`).join(" · "),
+);
+
 
 /* ── key pages (cart/checkout/track/policies) ────────────────────────────── */
 say("");

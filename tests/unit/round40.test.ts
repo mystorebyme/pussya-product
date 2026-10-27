@@ -46,14 +46,15 @@ test("R40-1: customer ko koi technical payment line nahi (sirf skeleton, phir se
 test("R40-2: logo per-device height + asli file ratio (stretch/crop nahi)", () => {
   const css = read("apps/web/src/app/globals.css");
   const lockup = read("apps/web/src/components/brand-lockup.tsx");
-  // teen breakpoints ke liye teen heights (R43: naye lockup ke saath 44 → 52 → 58)
-  assert.match(css, /\.brand-lockup img \{[^}]*height: 44px/);
-  assert.match(css, /min-width: 768px\)[^@]*\.brand-lockup img \{[^}]*height: 52px/);
-  assert.match(css, /min-width: 1024px\)[^@]*\.brand-lockup img \{[^}]*height: 58px/);
+  // teen breakpoints ke liye teen heights (R45: naye gold lockup ke saath 46 → 54 → 60)
+  assert.match(css, /\.brand-lockup img \{[^}]*height: 46px/);
+  assert.match(css, /min-width: 768px\)[^@]*\.brand-lockup img \{[^}]*height: 54px/);
+  assert.match(css, /min-width: 1024px\)[^@]*\.brand-lockup img \{[^}]*height: 60px/);
   assert.match(css, /\.brand-lockup img \{[^}]*object-fit: contain/, "kabhi stretch nahi");
   // R44: image markup ab `brand-mark.tsx` me hai (ek hi jagah), lockup wahan se aata hai
   const mark = read("apps/web/src/components/brand-mark.tsx");
-  assert.match(mark, /width=\{310\}\s*\n?\s*height=\{138\}/);
+  // R45: intrinsic size = naya mobile lockup 374×138 (2.70:1)
+  assert.match(mark, /width=\{374\}\s*\n?\s*height=\{138\}/);
   assert.match(lockup, /BrandMark/);
 });
 

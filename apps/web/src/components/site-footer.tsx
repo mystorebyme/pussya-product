@@ -241,7 +241,9 @@ export function SiteFooter() {
 
       <div className="border-t border-white/20">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-2 px-4 py-4 text-[11.5px] text-[#f3e2e2] sm:flex-row lg:px-6">
-          <p>© {new Date().getFullYear()}, Noor Ethnic Wear. All rights reserved.</p>
+          {/* R45: saal server par build-time par banta hai aur client par abhi ka —
+              naye saal ki pehli loading par hydration warning na aaye. */}
+          <p suppressHydrationWarning>© {new Date().getFullYear()}, Noor Ethnic Wear. All rights reserved.</p>
           <p className="text-[10.5px] tracking-[.1em] uppercase">Secure prepaid payments</p>
         </div>
       </div>

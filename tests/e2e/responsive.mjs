@@ -66,18 +66,18 @@ const assets = [
   // Minimum dims = file jo **asli me hai** (R41: owner ke apne logo/poster, koi
   // upscale nahi). Logo display height 42/52/54px hai, isliye har file 2× DPR
   // ke liye kaafi hai (84/104/108px needed).
-  ["images/brand/logo-mobile.png", 300, 130, "mobile logo (horizontal, 2× of 46px display)"],
-  ["images/brand/logo-tablet.png", 360, 158, "tablet logo (horizontal, 2× of 56px display)"],
-  ["images/brand/logo-desktop.png", 420, 186, "desktop logo (full lockup, 2.8× of 66px)"],
+  ["images/brand/logo-mobile.png", 360, 130, "mobile logo (gold lockup 374×138, 46px display)"],
+  ["images/brand/logo-tablet.png", 430, 158, "tablet logo (gold lockup 444×164, 54px display)"],
+  ["images/brand/logo-desktop.png", 500, 186, "desktop logo (gold lockup 514×190, 60px display)"],
   ["images/brand/logo-fluid.png", 400, 320, "fluid logo (stacked, footer/invoice)"],
   ["images/brand/logo-mark-128.png", 128, 128, "favicon 128"],
   ["images/brand/logo-mark-192.png", 192, 192, "PWA 192"],
   ["images/brand/logo-mark-512.png", 512, 512, "PWA 512 / invoice"],
   // R41 posters — owner ne jo bheja wahi size (downscale bhi nahi).
   ["images/banners/banner-mobile.webp", 900, 1600, "mobile poster (portrait 941×1672)"],
-  ["images/banners/banner-tablet.webp", 1400, 1000, "tablet banner (1448×1086)"],
-  ["images/banners/banner-desktop.webp", 1500, 1000, "desktop banner (1536×1024, full width)"],
-  ["images/banners/banner-fluid.webp", 1500, 1000, "fluid banner (= desktop copy)"],
+  ["images/banners/banner-tablet.webp", 1600, 900, "tablet banner (1672×941, wahi wide frame)"],
+  ["images/banners/banner-desktop.webp", 1600, 900, "desktop banner (1672×941, full width)"],
+  ["images/banners/banner-fluid.webp", 1600, 900, "fluid banner (= desktop copy)"],
 ];
 
 for (const [file, minW, minH, note] of assets) {
@@ -132,11 +132,11 @@ check(
   /width="941"[^>]*height="1672"/.test(heroPicture),
 );
 check(
-  "hero aspect ratios match the files (941/1672 · 1448/1086 · 1536/1024)",
+  "hero aspect ratios match the files (941/1672 · 1672/941)",
   home.text.includes("hero-media") &&
     liveCss.includes("941 / 1672") &&
-    liveCss.includes("1448 / 1086") &&
-    liveCss.includes("1536 / 1024"),
+    liveCss.includes("1672 / 941") &&
+    liveCss.includes("1672 / 941"),
 );
 check("hero image loads eagerly (LCP) with high priority", /fetchPriority="high"|fetchpriority="high"/.test(heroPicture));
 
@@ -244,9 +244,9 @@ if (liveCss) {
   check(
     "CSS defines brand-lockup heights per breakpoint (44 → 52 → 58)",
     // flattened CSS me class aur tag ke beech ka space bhi chala jaata hai
-    /\.brand-lockupimg\{[^}]*height:44px/.test(flatCss) &&
-      /\.brand-lockupimg\{[^}]*height:52px/.test(flatCss) &&
-      /\.brand-lockupimg\{[^}]*height:58px/.test(flatCss),
+    /\.brand-lockupimg\{[^}]*height:46px/.test(flatCss) &&
+      /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss) &&
+      /\.brand-lockupimg\{[^}]*height:60px/.test(flatCss),
   );
   check("CSS keeps hero image inside its box (object-fit: contain, no crop)", /\.hero-mediaimg\{[^}]*object-fit:contain/.test(flatCss));
 } else {

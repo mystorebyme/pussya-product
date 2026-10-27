@@ -30,7 +30,12 @@ const BANNERS = {
 
 /* ------------------------------------------------------------- assets */
 
-test("R41-1: teeno banner files maujood hain aur teeno alag art hain", async () => {
+test("R41-1: teeno banner files maujood hain; mobile ka art desktop se alag hai", async () => {
+  /**
+   * R45: owner ka naya clean banner 1672×941 hai — wahi **desktop aur tablet**
+   * dono par jaata hai (ek hi wide frame, crop-free). Mobile ka art alag hai
+   * (portrait 941×1672), isliye kam se kam **do** distinct files honi chahiye.
+   */
   const digests = new Map<string, string>();
   for (const [name, file] of Object.entries(BANNERS)) {
     assert.ok(exists(file), `${name} banner missing`);
@@ -38,14 +43,15 @@ test("R41-1: teeno banner files maujood hain aur teeno alag art hain", async () 
     assert.ok(buffer.length > 20_000, `${name} banner suspiciously small`);
     digests.set(name, buffer.subarray(0, 4096).toString("base64"));
   }
-  assert.equal(new Set(digests.values()).size, 3, "desktop/tablet/mobile alag files honi chahiye");
+  assert.notEqual(digests.get("desktop"), digests.get("mobile"), "mobile ka apna portrait art hona chahiye");
+  assert.equal(digests.get("desktop"), digests.get("tablet"), "desktop/tablet ek hi wide frame use karte hain");
 });
 
 test("R41-2: banner ki asli dimensions config se match karti hain (crop/stretch nahi)", async () => {
   const config = read("apps/web/src/config/site.ts");
   const sizes = {
-    desktop: { width: 1536, height: 1024 },
-    tablet: { width: 1448, height: 1086 },
+    desktop: { width: 1672, height: 941 },
+    tablet: { width: 1672, height: 941 },
     mobile: { width: 941, height: 1672 },
   };
   for (const [name, expected] of Object.entries(sizes)) {
@@ -76,9 +82,11 @@ test("R41-3: banner build script owner ke posters se banata hai (koi crop nahi)"
   const ownerBranch = script.slice(script.indexOf("async function fromOwnerBanners"), script.indexOf("const ownerSizes"));
   assert.doesNotMatch(ownerBranch, /\.extract\(/, "crop nahi hota");
   assert.doesNotMatch(ownerBranch, /\.resize\(/, "upscale/downscale force nahi hota");
-  for (const file of ["banner-desktop.png", "banner-tablet.png", "banner-mobile.png"]) {
+  // R45: tablet ka koi alag 3-up sheet nahi — wahi clean banner desktop+tablet
+  for (const file of ["banner-desktop.png", "banner-mobile.png"]) {
     assert.ok(exists(`assets/source/banners/${file}`), `source ${file}`);
   }
+  assert.doesNotMatch(script, /banner-tablet\.png/, "3-up sheet ko source banana nahi chahiye");
 });
 
 /* ------------------------------------------------------------- hero markup */
@@ -94,8 +102,8 @@ test("R41-4: hero par device-wise <picture> + exact aspect-ratio (crop nahi)", (
 
   // CSS ratios = asli file ratios
   assert.match(css, /\.hero-media \{[\s\S]*?aspect-ratio: 941 \/ 1672;/);
-  assert.match(css, /@media \(min-width: 768px\)[\s\S]*?aspect-ratio: 1448 \/ 1086;/);
-  assert.match(css, /@media \(min-width: 1024px\)[\s\S]*?aspect-ratio: 1536 \/ 1024;/);
+  assert.match(css, /@media \(min-width: 768px\)[\s\S]*?aspect-ratio: 1672 \/ 941;/);
+  assert.match(css, /@media \(min-width: 1024px\)[\s\S]*?aspect-ratio: 1672 \/ 941;/);
 
   // `cover` crop karta hai — hero par kabhi nahi
   const heroCss = css.slice(css.indexOf("/* ---------- home hero"), css.indexOf("/* ----------", css.indexOf("/* ---------- home hero") + 10));

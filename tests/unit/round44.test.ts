@@ -53,7 +53,7 @@ test("R44-4: CSS me logo ki height kabhi 0 nahi aur fallback ko bhi jagah milti 
   const css = read("apps/web/src/app/globals.css");
   assert.doesNotMatch(css, /\.brand-lockup img \{[^}]*height:\s*0/, "logo height 0 = invisible");
   assert.doesNotMatch(css, /\.brand-lockup[^,{]*\{[^}]*display:\s*none/, "brand-lockup hidden nahi hona chahiye");
-  assert.match(css, /\.brand-lockup \.brand-fallback \{[^}]*min-height: 40px/);
+  assert.match(css, /\.brand-lockup \.brand-fallback \{[^}]*min-height: 42px/);
 });
 
 test("R44-5: apple touch icon 180×180 hai aur wahi file reference hoti hai", () => {
@@ -70,7 +70,16 @@ test("R44-5: apple touch icon 180×180 hai aur wahi file reference hoti hai", ()
 
 test("R44-6: har page ka favicon wahi brand mark hai (koi default Next icon nahi)", () => {
   const layout = read("apps/web/src/app/layout.tsx");
-  assert.doesNotMatch(layout, /favicon\.ico/, "Next ka default favicon use nahi hona chahiye");
+  /*
+   * R45: `app/favicon.ico` ab **hamara** crown mark hai (Next ka default nahi),
+   * isliye allowed — par tabhi jab file asli ICO ho. Next ka default icon
+   * (black/white triangle) kabhi nahi.
+   */
+  if (/favicon\.ico/.test(layout)) {
+    const ico = fs.readFileSync(path.join(process.cwd(), "apps/web/src/app/favicon.ico"));
+    assert.equal(ico.readUInt16LE(2), 1, "favicon.ico asli ICO hona chahiye (Next default nahi)");
+    assert.ok(ico.length > 600, "favicon.ico khaali nahi hona chahiye");
+  }
   for (const key of ["mark128", "mark180", "mark192"]) {
     assert.match(layout, new RegExp(key), `${key} favicon set me hona chahiye`);
   }

@@ -119,7 +119,7 @@ export default async function HomePage() {
         <div className="mx-auto w-full max-w-[1920px]">
           {/*
             data-hero + CSS (.hero-media) me per-breakpoint aspect-ratio:
-            mobile 941/1672 · tablet 1448/1086 · desktop 1536/1024 — teeno asli file
+            mobile 941/1672 · tablet + desktop 1672/941 — asli files
             ke ratio hain, isliye crop/stretch dono zero.
           */}
           <Link

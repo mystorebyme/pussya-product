@@ -1,25 +1,24 @@
 #!/usr/bin/env node
 /**
- * Hero banners — owner ke **apne logo** se banaye gaye (koi doosre brand ka banner nahi).
+ * Hero banners — owner ke **apne Diwali posters** se (koi stock art nahi).
  *
- * Rule: koi stock photo nahi, koi doosri site ka asset nahi. Sirf:
- *   • cream/gold background (brand palette),
- *   • logo ka illustration panel (aapke logo ka hi hissa),
- *   • wordmark + tagline text.
+ * Rule: koi crop nahi, koi stretch nahi — poster ka poora frame WebP me convert
+ * hota hai, usi ke aspect-ratio par page me baithta hai.
  *
- * Owner apne product photos dena chahe to bas `assets/source/hero-*.png` rakh kar
- * is script ko dobara chala dein — file names wahi rehte hain.
+ * R45 (owner ne naya clean banner bheja):
+ *   assets/source/banners/banner-desktop.png  1672×941  → desktop **aur** tablet
+ *   assets/source/banners/banner-mobile.png    941×1672 → mobile (portrait)
  *
- * Owner ke diye hue asli Diwali posters (`assets/source/banners/`) mile to **wahi**
- * use hote hain — sirf PNG → WebP conversion hota hai, **koi crop nahi, koi stretch
- * nahi** (poster ka poora frame, uska text/logo intact rehta hai). Na mile to niche
- * wala generated fallback chalta hai.
+ * ⚠️ `_unused-3up-sheet.png` (1983×793) ek **3-up mockup sheet** hai (3 layouts
+ * side-by-side) — single banner ke liye use nahi hota, isliye ignore hai.
+ *
+ * Na mile to purana generated fallback chalta hai (owner logo se).
  *
  * Output (apps/web/public/images/banners/):
- *   banner-desktop.webp  1536×1024  (≥1024px, full frame)
- *   banner-tablet.webp   1448×1086  (768–1023px, full frame)
- *   banner-mobile.webp    941×1672  (<768px, portrait full frame)
- *   banner-fluid.webp    desktop ka fluid copy (flexible containers)
+ *   banner-desktop.webp  1672×941   (≥1024px)
+ *   banner-tablet.webp   1672×941   (768–1023px, wahi 1.78:1 frame)
+ *   banner-mobile.webp    941×1672  (<768px portrait)
+ *   banner-fluid.webp    desktop ka copy (flexible containers)
  *
  * Run: node scripts/brand/build-hero-banners.mjs
  */
@@ -44,7 +43,8 @@ await fs.mkdir(OUT, { recursive: true });
 const OWNER_DIR = path.join(ROOT, "assets/source/banners");
 const OWNER = [
   { name: "banner-desktop", src: "banner-desktop.png" },
-  { name: "banner-tablet", src: "banner-tablet.png" },
+  // tablet par wahi wide frame (chhota kuch nahi katta; koi doosra 3-up art nahi)
+  { name: "banner-tablet", src: "banner-desktop.png" },
   { name: "banner-mobile", src: "banner-mobile.png" },
 ];
 

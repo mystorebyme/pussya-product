@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { brandAssets, siteConfig } from "@/config/site";
+import { BRAND_V, siteConfig } from "@/config/site";
 
 /** static export (GitHub Pages) me bhi manifest file bane */
 export const dynamic = "force-static";
@@ -17,11 +17,14 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: `${base}/` || "/",
     scope: `${base}/` || "/",
     display: "standalone",
-    background_color: "#000000",
+    /* R45: splash background pehle kaala tha — store cream/white hai, isliye
+       logo ke peeche wahi cream (`#fdfaf4`) aur theme crimson. */
+    background_color: "#fdfaf4",
     theme_color: "#862222",
     icons: [
-      { src: `${base}/images/brand/logo-mark-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: brandAssets.mark, sizes: "512x512", type: "image/png", purpose: "any" },
+      // dono icons ek hi brand mark se, aur base path dono par lagta hai
+      { src: `${base}/images/brand/logo-mark-192.png${BRAND_V}`, sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: `${base}/images/brand/logo-mark-512.png${BRAND_V}`, sizes: "512x512", type: "image/png", purpose: "any" },
     ],
   };
 }

@@ -291,9 +291,10 @@ table {
 */
 .brand-lockup img {
   display: block;
-  /* R43: logo ka naya crop (NOOR + ETHNIC WEAR, 2.25:1) — pehle 42px par bhi
-     letter-tops cut the, ab poora lockup dikhta hai aur bada bhi hai. */
-  height: 44px;
+  /* R45: naya gold-emblem lockup (2172×724 → 2.70:1) — poora frame, koi crop
+     nahi. Height 46/54/60 par width ~124/146/162px, header bar (66/74/70) me
+     aaram se fit, aur naya lockup patla hone ke baad bhi bada dikhta hai. */
+  height: 46px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
@@ -301,30 +302,30 @@ table {
 
 @media (min-width: 768px) {
   .brand-lockup img {
-    height: 52px;
+    height: 54px;
   }
 }
 
 @media (min-width: 1024px) {
   .brand-lockup img {
-    height: 58px;
+    height: 60px;
   }
 }
 
 .brand-lockup[data-size="compact"] img {
-  height: 40px;
+  height: 42px;
 }
 
 /* R44: agar logo file load hi na ho to text lockup (BrandMark) — usse bhi header
    me jagah milni chahiye, warna fallback 0-height ho kar invisible ho jaata. */
 .brand-lockup .brand-fallback {
-  min-height: 40px;
+  min-height: 42px;
   justify-content: center;
 }
 
 @media (min-width: 768px) {
   .brand-lockup .brand-fallback {
-    min-height: 48px;
+    min-height: 50px;
   }
 }
 
@@ -362,13 +363,14 @@ table {
 @media (min-width: 768px) {
   /* tablet poster: 1448×1086 */
   .hero-media {
-    aspect-ratio: 1448 / 1086;
+    /* tablet: wahi wide Diwali banner (1672×941) */
+    aspect-ratio: 1672 / 941;
   }
 }
 
 @media (min-width: 1024px) {
-  /* desktop poster: 1536×1024 — poori width, poora frame */
+  /* desktop poster: 1672×941 — poori width, poora frame */
   .hero-media {
-    aspect-ratio: 1536 / 1024;
+    aspect-ratio: 1672 / 941;
   }
 }

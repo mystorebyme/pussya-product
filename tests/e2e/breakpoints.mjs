@@ -144,7 +144,7 @@ for (const src of new Set([heroPic.img, ...heroPic.sources.map((s) => s.src), br
  * (mobile 941×1672, tablet 1448×1086, desktop 1536×1024). Dono side match hone se
  * `object-fit: contain` ke baad koi crop/stretch nahi hota.
  */
-const boxRatio = { mobile: 941 / 1672, tablet: 1448 / 1086, desktop: 1536 / 1024 };
+const boxRatio = { mobile: 941 / 1672, tablet: 1672 / 941, desktop: 1672 / 941 };
 for (const [kind, expected] of Object.entries(boxRatio)) {
   const src = Object.keys(sizes).find((key) => key.includes(`banner-${kind}`));
   if (!src) continue;
@@ -163,7 +163,7 @@ check(
   `${mobileAsset?.w}px`,
 );
 const tabletAsset = sizes[heroPic.sources.find((s) => s.min === 768)?.src ?? ""];
-check("tablet banner ≥ 1200px wide (retina iPad)", (tabletAsset?.w ?? 0) >= 1200, `${tabletAsset?.w}px`);
+check("tablet banner ≥ 1600px wide (wahi wide frame)", (tabletAsset?.w ?? 0) >= 1600, `${tabletAsset?.w}px`);
 const desktopAsset = sizes[heroPic.sources.find((s) => s.min === 1024)?.src ?? ""];
 /**
  * R41: desktop poster 1536×1024 hai — owner ki asli file, **upscale nahi ki**
@@ -171,8 +171,8 @@ const desktopAsset = sizes[heroPic.sources.find((s) => s.min === 1024)?.src ?? "
  * file 1440–1600px laptop par 1:1 sharp rehti hai.
  */
 check(
-  "desktop banner ≥ 1500px wide (owner ka 1536px source, koi upscale nahi)",
-  (desktopAsset?.w ?? 0) >= 1500,
+  "desktop banner ≥ 1600px wide (owner ka 1672px source, koi upscale nahi)",
+  (desktopAsset?.w ?? 0) >= 1600,
   `${desktopAsset?.w}px`,
 );
 

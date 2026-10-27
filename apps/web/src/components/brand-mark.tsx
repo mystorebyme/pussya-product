@@ -49,7 +49,7 @@ export function BrandMark({
       <img
         src={brandAssets.fluid}
         alt="Noor Ethnic Wear"
-        width={458}
+        width={1083}
         height={400}
         decoding="async"
         fetchPriority="high"
@@ -67,8 +67,8 @@ export function BrandMark({
       <img
         src={brandAssets.mobile}
         alt="Noor Ethnic Wear"
-        /* asli file: 310×138 (tablet 369×164, desktop 427×190) — ratio 2.25:1 */
-        width={310}
+        /* R45: asli file mobile 374×138 (tablet 444×164, desktop 514×190) — 2.70:1 */
+        width={374}
         height={138}
         decoding="async"
         fetchPriority="high"

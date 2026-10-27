@@ -120,3 +120,71 @@ Har push par: static build → Pages deploy → **live smoke** (WAIT: site par N
 1. Repo → Settings → Pages → source **GitHub Actions** (pehle se set hai) — aur Actions me pichhle template workflows *"Deploy Jekyll with GitHub Pages dependencies preinstalled"* + *"Deploy static content to Pages"* ko **Disable** kar dein (mere token ke paas permission nahi; ye `main` par chalte hain aur deploy ke upar chadh sakte hain).
 2. Sheet token ek baar browser me kholiye: `<exec URL>?action=set_token&token=…` (checklist Kaam 2b/3).
 3. Sheet `Settings` me asli `upi_id` + `whatsapp` daaliye.
+
+---
+
+# Round 45 — naya logo + naya banner + bache hue bugs
+
+**Owner ka message:** *"header logo update kro ok and remaining bug fix kro"*.
+Owner ne teen files bhejin: naya **gold-emblem logo** (`2172×724`, transparent),
+naya **clean Diwali banner** (`1672×941`) aur ek mobile poster (`941×1672`).
+Teesri file (`1983×793`) ek **3-up mockup sheet** thi (teen layouts side-by-side) —
+wo banner ke liye use **nahi** ki gayi (rename: `assets/source/banners/_unused-3up-sheet.png`).
+
+## 7. Logo — kya badla
+
+| Item | Pehle (R43/R44) | Ab (R45) |
+| --- | --- | --- |
+| Source artwork | purana arch logo | owner ka naya gold emblem, `assets/source/logo-gold.png` |
+| Crop | height ke 55% par wordmark band | **koi crop nahi** — sirf transparent border `trim`, poora lockup |
+| Files | 427×190 / 369×164 / 310×138 (2.25:1) | **514×190 / 444×164 / 374×138 (2.70:1)** |
+| Header height | 44 / 52 / 58 px | **46 / 54 / 60 px** (naya lockup patla hai, isliye bada rakha) |
+| Cache | `?v=3` | **`?v=4`** (browser purana crop cache se na dikhaye) |
+| Intrinsic size | `310×138` | `374×138` (asli file ka ratio — layout shift nahi) |
+
+Logo ke saare 10 assets ek hi source se bante hain: header lockups, footer/`fluid`,
+crown square marks (128/180/192/512), OG card aur **favicon.ico** — koi redraw nahi.
+
+## 8. Banner — kya badla
+
+| Device | File | Size | Note |
+| --- | --- | --- | --- |
+| ≥1024px | `banner-desktop.webp` | 1672×941 | owner ka naya clean poster, poori width, koi crop nahi |
+| 768–1023px | `banner-tablet.webp` | 1672×941 | **wahi** wide frame (alag 3-up sheet use nahi hui) |
+| <768px | `banner-mobile.webp` | 941×1672 | portrait poster (logo + UP TO 75% OFF + Shop Now) |
+
+`heroBannerSizes` (config) aur `.hero-media` aspect-ratios dono asli file sizes par
+set hain (`object-fit: contain`) — isliye 320px se 1440px tak kuch bhi katta ya
+stretch nahi hota.
+
+## 9. Bache hue bugs jo is round me fix hue
+
+| # | Bug | Root cause | Fix |
+| --- | --- | --- | --- |
+| 1 | `/favicon.ico` **404** (browser ka default request) | site me sirf PNG icon links the, root ICO file hi nahi thi | `app/favicon.ico` — crown mark se asli ICO (32+48 px) build script banata hai; page par bhi declare |
+| 2 | Favicon ka mark 16px par kuch nahi dikhta tha | square tile me crown ko 78% inset par baithaya jaata tha, aur crop me letters ka kinara aa jaata tha | crown **gold-pixel detection** se crop hota hai (22% band → column runs → beech wala cluster), tile ki 92% width bharta hai |
+| 3 | PWA splash **kaala** | `manifest.background_color: "#000000"` | cream `#fdfaf4` + crimson theme (store ka apna palette) |
+| 4 | Manifest icons par base path/version mix tha | ek icon `brandAssets.mark` (versioned), doosra hardcoded | dono `base + path + BRAND_V` |
+| 5 | Footer ka saal hydration mismatch de sakta tha | `new Date().getFullYear()` server (build-time) vs client | `suppressHydrationWarning` |
+| 6 | Announcement strip ka purana hydration mismatch | R41 me "Free shipping" copy hatne ke baad apne aap khatam (server aur client dono ab `defaultAnnouncements[0]`) | verify kiya — mismatch source hi nahi bacha |
+
+## 10. Tests (R45 ke baad, sab local)
+
+| Suite | Result |
+| --- | --- |
+| `npm run test:unit` | **323 pass / 0 fail** (R45 ke 7 naye guards) |
+| `npm run test:responsive` | 44 pass / 0 fail |
+| `breakpoints` (320→1440) | 50 pass / 0 fail |
+| `tests/e2e/smoke.mjs` | 106 pass / 5 fail — sab 5 sirf **is sandbox me sheet/UPI env na hone** se (same as R44) |
+| `links` | 40 pages, 0 fail |
+| `round16` | 35 pass / 0 fail |
+| `payments` | 61 pass / 0 fail |
+| static audit (`dist`, 486 pages) | 34,875 refs · **0 broken** · alt-missing 0 |
+| lint / typecheck | 0 errors / clean |
+
+## 11. Jo abhi bhi unverified hai
+
+- **Browser me real screenshot** — sandbox me Chromium nahi; logo/ favicon ka render
+  sharp se bana kar dekha gaya (white background par poora lockup, crown tile fill).
+- **`/favicon.ico` live URL par** — deploy ke baad `docs/09-devops/live-check.md`
+  me naya check (`200 + ICO magic + 32/48 sizes`) khud proof deta hai.
