@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T19:25:26.315Z
+Ran: 2026-10-27T20:02:57.795Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 443837 bytes · 226ms |
+| ✅ | home page 200 — HTTP 200 · 447165 bytes · 215ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -68,6 +68,9 @@ Ran: 2026-10-27T19:25:26.315Z
 | ✅ | category icon animation CSS live hai |
 | ✅ | smooth page transition CSS live hai |
 | ✅ | R48 palette + CTA sheen CSS live hai |
+| ✅ | R49 button feel CSS live hai (hover lift + press) |
+| ✅ | R49 maroon CTA par gradient + gold sheen live hai |
+| ✅ | R49 footer maroon gradient + gold hairline live hai |
 | ✅ | R48 PDP hover zoom CSS live hai (base image hat jaye) |
 | ✅ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
@@ -123,7 +126,7 @@ Ran: 2026-10-27T19:25:26.315Z
 | result | link | HTTP |
 | --- | --- | --- |
 | ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/05m9q-baoks49.css` | 200 |
+| ❌ | `/pussya-product/_next/static/chunks/05m9q-baoks49.css` | 404 |
 | ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
 | ✅ | `/pussya-product/manifest.webmanifest` | 200 |
 | ✅ | `/pussya-product/favicon.ico` | 200 |
@@ -145,15 +148,14 @@ Ran: 2026-10-27T19:25:26.315Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/off-whitetrendy-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-roman-silk-pink-anarkali-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-5-layers-orange-anarkali-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/premium-and-lightweight-anarkali-suit-set-1/` | 200 |
-| ✅ | `/pussya-product/products/orange-shades-premium-quality-koti-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/real-modeling-pure-soft-organza-silk-fabric-fully-flair-kali-pattern-and-canvas-patta-with-dupatta-set-pant-ready-to-wear-1/` | 200 |
-| ✅ | `/pussya-product/products/saniya-s-wine-gown/` | 200 |
-| ✅ | `/pussya-product/products/sunheri-fux-georgette-suit-set-6013/` | 200 |
+| ✅ | `/pussya-product/products/naishvika-floral-anarkali-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/hannah-traditional-white-anarkali-suit/` | 200 |
+| ✅ | `/pussya-product/products/noors-premium-anarkali-sut-set-115-mustard/` | 200 |
+| ✅ | `/pussya-product/products/kiyara-mahendi-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/ivory-and-maroon-elegant-top-bottom-dupatta-suit-set-10511750529156/` | 200 |
+| ✅ | `/pussya-product/products/aditis-white-coloured-anarkali-suit-set-td04/` | 200 |
+| ✅ | `/pussya-product/products/solid-black-long-flair-less-boder-set-with-dupatta-td-114/` | 200 |
+| ✅ | `/pussya-product/products/western-style-sleeve-premium-readymade-kalamkari-designer-gown/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -162,7 +164,12 @@ Ran: 2026-10-27T19:25:26.315Z
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 1 problem mili:
+
+- broken internal links: /pussya-product/_next/static/chunks/05m9q-baoks49.css (404)
+
+> deploy propagation: 135s wait kiya
