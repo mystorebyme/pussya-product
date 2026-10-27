@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      next:
+        patterns: ["next", "eslint-config-next", "react", "react-dom"]
+      tooling:
+        patterns: ["typescript", "eslint", "tailwindcss", "@tailwindcss/*", "tsx"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

@@ -1,0 +1,82 @@
+name: GitHub Pages preview
+
+# GitHub Pages par static preview (browse karne ke liye).
+# Poora site — cart, checkout, payment, order tracking, admin — Render par chalta hai
+# (render.yaml). Pages par Node server nahi chalta, isliye yahan sirf static pages.
+
+on:
+  push:
+    branches:
+      - arena/f713eef1-tannu-product
+      - main
+    paths-ignore:
+      - ".reviews-sync-trigger"
+      - "database/seeds/reviews/**"
+  workflow_dispatch:
+
+# NOTE: empty commits path filters ke saath workflow trigger nahi karte —
+# rebuild chahiye to koi file change karke push karein.
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build static preview
+        env:
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
+          # Live store (Vercel ya Netlify) ka URL — iske hone se Pages par
+          # checkout/payment/tracking seedha live API par jaate hain.
+          # Live store ka URL. Netlify par shift karne ke baad sirf ek repo variable
+          # set karna hai (Settings → Variables → Actions → STORE_API_URL = Netlify URL)
+          # — koi code change nahi. Variable na ho to purana Vercel URL chalta hai.
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
+          NEXT_PUBLIC_LIVE_STORE_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
+          # Canonical/OG isi deployment ke hain (preview ko live store ka duplicate na samjha jaye)
+          NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: node scripts/pages/build-preview.mjs
+
+      # Pages site pehle se enable hai (Settings → Pages → Source: GitHub Actions).
+      # `enablement: true` se agar enable nahi hai to workflow khud try karta hai.
+      - id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-preview
+          path: dist
+          retention-days: 14
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,333 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #862222;
+  --color-maroon-dark: #6d1a1a;
+  --color-cream: #faf6f1;
+  --color-sand: #e9dfd4;
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-body: "Jost", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --maroon: #862222;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: #2f2a25;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+.reveal {
+  animation: slideUp 0.6s ease both;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-native-scrollbar::-webkit-scrollbar {
+  height: 0;
+}
+
+.container-noor {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .container-noor {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* ---------- motion (live store jaisa feel: reveal, fade, ken-burns) ---------- */
+
+@keyframes kenburns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.07) translate3d(0, -1.2%, 0);
+  }
+}
+
+@keyframes softFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 14s ease-out forwards;
+}
+
+.animate-soft-fade {
+  animation: softFade 0.7s ease both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.45s ease both;
+}
+
+/* scroll-reveal: <Reveal> component class toggle karta hai */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kenburns,
+  .animate-marquee,
+  .animate-soft-fade,
+  .animate-slide-in-right {
+    animation: none !important;
+  }
+  .reveal-init {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-in {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* product card hover: second image cross-fade + slow zoom */
+.card-media img {
+  transition:
+    opacity 0.55s ease,
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* hover: pehli image poori hat jaati hai */
+.group:hover .card-media .card-media-primary {
+  opacity: 0;
+}
+
+/* doosri image background me cursor ke saath move karti hai (parallax follow).
+   Thoda bada scale hai taaki move karne par kinare khali na dikhein. */
+.card-media .card-media-alt {
+  opacity: 0;
+  transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0) scale(1.06);
+  transition:
+    opacity 0.35s ease,
+    transform 0.18s ease-out;
+  will-change: transform, opacity;
+}
+
+.group:hover .card-media .card-media-alt {
+  opacity: 1;
+}
+
+.group:hover .card-media .card-media-primary {
+  transform: none;
+}
+
+/* gallery cross-fade */
+.gallery-slide {
+  transition: opacity 0.45s ease;
+}
+
+/* ---------- responsive polish: mobile / tablet / laptop ---------- */
+
+/* page kabhi side me scroll na kare (sticky header bhi kaam karta rahe) */
+body {
+  overflow-x: clip;
+}
+
+/* iOS: chhote inputs par tap karte hi page zoom ho jata hai — 16px se rukta hai */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* touch devices par hover-only affordances kaam nahi karte */
+@media (hover: none) {
+  .group:hover .card-media .card-media-primary {
+    opacity: 1;
+  }
+  .group:hover .card-media .card-media-alt {
+    opacity: 0;
+  }
+  .card-media .card-media-alt {
+    transform: none;
+  }
+}
+
+/* tablet range: PDP ka gallery text thoda bada, buttons full-width friendly */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container-noor {
+    padding-inline: 1.25rem;
+  }
+}
+
+/* ---------- mobile safety: page kabhi viewport se chaudi na ho ----------
+   Live store ki descriptions me size-chart tables hain; bina wrapper table
+   mobile par page ko desktop width tak kheench deti thi. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+svg,
+table {
+  max-width: 100%;
+}
+
+.product-rich {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* rich text ke andar ki tables apne box me scroll karein, page ko na chauda karein */
+.product-rich table,
+.prose-noor table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.product-rich td,
+.product-rich th,
+.prose-noor td,
+.prose-noor th {
+  padding: 4px 8px 4px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* ---------- brand lockup (responsive logo) ----------
+   Ek hi `<picture>`, teen assets — browser sirf ek download karta hai.
+   Height breakpoints yahin hain: mobile 40 → tablet 50 → desktop 46 (horizontal
+   lockup lamba hai, isliye height kam par width zyada — header me overlap nahi). */
+.brand-lockup img {
+  height: 40px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup img {
+    height: 50px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-lockup img {
+    height: 46px;
+  }
+}
+
+.brand-lockup[data-size="compact"] img {
+  height: 34px;
+}
+
+/* footer / drawer — stacked fluid logo */
+.brand-lockup[data-variant="stacked"] img {
+  height: 92px;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup[data-variant="stacked"] img {
+    height: 108px;
+  }
+}
+
+/* ---------- home hero (device-specific banner) ---------- */
+.hero-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 320px par bhi hero ke edges par kuch kat na jaye */
+@media (max-width: 767px) {
+  .hero-media img {
+    object-fit: contain;
+    background: #fbf1e2;
+  }
+}

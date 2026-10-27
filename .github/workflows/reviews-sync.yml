@@ -1,0 +1,62 @@
+name: Reviews sync
+
+# Live store ke Trustoo reviews roz raat 2:30 IST par pull hote hain aur repo me commit ho jaate hain.
+# Site inhe build ke waqt padhti hai — isliye reviews "vha se direct update" rehte hain.
+
+on:
+  # push trigger: workflow_dispatch ke liye workflow default branch par hona chahiye,
+  # isliye manual run ke liye trigger file touch karke push karein
+  push:
+    paths:
+      - ".reviews-sync-trigger"
+  schedule:
+    - cron: "0 21 * * *" # 02:30 IST
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Sync ke baad result commit karein?"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reviews-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: fetch live reviews
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch reviews
+        run: node scripts/reviews-sync/fetch-reviews.mjs
+
+      - name: Summary
+        run: |
+          node -e "
+            const r = require('./database/seeds/reviews/reviews.json');
+            const products = Object.keys(r.products || {}).length;
+            console.log('reviews:', r.shop.count, '| products:', products, '| syncedAt:', r.meta.syncedAt);
+          " >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.commit }}
+        run: |
+          git config user.name "reviews-sync[bot]"
+          git config user.email "reviews-sync@users.noreply.github.com"
+          git add database/seeds/reviews
+          if git diff --cached --quiet; then
+            echo "no changes"
+            exit 0
+          fi
+          git commit -m "chore(reviews): daily Trustoo sync"
+          git push

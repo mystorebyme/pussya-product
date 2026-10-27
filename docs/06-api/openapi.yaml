@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: Noor Ethnic Wear API
+  version: 1.0.0
+  description: Products, orders, payments for noorethnicwear.in
+servers:
+  - url: http://localhost:4000/api/v1
+  - url: https://api.noorethnicwear.in/api/v1
+tags:
+  - name: catalogue
+  - name: orders
+  - name: payments
+paths:
+  /health:
+    get:
+      tags: [catalogue]
+      summary: Service health
+      responses:
+        "200": { description: OK }
+  /products:
+    get:
+      tags: [catalogue]
+      summary: List products
+      parameters:
+        - { in: query, name: q, schema: { type: string } }
+        - { in: query, name: collection, schema: { type: string } }
+        - { in: query, name: category, schema: { type: string } }
+        - { in: query, name: sort, schema: { type: string, enum: [newest, price-asc, price-desc, featured] } }
+        - { in: query, name: page, schema: { type: integer, minimum: 1, default: 1 } }
+        - { in: query, name: perPage, schema: { type: integer, minimum: 1, maximum: 60, default: 24 } }
+      responses:
+        "200":
+          description: Paginated products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: "#/components/schemas/Product" } }
+                  page: { type: integer }
+                  perPage: { type: integer }
+                  total: { type: integer }
+                  totalPages: { type: integer }
+  /products/{handle}:
+    get:
+      tags: [catalogue]
+      summary: Product detail
+      parameters: [{ in: path, name: handle, required: true, schema: { type: string } }]
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema: { type: object, properties: { data: { $ref: "#/components/schemas/Product" } } }
+        "404": { description: Not found }
+  /collections:
+    get:
+      tags: [catalogue]
+      summary: Collections with counts
+      responses:
+        "200": { description: OK }
+  /catalog/meta:
+    get:
+      tags: [catalogue]
+      summary: Catalogue metadata
+      responses:
+        "200": { description: OK }
+  /orders:
+    post:
+      tags: [orders]
+      summary: Create order
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: false
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateOrder" }
+      responses:
+        "201": { description: Created }
+        "200": { description: Idempotent replay }
+        "400": { description: Validation error }
+        "422": { description: COD not allowed / coupon invalid }
+        "429": { description: Rate limited }
+    get:
+      tags: [orders]
+      summary: List orders (admin)
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: OK }
+        "401": { description: Unauthorized }
+  /orders/{orderNumber}:
+    get:
+      tags: [orders]
+      summary: Order by number
+      parameters: [{ in: path, name: orderNumber, required: true, schema: { type: string } }]
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+  /orders/{orderNumber}/status:
+    patch:
+      tags: [orders]
+      summary: Update order status (admin)
+      security: [{ bearerAuth: [] }]
+      parameters: [{ in: path, name: orderNumber, required: true, schema: { type: string } }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [confirmed, packed, shipped, delivered, cancelled, returned]
+                note: { type: string }
+      responses:
+        "200": { description: OK }
+        "409": { description: Invalid transition }
+  /payments/link:
+    post:
+      tags: [payments]
+      summary: Create payment link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [orderNumber]
+              properties:
+                orderNumber: { type: string }
+      responses:
+        "200": { description: OK }
+        "503": { description: Provider unavailable }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Product:
+      type: object
+      properties:
+        handle: { type: string }
+        title: { type: string }
+        description: { type: string }
+        productType: { type: string }
+        vendor: { type: string }
+        price: { type: integer, description: paise }
+        compareAtPrice: { type: integer, nullable: true }
+        sizes: { type: array, items: { type: string } }
+        tags: { type: array, items: { type: string } }
+        collections: { type: array, items: { type: string } }
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              src: { type: string }
+              alt: { type: string }
+    CreateOrder:
+      type: object
+      required: [customer, items, paymentMethod]
+      properties:
+        customer:
+          type: object
+          required: [name, email, phone, address, city, state, pincode]
+          properties:
+            name: { type: string }
+            email: { type: string, format: email }
+            phone: { type: string, pattern: "^[6-9][0-9]{9}$" }
+            address: { type: string }
+            city: { type: string }
+            state: { type: string }
+            pincode: { type: string, pattern: "^[1-9][0-9]{5}$" }
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [handle, size, qty]
+            properties:
+              handle: { type: string }
+              size: { type: string }
+              qty: { type: integer, minimum: 1, maximum: 10 }
+        paymentMethod: { type: string, enum: [cod, prepaid] }
+        couponCode: { type: string }
+        notes: { type: string }

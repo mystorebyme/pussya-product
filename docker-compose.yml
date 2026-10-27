@@ -1,0 +1,52 @@
+# Local full stack: storefront + admin + api
+# (Phase 1 me database ki zaroorat nahi — catalogue build-time JSON hai,
+#  orders `.data/` me JSON file store hote hain. Phase 2 me postgres/redis add karein.)
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      PORT: 4000
+      WEB_ORIGIN: http://localhost:3000
+      ADMIN_ORIGIN: http://localhost:3001
+      ADMIN_API_TOKEN: local-dev-token
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./.data:/app/.data
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    environment:
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  admin:
+    build:
+      context: .
+      dockerfile: apps/admin/Dockerfile
+    environment:
+      ADMIN_PASSWORD: noor2026
+      ADMIN_SESSION_SECRET: local-dev-secret
+      NEXT_PUBLIC_STORE_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+    volumes:
+      - ./.data:/app/.data
+
+  # Phase 2 (uncomment):
+  # postgres:
+  #   image: postgres:16-alpine
+  #   environment: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: noor }
+  #   ports: ["5432:5432"]
+  # redis:
+  #   image: redis:7-alpine
+  #   ports: ["6379:6379"]

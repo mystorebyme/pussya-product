@@ -1,0 +1,106 @@
+# Render blueprint — https://noorclothing.onrender.com
+#
+# Teen cheezein: storefront (public) + admin (private URL) + ek Postgres,
+# aur ek static "preview" site (bina login/checkout, sirf pages dekhne ke liye).
+# Render dashboard → New → Blueprint → repo select → ye file khud padh lega.
+#
+# Important:
+#  • Free Postgres Render par 30 din baad expire hota hai — dashboard se renew
+#    kar lena, warna orders naye DB me jaane lagenge.
+#  • ADMIN_API_TOKEN dono services me same hona chahiye, isliye storefront
+#    generate karta hai aur admin `fromService` se padhta hai.
+#  • Admin panel orders/tracking sirf storefront API se likhta hai
+#    (STORE_API_URL), taaki customer ka tracking page turant update ho.
+
+databases:
+  - name: noor-db
+    databaseName: noor
+    user: noor
+    plan: free
+    region: singapore
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: noor-storefront
+    runtime: node
+    plan: free
+    region: singapore
+    branch: arena/f713eef1-tannu-product
+    buildCommand: npm ci && npm run catalog:build && npm run build --workspace @noor/web
+    # Har boot par migrate (idempotent, advisory lock) — phir server start.
+    startCommand: npm run db:migrate; npm run start --workspace @noor/web
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: NEXT_PUBLIC_SITE_URL
+        value: https://noorclothing.onrender.com
+      - key: OTP_DEV_MODE
+        value: "on"
+      - key: OTP_TOKEN_SECRET
+        generateValue: true
+      - key: ADMIN_API_TOKEN
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: noor-db
+          property: connectionString
+      # Owner ki Google Sheet (settings read + orders/payments/messages append).
+      # Apps Script deploy karke /exec URL aur token yahan daaliye.
+      - key: GOOGLE_SHEETS_WEBAPP_URL
+        sync: false
+      - key: GOOGLE_SHEETS_TOKEN
+        sync: false
+      # Payment yahan aata hai (Google Sheet settings sheet ise override karti hai)
+      - key: STORE_UPI_ID
+        value: 
+      - key: STORE_UPI_NAME
+        value: Noor Clothing
+
+  - type: web
+    name: noor-admin
+    runtime: node
+    plan: free
+    region: singapore
+    branch: arena/f713eef1-tannu-product
+    buildCommand: npm ci && npm run catalog:build && npm run build --workspace @noor/admin
+    startCommand: npm run start --workspace @noor/admin
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: ADMIN_SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@noorethnicwear.in
+      - key: ADMIN_PASSWORD
+        sync: false # Render dashboard me set kariye
+      - key: ADMIN_API_TOKEN
+        fromService:
+          name: noor-storefront
+          type: web
+          envVarKey: ADMIN_API_TOKEN
+      - key: STORE_API_URL
+        value: https://noorclothing.onrender.com
+      - key: NEXT_PUBLIC_STORE_URL
+        value: https://noorclothing.onrender.com
+
+  # Static preview — sirf browse karne ke liye (GitHub Pages jaisa).
+  # Cart/checkout/order-tracking yahan nahi chalte, wo storefront par hain.
+  - type: web
+    name: noor-preview
+    runtime: static
+    plan: free
+    branch: arena/f713eef1-tannu-product
+    buildCommand: npm ci && node scripts/pages/build-preview.mjs
+    staticPublishPath: dist
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"

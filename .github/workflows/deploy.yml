@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Kya deploy karna hai"
+        required: true
+        default: all
+        type: choice
+        options: [all, web, admin, api]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Verify before deploy
+        run: |
+          npm run catalog:verify
+          npm run typecheck
+          npm run test:all
+
+      - name: Deploy storefront (Vercel)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'web' || github.event_name == 'push' }}
+        run: npx vercel deploy --prod --yes --token "$VERCEL_TOKEN"
+        working-directory: apps/web
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
+
+      - name: Deploy admin (Vercel)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'admin' }}
+        run: npx vercel deploy --prod --yes --token "$VERCEL_TOKEN"
+        working-directory: apps/admin
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+
+      - name: Trigger API deploy (Render)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'api' }}
+        run: curl -fsS "$RENDER_DEPLOY_HOOK" > /dev/null
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+      - name: Post-deploy health
+        if: ${{ github.event.inputs.target == 'all' || github.event_name == 'push' }}
+        run: bash infra/monitoring/health.sh
+        env:
+          WEB_URL: https://noorethnicwear.in
+          ADMIN_URL: https://admin.noorethnicwear.in
+          API_URL: https://api.noorethnicwear.in

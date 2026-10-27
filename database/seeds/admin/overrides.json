@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "note": "Admin panel isi file ko likhta hai. scripts/build-catalog.mjs publish par isse catalogue me merge karta hai.",
+    "lastPublishedAt": "2026-10-24T15:25:55.195Z"
+  },
+  "products": {},
+  "collections": {},
+  "hidden": [],
+  "newProducts": []
+}

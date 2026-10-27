@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# builds
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# local data (orders, messages, overrides) — production me DB
+.data/
+*.tmp
+
+# env / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# logs & coverage
+*.log
+npm-debug.log*
+coverage/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# generated heavy artifacts
+apps/*/public/images/products/
+
+# Pages build artifact (scripts/pages/build-preview.mjs generates it)
+apps/web/public/catalog-lite.json
+
+# Cloudflare Workers (vinext) local state — never commit
+apps/web/.dev.vars
+.dev.vars
+.wrangler/
+apps/web/.wrangler/

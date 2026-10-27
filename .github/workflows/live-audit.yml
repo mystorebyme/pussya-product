@@ -1,0 +1,79 @@
+name: Live site audit (saare functions)
+
+# Production par poora functional audit — "saare site ke function kaam kar rahe hain?"
+# ka jawab. Public flows (zero dependency, sirf fetch):
+#   smoke.mjs    → home/collection/PDP/reviews/search/cart/checkout/pay/GST invoice/
+#                  track order/contact/newsletter/admin APIs
+#   links.mjs    → header/footer ke saare internal links par 404/500 check
+#   round16.mjs  → stock guard, order-not-found, size guide, review trust, copy
+#   round23.mjs  → state↔pincode guard, speed budget, UTR-less claim, WhatsApp CTA
+#
+# Chalane ke liye: commit message me `[audit]` likhiye (manual) ya Actions →
+# "Live site audit" → Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Storefront URL"
+        required: false
+        default: "https://noor-ethnic-wear.vercel.app"
+  push:
+    branches:
+      - arena/f713eef1-tannu-product
+
+jobs:
+  audit:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[audit]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      BASE_URL: ${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}
+      # Secret set na ho to admin-only checks khud skip ho jaate hain.
+      ADMIN_API_TOKEN: ${{ secrets.ADMIN_API_TOKEN }}
+      ADMIN_URL: ${{ secrets.ADMIN_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Deployment settle (alias flap na ho)
+        run: |
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$BASE_URL/api/health" || true)
+            echo "attempt $i → /api/health $code"
+            [ "$code" = "200" ] && break
+            sleep 10
+          done
+
+      - name: Sheet bridge (Apps Script health)
+        continue-on-error: true
+        run: |
+          URL="${GOOGLE_SHEETS_WEBAPP_URL:-}"
+          TOKEN="${GOOGLE_SHEETS_TOKEN:-}"
+          if [ -z "$URL" ]; then echo "GOOGLE_SHEETS_WEBAPP_URL secret nahi hai — skip"; exit 0; fi
+          node scripts/sheets-selfcheck.mjs "$URL" "$TOKEN" || true
+        env:
+          GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL }}
+          GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN }}
+          EXPECTED_SHEET_ID: "1k8fsea04WpbrGjiyXuDrrS2Eewt9W7wx9X2lUQc5qMo"
+
+      - name: Storefront smoke (order → pay → invoice → track → contact)
+        run: node tests/e2e/smoke.mjs
+
+      - name: Internal links (koi 404/500 nahi)
+        run: node tests/e2e/links.mjs
+
+      - name: Round 16 regressions
+        run: node tests/e2e/round16.mjs
+
+      - name: Round 23 (pincode guard · speed · claim · WhatsApp)
+        run: node tests/e2e/round23.mjs
+
+      - name: Round 27 (logo center · GSC · analytics · contact)
+        run: node tests/e2e/round27.mjs
+
+      - name: Selftest (DB + sheet mirror)
+        continue-on-error: true
+        run: |
+          curl -sS --max-time 60 "$BASE_URL/api/sheet-selftest?key=lk-st-9f3k2m-7hq4rt-2026&stats=1" | head -c 2000; echo

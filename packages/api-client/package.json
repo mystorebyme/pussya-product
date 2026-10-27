@@ -1,0 +1,12 @@
+{
+  "name": "@noor/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Typed API client used by web and admin",
+  "main": "index.ts",
+  "types": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "@noor/types": "*"
+  }
+}

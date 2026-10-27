@@ -1,0 +1,129 @@
+name: Live payment + tracking smoke
+
+# Production (Vercel) par asli flow test — order place → payment page → UTR →
+# processing → admin confirm → paid + confirmed → tracking page.
+#
+# Manual run: Actions → "Live payment + tracking smoke" → Run workflow
+# (Ye 2 test orders banata hai — isliye schedule nahi hai.)
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Deployed storefront URL"
+        required: false
+        default: "https://noor-ethnic-wear.vercel.app"
+
+  # default branch ke bahar se dispatch GitHub API me nahi milta — isliye commit
+  # message me [live-test] likhne par bhi chalta hai (manual, gated).
+  push:
+    branches:
+      - arena/f713eef1-tannu-product
+
+jobs:
+  payments:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[live-test]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Health (DB reachable?)
+        run: |
+          URL="${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}"
+          echo "── $URL/api/health"
+          code=$(curl -sS -o health.json -w "%{http_code}" --retry 3 --retry-all-errors --max-time 60 "$URL/api/health")
+          echo "http: $code"
+          head -c 600 health.json; echo
+          test "$code" = "200" || { echo "health returned $code (deployment protection?)"; exit 1; }
+          node -e "const d=require('./health.json').data; if(!d||d.db!=='up'){console.error('DB not up:',d&&d.db,d&&d.dbError);process.exit(1)}"
+
+      # Branch push Vercel par naya production deployment bhi shuru kar deta hai.
+      # Us window me alias flap karta hai (kuch requests 500) — isliye pehle
+      # deployment ke settle hone ka intezaar: 6 lagataar 200 chahiye.
+      # Alias kabhi kabhi rollout ke beech flap karta hai — pehle 3 lagataar 200
+      # ka intezaar. Agar us commit ka deployment live hai to uska zikr log me.
+      - name: Wait for a stable deployment
+        run: |
+          URL="${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}"
+          WANT="${GITHUB_SHA:0:7}"
+          ok=0
+          for i in $(seq 1 30); do
+            body=$(curl -sS --max-time 20 "$URL/api/health?v=$WANT" || echo '')
+            code=$(printf '%s' "$body" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{process.stdout.write(JSON.parse(s).data.commit||"")}catch{}})')
+            if printf '%s' "$body" | grep -q '"status":"ok"'; then ok=$((ok+1)); else ok=0; fi
+            echo "attempt $i → health ok? stable $ok/3 · live commit ${code:-?} (want $WANT)"
+            if [ "$ok" -ge 3 ]; then echo "deployment stable — flow chalu"; exit 0; fi
+            sleep 10
+          done
+          echo "::warning::health 5 min me stable nahi hua — phir bhi flow chala rahe hain"
+
+      # Admin-only steps (payment confirm + "packed" block) secret token maangte hain;
+      # wo local/admin panel par verify hote hain. Yahan public flow chalta hai:
+      # order place → payment page → pending → UTR → processing → tracking page.
+      - name: Payment + tracking flow (public APIs)
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}
+          # khaali = admin steps skip (token public repo me nahi jaata)
+          ADMIN_API_TOKEN: ""
+        run: |
+          set +e
+          node tests/e2e/payments.mjs 2>&1 | tee flow.log
+          code=${PIPESTATUS[0]}
+          grep -E "FAIL|payments:" flow.log | while IFS= read -r line; do
+            echo "::error title=live-flow::${line}"
+          done
+          exit $code
+
+      # R23: state↔pincode guard, order create/pay page speed, UTR-less claim,
+      # WhatsApp screenshot option — sab public APIs par (admin panel checks skip).
+      - name: R23 checks (state guard · speed · claim · WhatsApp)
+        if: hashFiles('tests/e2e/round23.mjs') != ''
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}
+          ADMIN_API_TOKEN: ""
+        run: |
+          set +e
+          node tests/e2e/round23.mjs 2>&1 | tee -a flow.log
+          code=${PIPESTATUS[0]}
+          grep -E "FAIL|round23:" flow.log | while IFS= read -r line; do
+            echo "::error title=r23::${line}"
+          done
+          exit $code
+
+      # R23 round: state↔pincode guard, create/pay page speed, UTR-less claim,
+      # WhatsApp screenshot — sab public APIs par (admin panel local par test hota hai).
+      - name: R23 checks (state guard · speed · claim · WhatsApp)
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://noor-ethnic-wear.vercel.app' }}
+          ADMIN_API_TOKEN: ""
+          ADMIN_URL: ""
+        run: |
+          set +e
+          if [ ! -f tests/e2e/round23.mjs ]; then echo "round23.mjs nahi hai — skip"; exit 0; fi
+          node tests/e2e/round23.mjs 2>&1 | tee -a flow.log
+          code=${PIPESTATUS[0]}
+          grep -E "FAIL|round23:" flow.log | while IFS= read -r line; do
+            echo "::error title=r23::${line}"
+          done
+          exit $code
+
+      # log dekhne ke liye ek chhoti `live-logs` branch par commit (temporary)
+      - name: Publish flow log
+        if: always()
+        run: |
+          if [ ! -f flow.log ]; then echo "no log"; exit 0; fi
+          git config user.email "ci@noor.local"
+          git config user.name "live-smoke"
+          mkdir -p .live-logs
+          cp flow.log .live-logs/flow.log
+          date -u > .live-logs/updated.txt
+          git add -f .live-logs
+          git commit -m "live smoke log" || true
+          git push origin HEAD:live-logs --force

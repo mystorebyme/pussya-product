@@ -1,0 +1,66 @@
+name: Extra catalogue sync
+
+# thestoreofbufani.com se extra collections/products roz pull hote hain
+# (user ne kaha: saree chhod ke baaki extra collections add karo).
+# Seed commit hone ke baad build-catalog unhe catalogue me merge karta hai.
+
+on:
+  push:
+    paths:
+      - ".catalog-sync-trigger"
+  schedule:
+    - cron: "30 20 * * *" # 02:00 IST
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: "Sync ke baad result commit karein?"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: catalog-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: fetch extra catalogue
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch extra catalogue
+        run: node scripts/catalog-sync/fetch-extra.mjs
+
+      - name: Summary
+        run: |
+          node -e "
+            const fs = require('fs');
+            const p = 'database/seeds/extra/products.json';
+            if (!fs.existsSync(p)) { console.log('no products synced'); process.exit(0); }
+            const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+            console.log('extra products:', data.products.length);
+          " >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Rebuild catalogue
+        run: node scripts/build-catalog.mjs
+
+      - name: Commit
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.commit }}
+        run: |
+          git config user.name "catalog-sync[bot]"
+          git config user.email "catalog-sync@users.noreply.github.com"
+          git add database/seeds/extra database/seeds/catalog.json apps/web/src/data apps/admin/src/data
+          if git diff --cached --quiet; then
+            echo "no changes"
+            exit 0
+          fi
+          git commit -m "chore(catalog): daily extra collection sync"
+          git push

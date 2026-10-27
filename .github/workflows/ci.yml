@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: typecheck · build · test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Catalogue sanity
+        run: npm run catalog:verify
+
+      - name: Typecheck (web · admin · api)
+        run: npm run typecheck
+
+      # Lint bhi gate hai — pehle ye eslint 9 par crash karta tha (FlatCompat),
+      # isliye chup-chaap band pada tha. Ab native flat config + CI gate.
+      - name: Lint (storefront)
+        run: npm run lint --workspace @noor/web -- --max-warnings=40
+
+      - name: Unit + integration tests
+        run: npm run test:all
+
+      # Top skill repos wali discipline machine se check hoti hai (guess se nahi):
+      # skills format, instruction files sachche, hygiene, route→test map.
+      # Fail = koi skill toota / secret aa gaya / CLAUDE.md purana ho gaya.
+      - name: Repo audit (skills · instruction files · hygiene · route map)
+        run: npm run audit -- --check
+
+      - name: Build storefront
+        run: npm run build --workspace @noor/web
+
+      - name: Build admin
+        working-directory: apps/admin
+        run: npx next build
+
+      - name: Build api
+        run: npm run build --workspace @noor/api
+
+      - name: Dependency audit (non-blocking)
+        run: npm audit --omit=dev || true
+
+  smoke:
+    name: production-build smoke
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build --workspace @noor/web
+
+      - name: Start storefront
+        run: npm run start --workspace @noor/web &
+        env:
+          PORT: 3000
+          # smoke suite admin parity (note/payment/invoice) bhi check karti hai
+          ADMIN_API_TOKEN: dev-admin-token
+          OTP_DEV_MODE: "on"
+          # R38: production me UPI sirf sheet se aata hai (koi code default nahi).
+          # CI me sheet configured nahi hoti — isliye payment-flow tests ke liye
+          # ek neutral test VPA env se dete hain (asli payee ka koi hardcode nahi).
+          STORE_UPI_ID: noorstore@upi
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000/api/health --timeout 120000
+
+      - name: Smoke test
+        run: npm run test:smoke
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Responsive + breakpoint checks
+        run: npm run test:responsive
+        env:
+          BASE_URL: http://localhost:3000
+          ADMIN_API_TOKEN: dev-admin-token
+
+      - name: Round 16 audit (routes, stock, reviews, messages, links)
+        run: npm run test:audit
+        env:
+          BASE_URL: http://localhost:3000
+          ADMIN_API_TOKEN: dev-admin-token
+          MAX_PAGES: 45
+
+  e2e:
+    name: playwright (optional)
+    needs: verify
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build --workspace @noor/web
+      - run: npm run test:e2e
+        env:
+          CI: true
