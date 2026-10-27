@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T06:20:55.201Z
+Ran: 2026-10-27T06:23:11.193Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 413167 bytes · 201ms |
+| ✅ | home page 200 — HTTP 200 · 421637 bytes · 168ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -31,7 +31,7 @@ Ran: 2026-10-27T06:20:55.201Z
 | ✅ | header logo (desktop) (`images/brand/logo-desktop.png`) | 200 | image/png | 103 KB |
 | ✅ | header logo (tablet) (`images/brand/logo-tablet.png`) | 200 | image/png | 83 KB |
 | ✅ | header logo (mobile) (`images/brand/logo-mobile.png`) | 200 | image/png | 63 KB |
-| ✅ | footer logo (`images/brand/logo-fluid.png`) | 200 | image/png | 371 KB |
+| ✅ | footer logo (`images/brand/logo-fluid.png`) | 200 | image/png | 196 KB |
 | ✅ | favicon 128 (`images/brand/logo-mark-128.png`) | 200 | image/png | 6 KB |
 | ✅ | apple touch 180 (`images/brand/logo-mark-180.png`) | 200 | image/png | 11 KB |
 | ✅ | PWA 192 (`images/brand/logo-mark-192.png`) | 200 | image/png | 13 KB |
@@ -126,15 +126,14 @@ Ran: 2026-10-27T06:20:55.201Z
 | ✅ | `/pussya-product/pages/contact/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/luxury-off-white-georgette-anarkali-suit/` | 200 |
-| ✅ | `/pussya-product/products/whispering-breeze-georgette-embroidered-suit-set-td-107/` | 200 |
-| ✅ | `/pussya-product/products/premium-maroon-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-pink-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/luxury-mustard-embroidered-georgette-anarkali-suit/` | 200 |
-| ✅ | `/pussya-product/products/mesta-trendy-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/anamika-premium-designer-readymade-gown-with-dupatta-set-kka-1082/` | 200 |
-| ✅ | `/pussya-product/products/kumkum-elegant-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/aarushi-heavy-pure-cinon-silk-gown/` | 200 |
+| ✅ | `/pussya-product/products/rani-color-premium-quality-suit-set-dt-273-copy/` | 200 |
+| ✅ | `/pussya-product/products/manvis-white-coloured-anarkali-suit-set-11-7287410360452/` | 200 |
+| ✅ | `/pussya-product/products/mustard-foil-work-gown-set-royal-anarkali/` | 200 |
+| ✅ | `/pussya-product/products/bottle-green-designer-anarkali-suit-with-pant-and-dupatta/` | 200 |
+| ✅ | `/pussya-product/products/tiana-premium-black-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/siyas-royal-purple-elegant-golden-border-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/daminis-black-coloured-anarkali-suit-set-td03/` | 200 |
+| ✅ | `/pussya-product/products/kiyara-mahendi-color-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -144,9 +143,8 @@ Ran: 2026-10-27T06:20:55.201Z
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
+| ✅ | `/pussya-product/products/trending-anarkali-suit-set-3-pis/` | 200 |
 
 ## Summary
 
 ✔ Saare live checks pass.
-
-<!-- re-run after fluid-logo deploy -->
