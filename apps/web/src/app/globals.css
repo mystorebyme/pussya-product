@@ -283,35 +283,44 @@ table {
    Ek hi `<picture>`, teen assets — browser sirf ek download karta hai.
    Height breakpoints yahin hain: mobile 40 → tablet 50 → desktop 46 (horizontal
    lockup lamba hai, isliye height kam par width zyada — header me overlap nahi). */
+/*
+  R40 (owner: "logo fix kro"): logo ke teen alag files hain (mobile/tablet/desktop),
+  isliye height bhi per-breakpoint rakhni padti hai — warna ek hi height par
+  mobile file ka wordmark chhota aur desktop file ka mark bada dikhta hai.
+  Width `auto` + `object-contain` = kabhi stretch/crop nahi hota.
+*/
 .brand-lockup img {
-  height: 40px;
+  display: block;
+  height: 42px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 @media (min-width: 768px) {
   .brand-lockup img {
-    height: 50px;
+    height: 52px;
   }
 }
 
 @media (min-width: 1024px) {
   .brand-lockup img {
-    height: 46px;
+    height: 54px;
   }
 }
 
 .brand-lockup[data-size="compact"] img {
-  height: 34px;
+  height: 36px;
 }
 
 /* footer / drawer — stacked fluid logo */
 .brand-lockup[data-variant="stacked"] img {
-  height: 92px;
+  height: 96px;
 }
 
 @media (min-width: 768px) {
   .brand-lockup[data-variant="stacked"] img {
-    height: 108px;
+    height: 116px;
   }
 }
 

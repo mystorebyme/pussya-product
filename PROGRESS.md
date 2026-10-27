@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (repo copy + rebrand, Google Sheet = control panel)
+**Last updated:** 2026-10-27 (Sheet ban gayi, Vercel deploy path, payment/header/logo fix)
 
 ## Kya ready hai
 
@@ -9,9 +9,13 @@
 | Storefront (home, collections, product pages, gallery, cart, checkout, order tracking, invoices, policies) | ✅ chalta hai | `npm run dev` → http://localhost:3000 |
 | Owner panel (login, orders + timeline, stock, price, invoices, tracking, reviews, messages, coupons, settings, Sheet status) | ✅ chalta hai | `npm run dev:admin` → http://localhost:3001 |
 | REST API | ✅ chalta hai | `npm run dev:api` → http://localhost:4000 |
-| **Google Sheet = owner ka control panel** (phone, WhatsApp, UPI, announcement, GSTIN live) | ✅ code ready — bas `/exec` URL + token env me daalne hain | `docs/09-devops/google-sheets.md` |
+| **Google Sheet = owner ka control panel** | ✅ **sheet ban gayi** — 16 tabs + headers + Settings keys ([link](https://docs.google.com/spreadsheets/d/1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo/edit)); Apps Script `/exec` URL + token env me daalne hain | `docs/09-devops/google-sheets.md` |
 | Sheet tabs ke ready CSV (16) | ✅ | `docs/09-devops/sheet-tabs/` |
-| Unit tests | ✅ 279 pass | `npm run test:unit` |
+| Vercel deploy (button + GitHub Actions) | ✅ config + steps ready — bas Vercel secrets | `docs/09-devops/vercel-deploy.md` |
+| Payment page copy | ✅ koi technical "refresh kariye" line customer ko nahi dikhti | `apps/web/src/components/upi-payment.tsx` |
+| Header + logo | ✅ ek hi announcement strip, per-device logo size, nav child pages par active | `site-header.tsx`, `globals.css` |
+| Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
+| Unit tests | ✅ 287 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |
 | Brand assets (logo ke saare sizes + banners + favicon) | ✅ aapke logo se bane | `node scripts/brand/build-responsive-assets.mjs` |
 
@@ -19,7 +23,8 @@
 
 | Kaam | Kiske paas | Note |
 | --- | --- | --- |
-| Google Sheet banana + Apps Script deploy | owner ka Google account | steps: `docs/09-devops/google-sheets.md` |
+| Sheet ki `Settings` tab me apni values bharna (`upi_id`, `whatsapp`, `support_phone`, `announcement`) | owner | bharne ke baad site 3 second me utha leti hai |
+| Apps Script deploy (`/exec` URL) | owner ka Google account | steps: `docs/09-devops/google-sheets.md` |
 | `GOOGLE_SHEETS_WEBAPP_URL`, `GOOGLE_SHEETS_TOKEN`, `ADMIN_PASSWORD`, `DATABASE_URL` env set | hosting dashboard | `.env.example` me poora list |
 | Asli products (photos, price, stock) catalogue me daalna | owner ka data | abhi 287 **sample** products hain (design/flow test ke liye) |
 | Domain lagana | owner | domain final hone par sirf `NEXT_PUBLIC_SITE_URL` badalna hai |

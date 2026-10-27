@@ -2,6 +2,7 @@ import { contactSchema } from "@noor/validation";
 import { mirrorMessageToSheet, saveMessage } from "@/lib/messages";
 import { contactChannels, notifyContactMessage } from "@/lib/notify";
 import { runInBackground } from "@/lib/background";
+import { RATE_LIMITS, enforceRateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +12,9 @@ export const dynamic = "force-dynamic";
  * milta hai (message kho nahi sakta) aur admin panel me dikhta hai.
  */
 export async function POST(request: Request) {
+  const limited = enforceRateLimit(request, RATE_LIMITS.contact);
+  if (limited) return limited;
+
   let body: unknown;
   try {
     body = await request.json();

@@ -1,6 +1,7 @@
 import { preflight, withCors } from "@/lib/cors";
 import { claimPayment, getOrder, OrderError } from "@/lib/orders";
 import { readPhoneToken } from "@/lib/otp";
+import { RATE_LIMITS, enforceRateLimit, hitRateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,10 @@ export const dynamic = "force-dynamic";
  * match karke confirm karta hai (yahi manual UPI ka rule hai).
  */
 async function handlePost(request: Request) {
+  // IP + order dono par limit: last-4 brute force karke kisi ka order "claimed" na ho jaye
+  const limited = enforceRateLimit(request, RATE_LIMITS.payments);
+  if (limited) return limited;
+
   let body: { orderNumber?: string; phoneLast4?: string; phoneToken?: string; note?: string };
   try {
     body = (await request.json()) as typeof body;
@@ -26,6 +31,15 @@ async function handlePost(request: Request) {
   const orderNumber = String(body.orderNumber ?? "").trim().toUpperCase();
   if (!/^NE-[A-Z0-9]{4,16}$/.test(orderNumber)) {
     return Response.json({ error: "Enter a valid order number." }, { status: 400 });
+  }
+
+  // ek order par bhi limited attempts (6 / 10 min) — guessing se bachne ke liye
+  const perOrder = hitRateLimit(`order:${orderNumber}`, { name: "claim", limit: 6, windowMs: 10 * 60_000 });
+  if (!perOrder.ok) {
+    return Response.json(
+      { error: "Is order ke liye bahut attempts ho gaye — WhatsApp par screenshot bhej dijiye." },
+      { status: 429, headers: { "retry-after": String(perOrder.retryAfterSeconds) } },
+    );
   }
 
   const order = await getOrder(orderNumber);

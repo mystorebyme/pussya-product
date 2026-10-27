@@ -28,6 +28,16 @@ fallback nahi) — galat payee par paisa jaane se behtar hai payment pause ho ja
 
 ## 1. Google Sheet setup (ek baar, 5 minute)
 
+**Sheet pehle se bani hui hai** (16 tabs + headers + Settings keys):
+
+> `Noor Ethnic Wear — Store DB (Orders · Products · Settings)`
+> https://docs.google.com/spreadsheets/d/1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo/edit
+
+Uski `Settings` tab me apni values bhariye: `support_phone`, `whatsapp`, `upi_id`, `upi_name`,
+`announcement`, `gstin`, `free_shipping`. Cell **khaali** = wo cheez site par dikhegi hi nahi.
+
+Nayi sheet banana ho to (dusre brand ke liye):
+
 1. [sheets.new](https://sheets.new) → naam `Noor Ethnic Wear — Store`.
 2. Repo me `docs/09-devops/sheet-tabs/` ke **16 CSV** import kariye
    (File → Import → *Insert new sheet(s)*). Column ke naam script se hi bante hain —
@@ -37,9 +47,8 @@ fallback nahi) — galat payee par paisa jaane se behtar hai payment pause ho ja
 4. **Deploy → New deployment → Web app** — *Execute as: Me*, *Who has access: Anyone* → `/exec` URL copy.
 5. Us URL par env set kariye (niche `.env` table) aur redeploy:
    `GOOGLE_SHEETS_WEBAPP_URL=<exec URL>` · `GOOGLE_SHEETS_TOKEN=<lamba random token>`
-6. `Settings` tab me apni values bhariye:
-   `support_phone`, `whatsapp`, `upi_id`, `upi_name`, `announcement`, `gstin`, `free_shipping`.
-7. Check: `GET /api/settings` → `"meta":{"sheetSource":"apps-script"}` aur wahi number jo sheet me hai.
+   · `SHEET_EXPECTED_ID=<sheet URL ka id>`
+6. Check: `GET /api/settings` → `"meta":{"sheetSource":"apps-script"}` aur wahi number jo sheet me hai.
 
 Poora detail: [`docs/09-devops/google-sheets.md`](docs/09-devops/google-sheets.md).
 
@@ -61,15 +70,25 @@ npm run build:all        # web + admin + api
 npm run catalog:verify   # catalogue sanity
 ```
 
-## 3. Deploy
+## 3. Deploy (Vercel — button se)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mystorebyme/pussya-product&root-directory=apps/web&project-name=noor-ethnic-wear&repository-name=pussya-product)
+
+Root Directory **`apps/web`** (monorepo). Admin ke liye wahi button,
+`root-directory=apps/admin`. Env keys button ke baad daaliye — list `.env.example` me hai.
+
+**GitHub par ek-click deploy:** repo → **Actions** → **Deploy** → **Run workflow** →
+target (`all` / `web` / `admin` / `api`). Pehle repo secrets: `VERCEL_TOKEN`,
+`VERCEL_ORG_ID`, `VERCEL_PROJECT_ID_WEB`, `VERCEL_PROJECT_ID_ADMIN` (api ke liye
+`RENDER_DEPLOY_HOOK`). Workflow pehle test + typecheck chalata hai — fail hone par deploy rukta hai.
 
 | Target | Kya milta hai |
 | --- | --- |
-| **Vercel** | storefront (`apps/web`) + admin (`apps/admin`) — GitHub App access chahiye |
+| **Vercel** (recommended) | storefront (`apps/web`) + admin (`apps/admin`) |
 | **Render** | full app + Postgres (`render.yaml` blueprint) |
 | **Netlify** | storefront + admin, functions ke saath (`netlify.toml`) |
 
-Detail: [`docs/10-deployment/`](docs/10-deployment).
+Steps + troubleshooting: [`docs/09-devops/vercel-deploy.md`](docs/09-devops/vercel-deploy.md).
 
 ## 4. Owner panel (admin)
 

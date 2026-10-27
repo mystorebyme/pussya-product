@@ -19,10 +19,17 @@ Database (Postgres / JSON) **primary** hai: order, payment verification, invoice
 sab wahin rehta hai. Sheet uski live copy + owner ke settings ka source hai. Sheet down ho
 jaye to site chalti rehti hai (sirf owner edits ruk jaate hain) — koi order fail nahi hota.
 
-## 0. Sheet abhi banni hai — 5 minute me aise banaiye
+## 0. Sheet ready hai — ab sirf Apps Script + env
 
-Noor Ethnic Wear ki Sheet **owner ke apne Google account** me banti hai (customer data
-sirf owner ke paas rehta hai):
+Noor Ethnic Wear ki Sheet **owner ke apne Google account** me bani hui hai — 16 tabs,
+headers aur `Settings` keys ke saath:
+
+> **Noor Ethnic Wear — Store DB (Orders · Products · Settings)**
+> https://docs.google.com/spreadsheets/d/1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo/edit
+
+Bas step 3 se aage kariye (Apps Script deploy + env). Header dobara banane ho to
+`node scripts/sheets/export-tab-headers.mjs`. Nayi sheet (dusre brand ke liye) chahiye to
+step 1–2 se shuru kariye:
 
 1. [sheets.new](https://sheets.new) → naam: `Noor Ethnic Wear — Store`.
 2. Repo ke `docs/09-devops/sheet-tabs/` se **16 CSV** import kariye
@@ -37,7 +44,11 @@ sirf owner ke paas rehta hai):
    ```
    GOOGLE_SHEETS_WEBAPP_URL = https://script.google.com/macros/s/AKfy…/exec
    GOOGLE_SHEETS_TOKEN      = <lamba random token>
+   SHEET_EXPECTED_ID        = 1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo
    ```
+
+   > `SHEET_EXPECTED_ID` **code me kahin hardcoded nahi** hai — sirf env se aata hai
+   > (galat sheet pakadne par site warning deti hai, band nahi hoti).
 
 5. `Settings` tab me apni values bhariye. **Jo cell khaali hai wo site par dikhta hi
    nahi** — koi hardcoded fallback nahi:

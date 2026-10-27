@@ -74,10 +74,19 @@ test("R38-2: UPI ka ek hi source — sheet; code defaults khaali", () => {
 });
 
 test("R38-3: payment UI khaali UPI par honestly pause karta hai (galat payee nahi)", () => {
-  const upi = read("apps/web/src/components/upi-payment.tsx");
+  // comment hata kar sirf customer-facing text dekho (R40: technical line nahi)
+  const upi = read("apps/web/src/components/upi-payment.tsx")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
   assert.match(upi, /if \(!paid && !payeeVpa\)/, "empty-VPA branch maujood hai");
   assert.match(upi, /data-testid="upi-unavailable"/, "paused state ka testid");
-  assert.match(upi, /load nahi ho rahi/, "customer ko saaf message");
+  // R40 (owner): "payment settings load nahi ho rahi — refresh kariye" jaisi
+  // technical lines customer ko kabhi nahi dikhni chahiye.
+  assert.doesNotMatch(upi, /refresh kariye/i, "customer ko refresh karne ko nahi kehte");
+  assert.doesNotMatch(upi, /load nahi ho rahi/i, "technical load-error copy nahi");
+  assert.doesNotMatch(upi, /sheet se aati hai/i, "customer ko sheet ka pata nahi chalna chahiye");
+  assert.match(upi, /slowToLoad/, "pehle shaant skeleton, phir seedhi baat");
+  assert.match(upi, /Payment options khul rahe hain/, "loading copy customer-friendly");
   // QR/deep-link isi branch ke baad hi bante hain — khaali VPA par upi:// nahi
   const branchIndex = upi.indexOf("!payeeVpa");
   const openIndex = upi.indexOf('data-testid="upi-open"');

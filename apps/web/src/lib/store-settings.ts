@@ -32,14 +32,16 @@ export type StoreSettings = {
 };
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
-  announcement: "Diwali Sale — Up to 70% OFF · Final price ₹499 onwards",
+  /** R40: koi seasonal/purani copy default me nahi — owner sheet se set kare (khaali = header apni generic lines dikhata hai) */
+  announcement: "",
   freeShipping: true,
   /**
    * R38 (owner): purana hardcoded payee VPA code se **poora hata diya** — jo
    * sheet me hai wahi fetch honi chahiye. UPI ka ek hi source hai: Google Sheet
    * (Settings tab, `upi_id`). Env `STORE_UPI_ID` sirf emergency fallback hai
    * (sheet bilkul na chale; production me ye env bhi hata diya gaya). Dono
-   * khaali hon to payment page honestly bolta hai "settings load nahi ho rahi"
+   * khaali hon to payment card shaant skeleton dikhata hai (customer ko koi
+   * technical line nahi) aur team WhatsApp par payment link bhejti hai
    * — galat payee par paisa jaane se ye kahin behtar hai.
    */
   upiId: process.env.STORE_UPI_ID ?? "",

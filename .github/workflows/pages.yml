@@ -7,8 +7,8 @@ name: GitHub Pages preview
 on:
   push:
     branches:
-      - arena/f713eef1-tannu-product
       - main
+      - arena/f2c07741-pussya-product
     paths-ignore:
       - ".reviews-sync-trigger"
       - "database/seeds/reviews/**"

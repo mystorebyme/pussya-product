@@ -44,8 +44,9 @@ export function BrandLockup({
         <img
           src={brandAssets.fluid}
           alt="Noor Ethnic Wear"
-          width={660}
-          height={397}
+          /* asli file: 458×400 — ratio wahi rakha hai taaki layout shift na ho */
+          width={458}
+          height={400}
           decoding="async"
           className="block w-auto max-w-full object-contain"
         />
@@ -57,7 +58,8 @@ export function BrandLockup({
           <img
             src={brandAssets.mobile}
             alt="Noor Ethnic Wear"
-            width={403}
+            /* asli file: 285×112 (desktop 382×150, tablet 331×130) */
+            width={285}
             height={112}
             decoding="async"
             className="block w-auto max-w-full object-contain"

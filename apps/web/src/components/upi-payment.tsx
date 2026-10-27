@@ -96,6 +96,21 @@ export function UpiPayment({
   const payeeName = (live && liveSettings.upiName.trim()) || upiName;
   const helpWhatsapp = (live && liveSettings.whatsapp.trim()) || whatsapp;
 
+  /**
+   * Owner (R40): UPI ID pehle paint par khaali hoti hai (value sheet se aati hai),
+   * isliye turant error dikhana galat tha. Pehle ~8s shaant skeleton, phir ek
+   * seedhi non-technical line. Customer ko kabhi "refresh kariye" nahi kehte.
+   */
+  const [slowToLoad, setSlowToLoad] = useState(false);
+  useEffect(() => {
+    if (payeeVpa) {
+      setSlowToLoad(false);
+      return;
+    }
+    const timer = setTimeout(() => setSlowToLoad(true), 8_000);
+    return () => clearTimeout(timer);
+  }, [payeeVpa]);
+
   const callbackUrl = useMemo(() => {
     if (!returnToken) return undefined;
     const base = (siteUrl ?? (typeof window !== "undefined" ? window.location.origin : "")).replace(/\/+$/, "");
@@ -261,47 +276,46 @@ export function UpiPayment({
   const paid = paymentStatus === "paid";
 
   /**
-   * R38 (owner): UPI ID **sirf sheet** se aati hai — code me koi hardcoded payee
-   * default nahi bacha. Sheet se value nahi mili (script down / Settings tab me
-   * `upi_id` khaali) to payment honestly pause dikhaate hain — galat payee par
-   * paisa jaane se ye kahin behtar hai. Live settings aate hi (3s poll) ye block
-   * apne aap normal payment UI ban jaata hai.
+   * UPI ID sirf sheet se aati hai — value na mile to galat payee par paisa bhejne
+   * se behtar hai payment pause. Live settings (3s poll) aate hi card normal ho
+   * jaata hai; customer ko sirf skeleton ya seedhi baat dikhti hai (R38/R40).
    */
   if (!paid && !payeeVpa) {
     return (
-      <div className="mt-4 overflow-hidden border border-[#e6d3a8] bg-[#fdf9ee]" data-testid="upi-payment">
-        <div className="border-b border-[#ecd9b0] bg-[#f8efd9] px-4 py-2.5 sm:px-5">
-          <h2 className="text-[11px] font-semibold tracking-[.14em] text-[#8a6a1f] uppercase">
-            Pay {formatPrice(amount)} via UPI
-          </h2>
+      <div className="mt-4 overflow-hidden border border-[#eee6de] bg-white" data-testid="upi-payment">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#f0eae3] bg-[#fcfaf7] px-4 py-2.5 sm:px-5">
+          <h2 className="text-[11px] font-semibold tracking-[.14em] text-[#8a8078] uppercase">Payment</h2>
+          <span className="text-[11px] text-[#8a8078]">Order {orderNumber}</span>
         </div>
-        <div className="px-4 py-4 sm:px-5" data-testid="upi-unavailable">
-          <p className="text-[12.5px] leading-relaxed text-[#4a423b]">
-            Payment settings abhi load nahi ho rahi (UPI ID store ki sheet se aati hai).
-            Page ek-do baar refresh kariye — phir bhi na chale to WhatsApp par order
-            number <strong>{orderNumber}</strong> bhej dijiye, team turant madad karegi.
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={recheckStatus}
-              className="inline-flex h-8 items-center border border-[#e0cf9f] bg-white px-2.5 text-[10px] font-semibold tracking-[.08em] text-[#6b5214] uppercase"
-              data-testid="upi-recheck"
-            >
-              Check status
-            </button>
-            {wa ? (
-              <a
-                href={`https://wa.me/91${wa}?text=${encodeURIComponent(`Hi Noor Ethnic Wear, payment settings load nahi ho rahi — order ${orderNumber} (${formatPrice(amount)}). Madad chahiye.`)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-8 items-center border border-[#e0cf9f] bg-white px-2.5 text-[10px] font-semibold tracking-[.08em] text-[#6b5214] uppercase"
-                data-testid="upi-help-whatsapp"
-              >
-                WhatsApp par madad
-              </a>
-            ) : null}
-          </div>
+
+        <div className="px-4 py-4 sm:px-5" data-testid="upi-unavailable" aria-busy={!slowToLoad}>
+          {slowToLoad ? (
+            <>
+              <p className="text-[12.5px] leading-relaxed text-[#4a423b]">
+                Aapka order <strong className="text-[#862222]">{orderNumber}</strong> save ho gaya hai. Online
+                payment is order ke liye abhi available nahi hai — team aapko payment link WhatsApp par bhej
+                degi.
+              </p>
+              {wa ? (
+                <a
+                  href={`https://wa.me/91${wa}?text=${encodeURIComponent(`Hi Noor Ethnic Wear, order ${orderNumber} (${formatPrice(amount)}) ka payment link bhej dijiye.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex h-9 items-center border border-[#e0cf9f] bg-[#fdf9ee] px-3 text-[10.5px] font-semibold tracking-[.08em] text-[#6b5214] uppercase"
+                  data-testid="upi-help-whatsapp"
+                >
+                  WhatsApp par payment link maangein
+                </a>
+              ) : null}
+            </>
+          ) : (
+            <>
+              {/* silent wait — settings har 3s par refresh hoti hain, customer ko kuch karne ki zaroorat nahi */}
+              <div className="h-3 w-36 animate-pulse rounded bg-[#f1ece6]" aria-hidden="true" />
+              <div className="mt-2 h-3 w-56 animate-pulse rounded bg-[#f1ece6]" aria-hidden="true" />
+              <p className="mt-3 text-[12px] text-[#8a8078]">Payment options khul rahe hain…</p>
+            </>
+          )}
           {statusNote ? (
             <p className="mt-2 border border-[#e6d3a8] bg-[#fbf3df] px-2.5 py-2 text-[11px] leading-relaxed text-[#7a5c14]">
               {statusNote}

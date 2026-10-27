@@ -26,18 +26,19 @@ const quickLinks = [
   { label: "ANARKALI", href: "/collections/party-wear-gown" },
   { label: "LEHENGA CHOLI", href: "/collections/lehnga-choli" },
   { label: "PRINTED SET", href: "/collections/printed-suit-set" },
+  { label: "BEST SELLER", href: "/collections/best-seller" },
   { label: "NEW IN", href: "/collections/new-arrivals" },
   { label: "SALE", href: "/collections/sale" },
   { label: "CONTACT", href: "/pages/contact" },
 ];
 
-// Fallback copy — admin → Settings se announcement set ho to wahi dikhta hai
+// Fallback copy — admin → Settings se announcement set ho to wahi dikhta hai.
+// R40: koi date/purana offer nahi (Diwali copy hata di) — sirf hamesha sach rehne wali baatein.
 const defaultAnnouncements = [
-  "Diwali Sale — Up to 70% OFF · Final price ₹499 onwards",
-  "Diwali dispatch ✦ order by 4 Nov for delivery before the festival",
   "Free shipping across India — every order",
+  "Secure prepaid checkout — UPI se seedha payment",
   "Same-day dispatch on prepaid orders",
-  "Secure prepaid checkout — UPI, cards & netbanking",
+  "Designer anarkali, lehenga choli & printed suit sets",
 ];
 
 export function SiteHeader() {
@@ -54,6 +55,15 @@ export function SiteHeader() {
 
   // owner (admin ya Google Sheet) se announcement badalte hi header par wahi dikhta hai
   const announcements = announcement ? [announcement, ...defaultAnnouncements] : defaultAnnouncements;
+
+  // announcement strip khud rotate kare (R40) — pehle sirf dots se badalta tha
+  useEffect(() => {
+    if (announcements.length < 2) return;
+    const timer = window.setInterval(() => {
+      setBannerIndex((current) => (current + 1) % announcements.length);
+    }, 4_200);
+    return () => window.clearInterval(timer);
+  }, [announcements.length]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -311,7 +321,10 @@ export function SiteHeader() {
         >
           <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-x-5 gap-y-0.5 px-4 py-1.5 xl:gap-x-8">
             {quickLinks.map((link) => {
-              const active = pathname === link.href;
+              // collection child pages bhi apne nav item ko highlight karein
+              const active =
+                pathname === link.href ||
+                (link.href !== "/" && pathname.startsWith(`${link.href}/`));
               return (
                 <Link
                   key={link.href}

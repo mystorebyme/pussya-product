@@ -1,5 +1,6 @@
 import { preflight, withCors } from "@/lib/cors";
 import { createOrderSchema } from "@noor/validation";
+import { RATE_LIMITS, enforceRateLimit } from "@/lib/rate-limit";
 import {
   createOrder,
   findIdempotentOrder,
@@ -11,6 +12,10 @@ import {
 export const dynamic = "force-dynamic";
 
 async function handlePost(request: Request) {
+  // burst / script se fake orders na bane (asli customer kabhi isse nahi takrata)
+  const limited = enforceRateLimit(request, RATE_LIMITS.orders);
+  if (limited) return limited;
+
   const idempotencyKey = request.headers.get("idempotency-key")?.trim().slice(0, 120);
   // double click / network retry par doosra order na bane (disk-backed, restart-safe)
   if (idempotencyKey) {

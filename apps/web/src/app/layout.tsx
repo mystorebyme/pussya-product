@@ -5,7 +5,6 @@ import { CartProvider } from "@/components/cart-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { FloatingHelp } from "@/components/floating-help";
-import { AnnouncementBar } from "@/components/announcement-bar";
 import { WishlistProvider } from "@/components/wishlist-provider";
 import { StoreSettingsProvider } from "@/components/store-settings-provider";
 import { StoreStructuredData } from "@/components/store-structured-data";
@@ -123,7 +122,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             >
               Skip to content
             </a>
-            <AnnouncementBar />
             <SiteHeader />
             <main id="main-content" className="min-h-[60vh]">{children}</main>
             <SiteFooter />
