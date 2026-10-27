@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T05:50:22.842Z
+Ran: 2026-10-27T05:53:30.600Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 422411 bytes · 315ms |
+| ✅ | home page 200 — HTTP 200 · 415955 bytes · 179ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -40,6 +40,19 @@ Ran: 2026-10-27T05:50:22.842Z
 | ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 284 KB |
 | ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 272 KB |
 | ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 283 KB |
+
+## Logo per viewport (browser ka `<source>` selection)
+
+| result | viewport | file | display height | file width | required |
+| --- | --- | --- | --- | --- | --- |
+| ✅ | 320px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
+| ✅ | 375px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
+| ✅ | 390px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
+| ✅ | 430px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
+| ✅ | 768px | `logo-tablet.png` | 52px | 369px | ≥ 104px |
+| ✅ | 1024px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
+| ✅ | 1366px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
+| ✅ | 1440px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
 
 ## CSS (logo visibility)
 
@@ -107,17 +120,14 @@ Ran: 2026-10-27T05:50:22.842Z
 | ✅ | `/pussya-product/pages/contact/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/black-masleen-silk-long-gown-ac-7003/` | 200 |
-| ✅ | `/pussya-product/products/lakhnavi-work-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/kishika-yellow-color-anarkali-suit-set-sleeves-fabric-attached/` | 200 |
-| ✅ | `/pussya-product/products/niyara-maroon-color-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-lakhnavi-embroidered-work-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-lakhnavi-embroidered-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/alveera-premium-quality-mustard-yellow-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/red-coloured-designer-anarkali-suit/` | 200 |
-| ✅ | `/pussya-product/products/maroon-coloured-designer-anarkali-suit/` | 200 |
-| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/pranavi-anarkali-dupatta-set/` | 200 |
+| ✅ | `/pussya-product/products/tridha-fendy-silk-blush-pink-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/aditis-white-coloured-anarkali-suit-set-td04/` | 200 |
+| ✅ | `/pussya-product/products/yellow-trendy-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/black-lucknowi-sequins-work-v-neck-gown-pent-and-duptta-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/western-style-sleeve-premium-readymade-kalamkari-designer-gown/` | 200 |
+| ✅ | `/pussya-product/products/real-modeling-pure-soft-organza-silk-fabric-fully-flair-kali-pattern-and-canvas-patta-with-dupatta-set-pant-ready-to-wear-1/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -126,6 +136,9 @@ Ran: 2026-10-27T05:50:22.842Z
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
+| ✅ | `/pussya-product/products/trending-anarkali-suit-set-3-pis/` | 200 |
+| ✅ | `/pussya-product/products/premium-readymade-anarkali-suit-set-3-pis/` | 200 |
 
 ## Summary
 
