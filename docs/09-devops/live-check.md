@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T19:05:14.771Z
+Ran: 2026-10-27T19:25:26.315Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 451514 bytes · 211ms |
+| ✅ | home page 200 — HTTP 200 · 443837 bytes · 226ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -145,23 +145,23 @@ Ran: 2026-10-27T19:05:14.771Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/saakshi-s-grey-cosmo-slit-anarkali-with-skirt-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/stunning-red-colour-premium-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/chandnis-latest-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/chandnis-latest-anarkali-suit-set-8201648537732/` | 200 |
-| ✅ | `/pussya-product/products/mesta-trendy-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-heavy-traditional-crop-top-with-shrug-5/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-heavy-traditional-crop-top-with-shrug-3/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-heavy-traditional-crop-top-with-shrug-2/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-heavy-traditional-crop-top-with-shrug-1/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-heavy-traditional-crop-top-with-shrug/` | 200 |
-| ✅ | `/pussya-product/products/royal-wine-georgette-anarkali-heavy-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/classic-pink-anarkali-suit-set-15408494084228/` | 200 |
-| ✅ | `/pussya-product/products/classic-pink-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/bottle-green-designer-anarkali-suit-with-pant-and-dupatta/` | 200 |
+| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/off-whitetrendy-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-roman-silk-pink-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-5-layers-orange-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/premium-and-lightweight-anarkali-suit-set-1/` | 200 |
+| ✅ | `/pussya-product/products/orange-shades-premium-quality-koti-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/real-modeling-pure-soft-organza-silk-fabric-fully-flair-kali-pattern-and-canvas-patta-with-dupatta-set-pant-ready-to-wear-1/` | 200 |
+| ✅ | `/pussya-product/products/saniya-s-wine-gown/` | 200 |
+| ✅ | `/pussya-product/products/sunheri-fux-georgette-suit-set-6013/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
+| ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
+| ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
+| ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
