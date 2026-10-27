@@ -53,7 +53,7 @@ export async function checkPincodeOffline(pincode: string): Promise<OfflinePinco
       if (pincodes.includes(pin)) {
         return {
           serviceable: true,
-          message: `Deliverable — ${district}, ${state}. Free shipping, 4-7 business days.`,
+          message: `Deliverable — ${district}, ${state}. Delivery in 4-7 business days.`,
           state,
           district,
           deliveryDays: "4-7 business days",

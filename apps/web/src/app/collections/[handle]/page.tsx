@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const products = await getProductsByCollection(collection.handle);
   return {
     title: `${collection.title} — ${products.length} styles`,
-    description: `${collection.title}: ${collection.subtitle}. ${products.length} designer pieces at Noor Ethnic Wear, free shipping across India and secure prepaid checkout.`,
+    description: `${collection.title}: ${collection.subtitle}. ${products.length} designer pieces at Noor Ethnic Wear, with secure prepaid UPI checkout.`,
     alternates: { canonical: `/collections/${canonicalCollectionHandle(collection.handle)}` },
     // khaali collection par thin content — index mat karo (par page accessible rahe)
     robots: products.length === 0 ? { index: false, follow: true } : undefined,

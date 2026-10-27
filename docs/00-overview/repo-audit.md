@@ -22,10 +22,10 @@
 | products | 446 |
 | collections | 11 |
 | sourceFiles | 253 |
-| sourceLines | 27895 |
-| testFiles | 48 |
+| sourceLines | 27882 |
+| testFiles | 49 |
 | skills | 20 |
-| docsPages | 128 |
+| docsPages | 129 |
 
 ## Skills (20/20 pass)
 

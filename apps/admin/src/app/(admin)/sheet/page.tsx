@@ -192,10 +192,6 @@ export default async function SheetPage() {
               <label>Support email</label>
               <div className="mono">{settings.supportEmail ?? "—"}</div>
             </div>
-            <div className="field">
-              <label>Free shipping</label>
-              <div>{settings.freeShipping === false ? "No" : "Yes"}</div>
-            </div>
           </div>
           <div className="field" style={{ marginBottom: 0 }}>
             <label>Announcement bar</label>

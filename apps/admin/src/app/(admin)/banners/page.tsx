@@ -76,11 +76,13 @@ export default async function BannersPage() {
             Hero link: <span className="mono">{HERO_HREF}</span>
           </p>
           <p className="small muted">
-            Teen device-specific files yahin se aati hain (<span className="mono">apps/web/public/images/banners/</span>)
-            — phone par portrait, tablet par 4:3, desktop par wide. Sab me flat 70% OFF, final price ₹499–₹699.
-            Nayi creative chahiye to wahi files replace karke deploy karo
-            (<span className="mono">node scripts/brand/build-responsive-assets.mjs</span>);
-            announcement text Settings (ya Google Sheet) se turant badalta hai.
+            Teen device-specific posters yahin se aate hain (<span className="mono">apps/web/public/images/banners/</span>)
+            — mobile par portrait (941×1672), tablet par 1448×1086, desktop par 1536×1024. Poster me
+            Noor logo, UP TO 75% OFF, SHOP NOW, Secure Payment aur Easy Returns hain; page inhe
+            <strong> crop kiye bina</strong> poora dikhata hai. Nayi creative chahiye to
+            <span className="mono"> assets/source/banners/</span> me wahi teen PNG replace karke
+            <span className="mono"> node scripts/brand/build-hero-banners.mjs</span> chala dijiye.
+            Announcement text Settings (ya Google Sheet) se turant badalta hai.
           </p>
         </div>
       </div>

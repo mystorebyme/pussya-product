@@ -77,7 +77,7 @@ const ASK_WHATSAPP = "Please WhatsApp us and we will check for you.";
 const VALID_ONLY = "Please enter a valid Indian pincode.";
 
 const MESSAGES: Record<ServiceabilityReason, (pin: string, state?: string | null) => string> = {
-  ok: (pin, state) => `Delivering to ${pin}${state ? ` (${state})` : ""} — free shipping.`,
+  ok: (pin, state) => `Delivering to ${pin}${state ? ` (${state})` : ""} — delivery in 4-7 business days.`,
   invalid: () => "Please enter a valid 6-digit Indian pincode.",
   unknown: () => VALID_ONLY,
   blocked: () => `${UNAVAILABLE} ${ASK_WHATSAPP}`,

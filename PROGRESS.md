@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (Sheet ban gayi, Vercel deploy path, payment/header/logo fix)
+**Last updated:** 2026-10-27 (owner ke Diwali posters — desktop/tablet/mobile, no crop; Free Shipping hataya)
 
 ## Kya ready hai
 
@@ -14,6 +14,8 @@
 | Vercel deploy (button + GitHub Actions) | ✅ config + steps ready — bas Vercel secrets | `docs/09-devops/vercel-deploy.md` |
 | Payment page copy | ✅ koi technical "refresh kariye" line customer ko nahi dikhti | `apps/web/src/components/upi-payment.tsx` |
 | Header + logo | ✅ ek hi announcement strip, per-device logo size, nav child pages par active | `site-header.tsx`, `globals.css` |
+| **Diwali hero banners** (desktop / tablet / mobile) | ✅ owner ke teen posters — har device ki apni file, `object-fit: contain` + exact aspect-ratio, koi crop/stretch nahi; desktop full width | `assets/source/banners/`, `node scripts/brand/build-hero-banners.mjs` |
+| **"Free Shipping" claim** | ✅ poori site se hataya (header, strip, cart, PDP, policies, meta; admin toggle bhi) | `tests/unit/round41.test.ts` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 287 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |

@@ -142,7 +142,7 @@ export function ProductDetail({
       setPinOk(result.serviceable);
       setPinMessage(
         result.serviceable
-          ? `Delivering to ${pin}${result.district ? ` — ${result.district}, ${result.state}` : ""}. Free shipping, ${result.deliveryDays ?? "4-7 business days"}.`
+          ? `Delivering to ${pin}${result.district ? ` — ${result.district}, ${result.state}` : ""}. Delivery in ${result.deliveryDays ?? "4-7 business days"}.`
           : result.message,
       );
     } catch {
@@ -180,7 +180,7 @@ export function ProductDetail({
       title: "Shipping & Delivery",
       content: (
         <p className="text-[12.5px] leading-relaxed text-[#5c534b]">
-          Ready to dispatch in 1-2 days. Free shipping across India, prepaid orders only (UPI) —
+          Ready to dispatch in 1-2 days. Prepaid orders only (UPI) —
           4-7 business days delivery. Cash on Delivery available nahi hai, isliye order place karte hi
           UPI se payment confirm kar lein.
         </p>

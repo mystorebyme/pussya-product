@@ -10,11 +10,16 @@
  * Owner apne product photos dena chahe to bas `assets/source/hero-*.png` rakh kar
  * is script ko dobara chala dein — file names wahi rehte hain.
  *
+ * Owner ke diye hue asli Diwali posters (`assets/source/banners/`) mile to **wahi**
+ * use hote hain — sirf PNG → WebP conversion hota hai, **koi crop nahi, koi stretch
+ * nahi** (poster ka poora frame, uska text/logo intact rehta hai). Na mile to niche
+ * wala generated fallback chalta hai.
+ *
  * Output (apps/web/public/images/banners/):
- *   banner-desktop.webp  1779×594   (≥1024px)
- *   banner-tablet.webp   1200×900   (768–1023px)
- *   banner-mobile.webp   860×1290   (<768px)
- *   banner-fluid.webp    1600×534   (flexible containers)
+ *   banner-desktop.webp  1536×1024  (≥1024px, full frame)
+ *   banner-tablet.webp   1448×1086  (768–1023px, full frame)
+ *   banner-mobile.webp    941×1672  (<768px, portrait full frame)
+ *   banner-fluid.webp    desktop ka fluid copy (flexible containers)
  *
  * Run: node scripts/brand/build-hero-banners.mjs
  */
@@ -32,6 +37,48 @@ const MAROON = "#6b1220";
 const GOLD = "#c9a449";
 
 await fs.mkdir(OUT, { recursive: true });
+
+/* ─────────── 1. owner ke asli posters (preferred) ───────────
+   Har breakpoint ki apni file — tablet/mobile par desktop banner crop karne se
+   logo aur "SHOP NOW" kat jaate the, isliye alag art use hoti hai. */
+const OWNER_DIR = path.join(ROOT, "assets/source/banners");
+const OWNER = [
+  { name: "banner-desktop", src: "banner-desktop.png" },
+  { name: "banner-tablet", src: "banner-tablet.png" },
+  { name: "banner-mobile", src: "banner-mobile.png" },
+];
+
+async function fromOwnerBanners() {
+  const found = [];
+  for (const entry of OWNER) {
+    const file = path.join(OWNER_DIR, entry.src);
+    try {
+      await fs.access(file);
+    } catch {
+      return null; // ek bhi missing → fallback (aadha-adhoor set kabhi nahi)
+    }
+    found.push({ ...entry, file });
+  }
+  const sizes = {};
+  for (const entry of found) {
+    const meta = await sharp(entry.file).metadata();
+    // native size hi rakhte hain — upscale se poster blurry hota hai
+    const webp = await sharp(entry.file)
+      .webp({ quality: 84, effort: 5 })
+      .toBuffer();
+    await fs.writeFile(path.join(OUT, `${entry.name}.webp`), webp);
+    sizes[entry.name] = { width: meta.width, height: meta.height };
+  }
+  // fluid fallback = desktop ka hi frame (aspect ratio kabhi nahi badalta)
+  await fs.copyFile(path.join(OUT, "banner-desktop.webp"), path.join(OUT, "banner-fluid.webp"));
+  return sizes;
+}
+
+const ownerSizes = await fromOwnerBanners();
+if (ownerSizes) {
+  console.log("hero banners ✔ (owner posters)", JSON.stringify(ownerSizes));
+  process.exit(0);
+}
 
 const trimmed = await sharp(SRC).flatten({ background: "#ffffff" }).trim({ threshold: 8 }).png().toBuffer();
 const { width: W, height: H } = await sharp(trimmed).metadata();

@@ -748,7 +748,7 @@ export function CheckoutForm() {
                   data-testid="pincode-status"
                 >
                   {pinStatus.ok
-                    ? `Deliverable${pinStatus.district ? ` — ${pinStatus.district}, ${pinStatus.state}` : ""}. Free shipping, 4-7 business days.`
+                    ? `Deliverable${pinStatus.district ? ` — ${pinStatus.district}, ${pinStatus.state}` : ""}. Delivery in 4-7 business days.`
                     : pinStatus.message}
                 </p>
               ) : null}

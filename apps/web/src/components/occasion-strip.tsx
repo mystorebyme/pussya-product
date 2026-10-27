@@ -57,13 +57,13 @@ export function EditorialBand() {
           <p className="mt-3 text-[13px] leading-relaxed text-[#5c534b]">
             Every Noor Ethnic Wear anarkali, lehenga and suit set is cut from premium fabric and finished by
             karigars who have spent generations perfecting zari, sequin and thread work. Fully stitched,
-            ready to wear and delivered free across India.
+            ready to wear and delivered across India.
           </p>
           <ul className="mt-4 grid grid-cols-2 gap-2 text-[11.5px] text-[#4a423b]">
             {[
               "Fully stitched & ready",
               "Premium mill-direct fabric",
-              "Free shipping pan-India",
+              "Prepaid UPI checkout",
               "7 days easy replacement",
             ].map((item) => (
               <li key={item} className="flex items-center gap-1.5">

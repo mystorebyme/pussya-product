@@ -41,7 +41,7 @@ const pages: Record<string, PageContent> = {
       {
         heading: "Here when you need us",
         body: [
-          "Our team is available on WhatsApp 24/7 for sizing help, fabric close-ups and order tracking. Free shipping across India on every prepaid order, with 7 days replacement.",
+          "Our team is available on WhatsApp 24/7 for sizing help, fabric close-ups and order tracking. Prepaid orders only, with 7 days easy replacement.",
         ],
       },
     ],
@@ -81,7 +81,7 @@ const pages: Record<string, PageContent> = {
   "shipping-policy": {
     title: "Shipping Policy",
     eyebrow: "Delivery",
-    intro: "Free shipping across India on every order — all orders are prepaid and dispatched within 1-2 business days.",
+    intro: "All orders are prepaid and dispatched within 1-2 business days.",
     sections: [
       {
         heading: "Dispatch timelines",

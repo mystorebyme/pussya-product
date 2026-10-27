@@ -8,8 +8,8 @@ We ship across India. If your pincode is not serviceable by our courier partners
 
 ## 2. Charges
 
-- **All orders:** free shipping anywhere in India.
-- **Prepaid only:** we accept UPI, cards and net banking. A secure payment link is shared on WhatsApp right after you place the order.
+- **All orders:** prepaid only — UPI se payment (QR + UPI ID checkout par dikhta hai).
+- **No hidden charges:** jo price checkout par dikhta hai, wahi pay karna hai.
 
 ## 3. Dispatch time
 

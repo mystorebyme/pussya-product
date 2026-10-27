@@ -324,19 +324,36 @@ table {
   }
 }
 
-/* ---------- home hero (device-specific banner) ---------- */
+/* ---------- home hero (device-specific banner) ----------
+   R41 (owner): "koi crop nahi, koi stretch nahi". Har breakpoint ka poster alag
+   hai aur wrapper ka aspect-ratio **usi file** ka ratio hai, isliye `contain`
+   kabhi kuch nahi kaat-ta. `cover` par tablet par logo/SHOP NOW kat jaata tha. */
+.hero-media {
+  display: block;
+  width: 100%;
+  background: #fbf1e2;
+  /* mobile poster: 941×1672 (portrait) */
+  aspect-ratio: 941 / 1672;
+}
+
 .hero-media img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
-/* 320px par bhi hero ke edges par kuch kat na jaye */
-@media (max-width: 767px) {
-  .hero-media img {
-    object-fit: contain;
-    background: #fbf1e2;
+@media (min-width: 768px) {
+  /* tablet poster: 1448×1086 */
+  .hero-media {
+    aspect-ratio: 1448 / 1086;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* desktop poster: 1536×1024 — poori width, poora frame */
+  .hero-media {
+    aspect-ratio: 1536 / 1024;
   }
 }

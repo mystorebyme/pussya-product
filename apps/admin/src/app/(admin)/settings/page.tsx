@@ -35,19 +35,6 @@ export default async function SettingsPage() {
             <input id="announcement" name="announcement" defaultValue={settings.announcement} />
           </div>
           <div className="row">
-            <div className="field">
-              <label htmlFor="freeShipping">Free shipping</label>
-              <label className="small" style={{ textTransform: "none", letterSpacing: 0 }}>
-                <input
-                  id="freeShipping"
-                  name="freeShipping"
-                  type="checkbox"
-                  defaultChecked={settings.freeShipping}
-                  style={{ width: "auto", marginRight: 8 }}
-                />
-                Sabhi prepaid orders par free
-              </label>
-            </div>
           </div>
           <div className="row">
             <div className="field">

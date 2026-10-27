@@ -15,11 +15,11 @@ import { CANONICAL_ORIGIN } from "@/lib/domain";
  *   - `brand/logo-fluid.png`    stacked (mark upar, wordmark neeche) — footer / invoice
  *   - `brand/logo-mark-{128,192,512}.png` square official mark (favicon, PWA, admin)
  *
- * Hero banner:
- *   - `banners/banner-desktop.webp` wide  (≥1024px)
- *   - `banners/banner-tablet.webp`  4:3   (768–1023px)
- *   - `banners/banner-mobile.webp`  portrait (<768px)
- *   - `banners/banner-fluid.webp`   fluid fallback
+ * Hero banner (owner ke diye hue Diwali posters se — koi crop nahi):
+ *   - `banners/banner-desktop.webp` 1536×1024 (≥1024px)
+ *   - `banners/banner-tablet.webp`  1448×1086 (768–1023px)
+ *   - `banners/banner-mobile.webp`   941×1672 portrait (<768px)
+ *   - `banners/banner-fluid.webp`   desktop ka fluid copy
  */
 const ASSET_BASE = process.env.NEXT_PUBLIC_PAGES_BASE_PATH ?? "";
 
@@ -45,11 +45,27 @@ export const heroBanners = {
   fluid: `${ASSET_BASE}/images/banners/banner-fluid.webp`,
 } as const;
 
-/** aspect ratios (CSS `aspect-ratio` ke liye) — layout shift zero */
+/**
+ * Har asset ki **asli** dimension + aspect ratio.
+ *
+ * Hero wrapper ka `aspect-ratio` bilkul isi ke barabar hota hai, isliye:
+ *   • kuch crop nahi hota (pointer/tablet par `SHOP NOW` ya logo kabhi nahi kat-ta),
+ *   • kuch stretch nahi hota (image apne hi ratio me render hoti hai),
+ *   • space pehle se reserve rehta hai → layout shift (CLS) zero.
+ *
+ * Ye numbers `node scripts/brand/build-hero-banners.mjs` ke output se aate hain
+ * (`tests/unit/round41.test.ts` inhe asli file dimensions se match karta hai).
+ */
+export const heroBannerSizes = {
+  desktop: { width: 1536, height: 1024 },
+  tablet: { width: 1448, height: 1086 },
+  mobile: { width: 941, height: 1672 },
+} as const;
+
 export const HERO_RATIO = {
-  desktop: 1779 / 594,
-  tablet: 4 / 3,
-  mobile: 860 / 1290,
+  desktop: heroBannerSizes.desktop.width / heroBannerSizes.desktop.height,
+  tablet: heroBannerSizes.tablet.width / heroBannerSizes.tablet.height,
+  mobile: heroBannerSizes.mobile.width / heroBannerSizes.mobile.height,
 } as const;
 
 /** invoice / print ke liye poora logo */

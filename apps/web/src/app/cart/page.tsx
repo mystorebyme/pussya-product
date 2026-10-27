@@ -14,7 +14,6 @@ export default function CartPage() {
   const { whatsapp } = useStoreSettings();
   // festive sale: final price already ₹499–₹699 — koi coupon stack nahi hota
   const total = Math.max(0, subtotal);
-  const freeShippingMet = true;
 
   return (
     <div className="container-noor py-8 lg:py-12">
@@ -115,7 +114,6 @@ export default function CartPage() {
             <h2 className="text-[11px] font-semibold tracking-[.16em] uppercase">Order summary</h2>
             <div className="mt-4 space-y-2 text-[12.5px]">
               <Row label="Subtotal" value={formatPrice(subtotal)} />
-              <Row label="Shipping" value={freeShippingMet ? "Free" : "Free (prepaid)"} />
               <div className="flex items-center justify-between border-t border-[#e7ddd2] pt-2.5 text-[14px] font-semibold">
                 <span>Total</span>
                 <span className="text-[#862222]">{formatPrice(total)}</span>

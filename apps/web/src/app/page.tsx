@@ -11,7 +11,7 @@ import { compactProduct, rotatePick, rotationBucket } from "@/lib/rotation";
 import { bestSellers } from "@/lib/best-sellers";
 import { BestSellersRail } from "@/components/best-sellers-rail";
 import { imageUrl } from "@/lib/format";
-import { heroBanners, siteConfig } from "@/config/site";
+import { heroBannerSizes, heroBanners, siteConfig } from "@/config/site";
 import { SafeImage } from "@/components/safe-image";
 import { ShippingNote } from "@/components/shipping-note";
 
@@ -21,21 +21,22 @@ export const revalidate = 600;
 export const metadata: Metadata = {
   title: "Noor Ethnic Wear | Designer Anarkali Suits, Lehenga Choli & Suit Sets",
   description:
-    "Shop designer Anarkali suits, lehanga choli and printed suit sets at Noor Ethnic Wear. Hand-finished pieces, free shipping within India and express delivery on prepaid orders.",
+    "Shop designer Anarkali suits, lehanga choli and printed suit sets at Noor Ethnic Wear. Hand-finished pieces, secure prepaid UPI checkout and express delivery.",
   alternates: { canonical: "/" },
 };
 
 /**
- * Festive home banner — owner ke diye hue Diwali Sale posters.
- * Artwork par "FLAT 70% OFF" chhapa hai; catalogue me 60% aur 70% dono hain, isliye
- * HTML copy/alt/announcement "Up to 70% OFF" bolti hai (misleading claim nahi).
+ * Festive home banner — owner ke diye hue teen Diwali posters (desktop / tablet /
+ * mobile), har breakpoint ki **apni** art.
  *
- * Device ke hisaab se alag file (ek hi download hoti hai):
- *   - <768px   → portrait poster  (mobile, poora composition)
- *   - 768–1023 → 4:3 crop         (tablet, text + dono models)
- *   - ≥1024px  → wide banner      (desktop/laptop)
- * Wrapper ka `aspect-ratio` har asset ke exact ratio ke barabar hai, isliye
- * kuch bhi crop/stretch nahi hota aur layout shift (CLS) zero rehta hai.
+ * Owner rule (R41): koi crop nahi, koi stretch nahi — logo, "UP TO 75% OFF",
+ * "SHOP NOW", "Secure Payment", "Easy Returns" teeno screens par poore dikhein.
+ * Isliye:
+ *   • <picture> se device ke hisaab se alag file (ek hi download hoti hai),
+ *   • wrapper ka `aspect-ratio` us file ke **exact** ratio ke barabar
+ *     (`heroBannerSizes` se), aur image `object-fit: contain` — isliye kabhi
+ *     kuch nahi kat-ta, sirf poster poora fit hota hai
+ *   • desktop par poster poori width leta hai (max 1920px container).
  */
 const HERO_HREF = "/collections/sale";
 
@@ -114,26 +115,30 @@ export default async function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── hero banner: device-specific festive poster (mobile / tablet / desktop) ── */}
-      <section className="relative bg-[#fbf1e2]" data-testid="hero-banner" aria-label="Diwali Sale">
-        <div className="mx-auto max-w-[1920px]">
+      <section className="relative bg-[#fbf1e2]" data-testid="hero-banner" aria-label="Diwali Sale — up to 75% off">
+        <div className="mx-auto w-full max-w-[1920px]">
+          {/*
+            data-hero + CSS (.hero-media) me per-breakpoint aspect-ratio:
+            mobile 941/1672 · tablet 1448/1086 · desktop 1536/1024 — teeno asli file
+            ke ratio hain, isliye crop/stretch dono zero.
+          */}
           <Link
             href={HERO_HREF}
-            aria-label="Shop the Diwali sale — up to 70% off"
-            className="hero-media group relative block aspect-[860/1290] w-full overflow-hidden bg-[#fbf1e2] md:aspect-[4/3] lg:aspect-[1779/594]"
+            aria-label="Shop the Diwali sale — up to 75% off"
+            className="hero-media block w-full bg-[#fbf1e2]"
           >
             <picture>
-              <source media="(min-width:1024px)" srcSet={heroBanners.desktop} width={1779} height={594} />
-              <source media="(min-width:768px)" srcSet={heroBanners.tablet} width={1200} height={900} />
+              <source media="(min-width:1024px)" srcSet={heroBanners.desktop} />
+              <source media="(min-width:768px)" srcSet={heroBanners.tablet} />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={heroBanners.mobile}
-                alt="Happy Diwali Sale — up to 70% off ethnic wear by Noor Ethnic Wear"
-                width={860}
-                height={1290}
+                alt="Noor Ethnic Wear Diwali Sale — up to 75% off, secure payment and easy returns"
+                width={heroBannerSizes.mobile.width}
+                height={heroBannerSizes.mobile.height}
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
-                className="transition duration-700 group-hover:scale-[1.01]"
               />
             </picture>
           </Link>
@@ -142,7 +147,7 @@ export default async function HomePage() {
           <div className="container-noor flex flex-col items-center gap-3 border-b border-[#efe2cf] py-5 text-center sm:flex-row sm:justify-between sm:text-left">
             <div>
               <h1 className="font-display text-[20px] leading-tight font-medium text-[#5c1010] sm:text-[24px]">
-                Diwali Sale — Up to <span className="text-[#862222]">70%</span> Off
+                Diwali Sale — Up to <span className="text-[#862222]">75%</span> Off
               </h1>
               <p className="mt-1 text-[11px] text-[#7b6f64]">
                 <ShippingNote />

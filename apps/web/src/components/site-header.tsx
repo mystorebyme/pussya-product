@@ -35,7 +35,7 @@ const quickLinks = [
 // Fallback copy — admin → Settings se announcement set ho to wahi dikhta hai.
 // R40: koi date/purana offer nahi (Diwali copy hata di) — sirf hamesha sach rehne wali baatein.
 const defaultAnnouncements = [
-  "Free shipping across India — every order",
+  "Prepaid orders — UPI se secure checkout",
   "Secure prepaid checkout — UPI se seedha payment",
   "Same-day dispatch on prepaid orders",
   "Designer anarkali, lehenga choli & printed suit sets",
@@ -653,7 +653,7 @@ function CartDrawer({
                 <span className="font-semibold text-[#862222]">{formatPrice(subtotal)}</span>
               </div>
               <p className="mt-1 text-[11px] text-[#8a8078]">
-                Free shipping across India · prepaid orders dispatch same day
+                Prepaid orders · dispatch same day
               </p>
               <Link
                 href="/cart"

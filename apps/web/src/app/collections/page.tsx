@@ -18,7 +18,7 @@ export const revalidate = 600;
 export const metadata: Metadata = {
   title: "Shop all collections — Anarkali, Lehenga, Printed Suit Sets",
   description:
-    "Browse every Noor Ethnic Wear edit: Anarkali suits, lehenga choli, printed suit sets, new arrivals and the Diwali sale — free shipping across India.",
+    "Browse every Noor Ethnic Wear edit: Anarkali suits, lehenga choli, printed suit sets, new arrivals and the Diwali sale — secure prepaid UPI checkout.",
   alternates: { canonical: "/collections" },
 };
 
@@ -43,8 +43,8 @@ export default async function CollectionsIndexPage() {
           Every Noor Ethnic Wear edit
         </h1>
         <p className="mt-2 text-[12.5px] leading-relaxed text-[#6b6259]">
-          Hand-finished suits, lehengas and festive sets — {siteConfig.name}. Free shipping pan-India, prepaid
-          only, 4–7 day delivery.
+          Hand-finished suits, lehengas and festive sets — {siteConfig.name}. Prepaid orders only,
+          4–7 day delivery.
         </p>
       </div>
 
