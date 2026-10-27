@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R47: header menu/size guide/our story, animated category icons, smoothness)
+**Last updated:** 2026-10-27 (R48: poora size guide (3 tabs/XS–XXL/in–cm/Find My Size), unique category images, palette + animation, PDP hover zoom, YouPI PG gateway)
 
 ## Kya ready hai
 
@@ -28,6 +28,11 @@
 | **R45 — favicon + PWA** | ✅ root `/favicon.ico` asli ICO (32+48, pehle 404 tha), crown mark tile ki 92% width bharta hai (16px par dikhta hai), manifest splash cream (pehle kaala) | `app/favicon.ico`, `build-responsive-assets.mjs`, `manifest.ts` |
 | **R45 — live verify** | ✅ Pages deploy (build/deploy/smoke) + live-check report (`docs/09-devops/live-check.md`) — naya logo, banner ratio, favicon ICO sab live URL par check hote hain | `gh run list` |
 | **R47 — header + size guide + icons + smoothness** | ✅ header me bars icon (har screen), **Size guide** slide-over (inches/cm, chart, how to measure, fit tips, WhatsApp help) + **Our story** link; 7 unique animated gold category icons; page/drawer transitions, tap-highlight off, focus ring — report: `docs/09-devops/r47-reference-polish.md` | `site-header.tsx`, `size-guide-dialog.tsx`, `category-icon.tsx`, `globals.css` |
+| **R48 — poora size guide** | ✅ 3 tabs (Measurements Chart / Find My Size / How to Measure), **Inches (in) ↔ Centimeters (cm)** toggle, chart **XS–XXL** (bust/waist/hips/front length, owner ke cm numbers verbatim), bust daal kar recommended size + 34″–44″ quick picks, unstitched suit note (~2.5 m top / ~2.5 m bottom / ~2.25 m dupatta, tailor XS–5XL), 4 steps har ek par pro-tip — panel aur `/pages/size-guide` dono ek hi component se | `lib/size-chart.ts`, `components/size-guide-content.tsx` |
+| **R48 — category images unique** | ✅ 7 circles ki 7 alag images (image + colour dono repeat na hon; deterministic) | `lib/circle-art.ts`, `app/page.tsx` |
+| **R48 — palette + animation** | ✅ warm ivory/gold tokens, CTA par gold sheen, nav link underline draw, PDP hover zoom, sab `prefers-reduced-motion` par band | `app/globals.css` |
+| **R48 — PDP hover** | ✅ hover par base image hat jaati hai aur zoom wali dikhti hai; cursor hatne par exactly pehle jaisi | `components/product-gallery.tsx` |
+| **R48 — YouPI PG gateway** | ✅ `youpi.js` + `window.Youpi.pay()` checkout, HMAC webhook (`/api/payments/webhook/youpi`), server-to-server verify (`/api/payments/youpi/confirm`), sheet se live config; config na ho to seedha UPI QR flow — setup: `docs/09-devops/youpi-payment-gateway.md` | `lib/youpi.ts`, `lib/youpi-signature.ts`, `components/youpi-pay.tsx` |
 | **R45 — chhote bugs** | ✅ footer ka saal hydration-safe (`suppressHydrationWarning`), manifest icons base path ke saath, live-check me favicon/ICO/mark checks | `site-footer.tsx`, `manifest.ts`, `scripts/audit/live-check.mjs` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 330 pass | `npm run test:unit` |

@@ -5,8 +5,7 @@ import { ContactForm } from "@/components/contact-form";
 import { ContactDetails } from "@/components/contact-details";
 import { TrackOrderForm } from "@/components/track-order-form";
 import { WhatsAppLink } from "@/components/whatsapp-link";
-import { SizeChartTable } from "@/components/size-chart-table";
-import { FIT_TIPS, MEASURE_STEPS } from "@/lib/size-chart";
+import { SizeGuideContent } from "@/components/size-guide-content";
 
 type PageContent = {
   title: string;
@@ -16,7 +15,8 @@ type PageContent = {
   showContactForm?: boolean;
   showContactDetails?: boolean;
   showTrackOrder?: boolean;
-  showSizeTable?: boolean;
+  /** poora tabbed size guide (chart / find my size / how to measure) */
+  showSizeGuide?: boolean;
 };
 
 const pages: Record<string, PageContent> = {
@@ -188,29 +188,15 @@ const pages: Record<string, PageContent> = {
     title: "Size Guide",
     eyebrow: "Find your fit",
     intro:
-      "Most of our suits are ready-to-wear. Compare your body measurements with the chart below — when in doubt, size up or message us on WhatsApp with your bust, waist and height.",
+      "Ready-to-wear anarkalis, lehengas aur suit sets — bust, waist, hips aur front length ka poora chart, inches ya centimetres me. Apna bust daal kar seedha recommended size bhi dekh sakti hain.",
     /*
-     * R47: page aur header ka size-guide panel **ek hi data** se chalte hain
-     * (`lib/size-chart.ts`), isliye dono jagah numbers kabhi alag nahi honge.
+     * R48 (owner): poora tabbed size guide — Measurements Chart / Find My Size
+     * / How to Measure, unit toggle, XS–XXL chart aur unstitched fabric note.
+     * Content `components/size-guide-content.tsx` me hai, jo header ke
+     * slide-over panel me bhi wahi chalta hai (numbers `lib/size-chart.ts`).
      */
-    sections: [
-      {
-        heading: "How to measure",
-        body: MEASURE_STEPS.map((step) => `${step.title}: ${step.body} ${step.tip}`),
-      },
-      {
-        heading: "Fit tips",
-        body: [...FIT_TIPS],
-      },
-      {
-        heading: "Ready-to-wear vs unstitched",
-        body: [
-          "Ready-to-wear pieces size chart ke hisaab se stitched aate hain. Unstitched set me fabric metres hote hain, jise aapka tailor aapke naap par sil sakta hai.",
-          "Anarkali aur lehenga me flare hota hai, isliye bust aur length sabse pehle check karein — hip ka farq aaram se adjust ho jaata hai.",
-        ],
-      },
-    ],
-    showSizeTable: true,
+    sections: [],
+    showSizeGuide: true,
   },
 };
 
@@ -289,9 +275,11 @@ export default async function ContentPage({
             ))}
           </div>
 
-          {page.showSizeTable ? (
+          {page.showSizeGuide ? (
             <div className="mt-9" data-testid="size-guide-page-table">
-              <SizeChartTable />
+              <div data-testid="size-guide-page">
+                <SizeGuideContent variant="page" />
+              </div>
             </div>
           ) : null}
 

@@ -183,11 +183,12 @@ test("R37: desktop nav apni centered row me (1fr column me overlap nahi)", () =>
 });
 
 /* ── 5. wedding circle image ───────────────────────────────────────────────── */
-test("R37: home ke Wedding circle me image hai (fallback = pehla product photo)", () => {
+test("R37: home ke Wedding circle me image hai (fallback = collection/product photo)", () => {
   const home = read(HOME);
-  assert.match(home, /circleImage\(weddingCollection, "weddin-collection"\)/, "wedding circle image");
+  // R48: images `pickCircleImages` se aate hain (har circle apni, alag image)
+  assert.match(home, /handle: "weddin-collection", collection: weddingCollection/, "wedding circle spec");
   assert.doesNotMatch(home, /title: "Wedding", image: undefined/, "hardcoded undefined gaya");
-  assert.match(home, /byCollection\(handle\)\[0\]\?\.images\[0\]/, "fallback product photo");
+  assert.match(home, /image: circleImages\[index\] \?\? definition\.collection\?\.image/, "fallback photo");
 });
 
 /* ── 6. instant means instant ──────────────────────────────────────────────── */

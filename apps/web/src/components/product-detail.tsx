@@ -386,7 +386,7 @@ export function ProductDetail({
             onClick={() => add()}
             data-testid="add-to-cart"
             disabled={sizeSoldOut || productSoldOut}
-            className="flex-1 bg-[#862222] px-4 py-3 text-[11.5px] font-semibold tracking-[.16em] text-white uppercase transition hover:bg-[#6d1a1a] disabled:cursor-not-allowed disabled:opacity-50"
+            className="cta-sheen flex-1 bg-[#862222] px-4 py-3 text-[11.5px] font-semibold tracking-[.16em] text-white uppercase transition hover:bg-[#6d1a1a] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {sizeSoldOut || productSoldOut ? "Out of stock" : "Add to cart"}
           </button>

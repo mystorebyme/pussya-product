@@ -158,3 +158,5 @@ Ran: 2026-10-27T18:07:47.460Z
 ## Summary
 
 ✔ Saare live checks pass.
+
+_R48 live re-check trigger: 2026-10-27T18:29:12Z (size guide tabs/XS–XXL, unique category images, palette + PDP zoom CSS)_

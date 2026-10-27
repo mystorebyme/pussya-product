@@ -103,8 +103,11 @@ export function ProductGallery({
       <div className="relative w-full min-w-0 flex-1">
         <div
           ref={frameRef}
-          className="relative mx-auto aspect-[4/5] max-h-[calc(100svh-150px)] w-full touch-pan-y overflow-hidden bg-[#f6f1ec] sm:aspect-[3/4] lg:max-h-[calc(100svh-140px)]"
+          className={`gallery-frame relative mx-auto aspect-[4/5] max-h-[calc(100svh-150px)] w-full touch-pan-y overflow-hidden bg-[#f6f1ec] sm:aspect-[3/4] lg:max-h-[calc(100svh-140px)] ${
+            zoom ? "is-zoomed" : ""
+          }`}
           data-testid="pdp-main-image-frame"
+          data-zoom={zoom ? "on" : "off"}
           onMouseEnter={() => setZoom(true)}
           onMouseLeave={() => {
             setZoom(false);
@@ -128,8 +131,16 @@ export function ProductGallery({
           {gallery.map((image, imageIndex) => (
             <div
               key={`${image}-slide-${imageIndex}`}
+              /*
+               * R48 (owner): hover par **purani image hat jaani chahiye** aur zoom
+               * wali dikhni chahiye. Isliye active slide ki opacity 0 ho jaati hai
+               * (zoom layer uske upar aa jaata hai) aur cursor hatne par wapas
+               * 100% — exactly pehle jaisa.
+               */
               className={`gallery-slide absolute inset-0 ${
-                imageIndex === index ? "z-10 opacity-100" : "pointer-events-none opacity-0"
+                imageIndex === index
+                  ? `z-10 ${zoom ? "opacity-0" : "opacity-100"}`
+                  : "pointer-events-none opacity-0"
               }`}
               aria-hidden={imageIndex !== index}
             >
@@ -144,9 +155,14 @@ export function ProductGallery({
             </div>
           ))}
 
-          {/* hover zoom layer (sirf pointer devices par dikhta hai) */}
+          {/*
+            hover zoom layer (sirf pointer devices par dikhta hai) —
+            base image ke upar 190% zoom, cursor ke hisaab se position. Mouse
+            leave par opacity 0 ho jaati hai aur base slide wapas aa jaati hai.
+          */}
           <div
-            className="pointer-events-none absolute inset-0 hidden bg-no-repeat transition-transform duration-300 ease-out sm:block"
+            data-testid="pdp-zoom-layer"
+            className="gallery-zoom pointer-events-none absolute inset-0 z-20 hidden bg-no-repeat sm:block"
             style={{
               backgroundImage: zoom ? `url("${imageUrl(gallery[index], 1400)}")` : "none",
               backgroundSize: "190%",

@@ -9,6 +9,7 @@ import { buildUpiUri, normaliseUpiId } from "@/lib/upi";
 import { UpiQr } from "@/components/upi-qr";
 import { whatsappNumber } from "@/lib/phone";
 import { useStoreSettingsState } from "@/components/store-settings-provider";
+import { YoupiPayButton } from "@/components/youpi-pay";
 
 /**
  * UPI payment card — seedha owner ke UPI account me paisa.
@@ -355,8 +356,22 @@ export function UpiPayment({
           </p>
         </div>
       ) : (
-        <div className="grid gap-4 px-4 py-4 sm:grid-cols-[auto_1fr] sm:px-5">
-          <div className="mx-auto w-full max-w-[190px] sm:mx-0">
+        <>
+          {/*
+            R48 — YouPI PG gateway (sheet se live config). Configured na ho to
+            component kuch render nahi karta aur neeche wala direct UPI QR flow
+            waise hi chalta rehta hai (owner ka purana rasta kabhi band nahi).
+          */}
+          <YoupiPayButton
+            orderNumber={orderNumber}
+            amount={amount}
+            onConfirmed={() => {
+              onConfirmed?.();
+              router.refresh();
+            }}
+          />
+          <div className="grid gap-4 px-4 py-4 sm:grid-cols-[auto_1fr] sm:px-5">
+            <div className="mx-auto w-full max-w-[190px] sm:mx-0">
             <div className="relative aspect-square w-full overflow-hidden rounded-sm border border-[#e6d3a8] bg-white p-1.5">
               <UpiQr
                 uri={upiUri}
@@ -511,7 +526,8 @@ export function UpiPayment({
               </div>
             )}
           </div>
-        </div>
+          </div>
+        </>
       )}
     </div>
   );

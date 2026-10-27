@@ -14,6 +14,7 @@ import { imageUrl } from "@/lib/format";
 import { heroBannerSizes, heroBanners, siteConfig } from "@/config/site";
 import { SafeImage } from "@/components/safe-image";
 import { ShippingNote } from "@/components/shipping-note";
+import { pickCircleImages } from "@/lib/circle-art";
 
 /** Home ke rails har 10 minute me badalte hain — page bhi utni hi der me refresh hota hai */
 export const revalidate = 600;
@@ -76,24 +77,44 @@ export default async function HomePage() {
   const weddingCollection = await getCollection("wedding-collection");
 
   /**
-   * R37 (owner): "wedding wale circle me image nahi dikh rhi" — pehle Wedding ka
-   * image hardcoded `undefined` tha, isliye circle khaali beige ring dikhta tha.
-   * Ab har circle ka image collection se aata hai, aur collection me image na ho
-   * to us collection ka **pehla product photo** fallback (circle kabhi khaali nahi).
+   * R48 (owner): har category circle ki **apni, alag image** — same photos
+   * repeat nahi. Selection `lib/circle-art.ts` me hai: pehle us collection ke
+   * products ke photos (colour ke saath), aur colour bhi repeat na ho; aakhir me
+   * collection ka apna image fallback (circle kabhi khaali nahi).
+   *
+   * R37 (owner): "wedding wale circle me image nahi dikh rhi" — Wedding ka image
+   * pehle hardcoded `undefined` tha, isliye beige ring dikhta tha. Ab har circle
+   * ka image data se aata hai.
    */
-  const circleImage = (collection: { image?: string | null } | undefined, handle: string) =>
-    collection?.image ?? byCollection(handle)[0]?.images[0] ?? null;
+  const circleDefs: { href: string; title: string; handle: string; collection?: { image?: string | null } }[] = [
+    { href: "/collections/party-wear-gown", title: "Anarkali Suit", handle: "party-wear-gown", collection: anarkaliCollection },
+    { href: "/collections/lehnga-choli", title: "Lehnga Choli", handle: "lehnga-choli", collection: lehngaCollection },
+    { href: "/collections/printed-suit-set", title: "Printed Suit Set", handle: "printed-suit-set", collection: printedCollection },
+    { href: "/collections/new-arrivals", title: "New Arrivals", handle: "new-arrivals", collection: newArrivalsCollection },
+    { href: "/collections/noors-choice", title: "Noor's Choice", handle: "noors-choice", collection: choiceCollection },
+    { href: "/collections/sale", title: "Sale", handle: "sale", collection: saleCollection },
+    { href: "/collections/wedding-collection", title: "Wedding", handle: "weddin-collection", collection: weddingCollection },
+  ];
+
+  const circleImages = pickCircleImages(
+    circleDefs.map((definition) => ({
+      handle: definition.handle,
+      candidates: [
+        ...byCollection(definition.handle).flatMap((product) =>
+          (product.images ?? []).slice(0, 2).map((image) => ({ image, color: product.color ?? null })),
+        ),
+        definition.collection?.image ? { image: definition.collection.image, color: null } : null,
+      ],
+    })),
+  );
 
   // "Shop by edit" circles — ek line me, live store ka style
-  const circleItems = [
-    { href: "/collections/party-wear-gown", title: "Anarkali Suit", image: circleImage(anarkaliCollection, "party-wear-gown"), count: byCollection("party-wear-gown").length },
-    { href: "/collections/lehnga-choli", title: "Lehnga Choli", image: circleImage(lehngaCollection, "lehnga-choli"), count: byCollection("lehnga-choli").length },
-    { href: "/collections/printed-suit-set", title: "Printed Suit Set", image: circleImage(printedCollection, "printed-suit-set"), count: byCollection("printed-suit-set").length },
-    { href: "/collections/new-arrivals", title: "New Arrivals", image: circleImage(newArrivalsCollection, "new-arrivals"), count: byCollection("new-arrivals").length },
-    { href: "/collections/noors-choice", title: "Noor's Choice", image: circleImage(choiceCollection, "noors-choice"), count: byCollection("noors-choice").length },
-    { href: "/collections/sale", title: "Sale", image: circleImage(saleCollection, "sale"), count: byCollection("sale").length },
-    { href: "/collections/wedding-collection", title: "Wedding", image: circleImage(weddingCollection, "weddin-collection"), count: byCollection("weddin-collection").length },
-  ];
+  const circleItems = circleDefs.map((definition, index) => ({
+    href: definition.href,
+    title: definition.title,
+    image: circleImages[index] ?? definition.collection?.image ?? null,
+    count: byCollection(definition.handle).length,
+  }));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -156,7 +177,7 @@ export default async function HomePage() {
             <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
               <Link
                 href="/collections/sale"
-                className="inline-flex h-11 items-center justify-center bg-[#862222] px-7 text-[11px] font-semibold tracking-[.16em] text-white uppercase transition hover:bg-[#6d1b1b]"
+                className="cta-sheen inline-flex h-11 items-center justify-center bg-[#862222] px-7 text-[11px] font-semibold tracking-[.16em] text-white uppercase transition hover:bg-[#6d1b1b]"
               >
                 Shop the sale
               </Link>

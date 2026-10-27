@@ -47,8 +47,19 @@ test("R47-2: header me Size guide (slide-over) aur Our story link hai", () => {
 
 test("R47-3: size guide panel me saari cheezein hain (chart, units, steps, tips, help)", () => {
   const dialog = read("apps/web/src/components/size-guide-dialog.tsx");
-  for (const required of ["SizeChartTable", "MEASURE_STEPS", "FIT_TIPS", "Ask on WhatsApp", "Full size guide"]) {
-    assert.ok(dialog.includes(required), `panel me ${required} missing`);
+  // R48: panel ki body `SizeGuideContent` me hai (page bhi wahi component use karta hai)
+  assert.ok(dialog.includes("SizeGuideContent"), "panel me size guide body missing");
+  const body = read("apps/web/src/components/size-guide-content.tsx");
+  for (const required of [
+    "SizeChartTable",
+    "MEASURE_STEPS",
+    "FIT_TIPS",
+    "UNSTITCHED_NOTE",
+    "findSizeForBust",
+    "Ask on WhatsApp",
+    "Full size guide",
+  ]) {
+    assert.ok(body.includes(required), `panel body me ${required} missing`);
   }
   // keyboard + scroll lock + escape
   assert.match(dialog, /event\.key === "Escape"/, "Escape se band ho");
@@ -66,9 +77,9 @@ test("R47-4: chart ka data ek hi jagah se aata hai (panel + page alag na ho)", (
   assert.match(chart, /bust: 42/);
 
   const page = read("apps/web/src/app/pages/[slug]/page.tsx");
-  assert.match(page, /SizeChartTable/, "size-guide page bhi wahi table dikhata hai");
-  assert.match(page, /MEASURE_STEPS/, "page ke steps bhi same source se");
-  assert.match(page, /FIT_TIPS/);
+  assert.match(page, /SizeGuideContent/, "size-guide page bhi wahi guide dikhata hai");
+  assert.match(read("apps/web/src/components/size-guide-content.tsx"), /MEASURE_STEPS/);
+  assert.match(read("apps/web/src/components/size-guide-content.tsx"), /FIT_TIPS/);
   // page par purana hardcoded array wapas na aaye
   assert.doesNotMatch(page, /\["S", "34", "30", "36", "38"\]/, "hardcoded size rows nahi");
 

@@ -25,6 +25,14 @@ export type PublicSettings = {
   supportEmail?: string;
   whatsapp: string;
   freeShipping: boolean;
+  /**
+   * R48 — YouPI PG public config (browser `youpi.js` embed karta hai).
+   * Webhook secret jaan-boojhkar **public type me nahi** hai — wo sirf server
+   * par rehta hai (`lib/youpi.ts`).
+   */
+  youpiEnabled?: boolean;
+  youpiPayUrl?: string;
+  youpiMerchantId?: string;
   updatedAt?: string;
 };
 
@@ -36,6 +44,14 @@ export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
   supportPhone: "",
   whatsapp: "",
   freeShipping: true,
+  /**
+   * Static preview (GitHub Pages) par `/api/settings` nahi hota, isliye gateway
+   * ka public config build-time env se aata hai. Server available ho to sheet ki
+   * live value jeetti hai (public API override karta hai).
+   */
+  youpiEnabled: (process.env.NEXT_PUBLIC_YOUPI_ENABLED ?? "true").toLowerCase() !== "false",
+  youpiPayUrl: process.env.NEXT_PUBLIC_YOUPI_PAY_URL ?? "",
+  youpiMerchantId: process.env.NEXT_PUBLIC_YOUPI_MERCHANT_ID ?? "",
 };
 
 /** Sheet ka change kitni der me browser tak pahunche (tab focus par turant hota hi hai). */

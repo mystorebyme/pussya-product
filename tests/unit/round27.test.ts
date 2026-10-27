@@ -90,8 +90,9 @@ test("payment page: UTR nahi maangta — sirf last 4 digit + ek confirm button",
   assert.match(pay, /Mobile ke last 4 digit/);
   // page par lambi text wall na ho (owner ne kam karne ko kaha)
   // R36: returnPath / defaultLast4 / onConfirmed props — R38: empty-UPI pause
-  // state (sheet se UPI na aaye to honest message) — budget 530 line
-  assert.ok(pay.split("\n").length < 530, "payment card compact ho gaya");
+  // state (sheet se UPI na aaye to honest message) — R48: YouPI gateway block
+  // upar (config na ho to kuch render nahi hota) — budget 620 line
+  assert.ok(pay.split("\n").length < 620, "payment card compact ho gaya");
 });
 
 test("payment page par 'payment ho gaya' confirm ka saaf message", () => {

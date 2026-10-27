@@ -15,6 +15,11 @@ export type SheetSettings = {
   gstin?: string;
   freeShipping?: boolean;
   adminUrl?: string;
+  /** R48 — YouPI PG (UPI gateway). Secret sirf server par rehta hai. */
+  youpiEnabled?: boolean;
+  youpiPayUrl?: string;
+  youpiMerchantId?: string;
+  youpiWebhookSecret?: string;
 };
 
 function text(value: unknown, max = 240): string | undefined {
@@ -53,6 +58,13 @@ export function normaliseSheetSettings(payload: unknown): SheetSettings | null {
     gstin: text(source.gstin ?? source.GSTIN, 20),
     freeShipping: truthy(source.freeShipping ?? source.free_shipping),
     adminUrl: text(source.adminUrl ?? source.admin_url ?? source.admin_panel, 200),
+    youpiEnabled: truthy(source.youpiEnabled ?? source.youpi_enabled),
+    youpiPayUrl: text(source.youpiPayUrl ?? source.youpi_pay_url ?? source.youpi_url, 200),
+    youpiMerchantId: text(source.youpiMerchantId ?? source.youpi_merchant_id ?? source.youpi_key, 120),
+    youpiWebhookSecret: text(
+      source.youpiWebhookSecret ?? source.youpi_webhook_secret ?? source.youpi_secret,
+      200,
+    ),
   };
 
   const hasValue = Object.values(settings).some((value) => value !== undefined);

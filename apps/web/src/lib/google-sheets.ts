@@ -411,6 +411,10 @@ export async function writeSheetSettings(settings: {
   gstin?: string;
   freeShipping?: boolean;
   adminUrl?: string;
+  youpiEnabled?: boolean;
+  youpiPayUrl?: string;
+  youpiMerchantId?: string;
+  youpiWebhookSecret?: string;
 }): Promise<boolean> {
   const config = googleSheetsConfig();
   if (!config) return false;
@@ -432,6 +436,11 @@ export async function writeSheetSettings(settings: {
           gstin: settings.gstin ?? "",
           free_shipping: settings.freeShipping !== false,
           ...(settings.adminUrl ? { admin_url: settings.adminUrl } : {}),
+          /* R48 — YouPI PG: sirf bhari hui values likhi jaati hain (khaali se sheet ki value na mite) */
+          ...(typeof settings.youpiEnabled === "boolean" ? { youpi_enabled: settings.youpiEnabled } : {}),
+          ...(settings.youpiPayUrl ? { youpi_pay_url: settings.youpiPayUrl } : {}),
+          ...(settings.youpiMerchantId ? { youpi_merchant_id: settings.youpiMerchantId } : {}),
+          ...(settings.youpiWebhookSecret ? { youpi_webhook_secret: settings.youpiWebhookSecret } : {}),
         },
       }),
       signal: AbortSignal.timeout(WRITE_TIMEOUT_MS),

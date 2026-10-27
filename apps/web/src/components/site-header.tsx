@@ -377,7 +377,7 @@ export function SiteHeader() {
                   key={link.href}
                   href={link.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
+                  className={`link-underline relative whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
                     active ? "text-[#862222]" : "text-[#222]"
                   }`}
                 >
@@ -408,7 +408,7 @@ export function SiteHeader() {
               href={storyLink.href}
               data-testid="header-our-story"
               aria-current={pathname === storyLink.href ? "page" : undefined}
-              className={`whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
+              className={`link-underline whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
                 pathname === storyLink.href ? "text-[#862222]" : "text-[#222]"
               }`}
             >

@@ -27,6 +27,19 @@ export type StoreSettings = {
   whatsapp: string;
   /** Admin panel ka link (sirf admin/owner ke liye — public API me nahi jaata) */
   adminUrl: string;
+  /**
+   * R48 — YouPI PG (UPI payment gateway). Ye teen public hain (browser ko
+   * `youpi.js` embed karne ke liye chahiye), sheet se live badalte hain:
+   *   Settings tab → `youpi_enabled`, `youpi_pay_url`, `youpi_merchant_id`
+   */
+  youpiEnabled: boolean;
+  youpiPayUrl: string;
+  youpiMerchantId: string;
+  /**
+   * **Sirf server** — webhook HMAC secret. Ye `/api/settings` (public) aur
+   * client payload me kabhi nahi jaata; sirf webhook route padhta hai.
+   */
+  youpiWebhookSecret: string;
   updatedAt: string;
   updatedBy: string;
 };
@@ -56,6 +69,11 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   supportEmail: process.env.SELLER_EMAIL ?? "",
   whatsapp: "",
   adminUrl: process.env.ADMIN_PANEL_URL ?? "",
+  /* R48 — gateway default se band nahi, par URL/key khaali hone par apne aap band */
+  youpiEnabled: (process.env.YOUPI_ENABLED ?? "true").toLowerCase() !== "false",
+  youpiPayUrl: process.env.YOUPI_PAY_URL ?? "",
+  youpiMerchantId: process.env.YOUPI_MERCHANT_ID ?? "",
+  youpiWebhookSecret: process.env.YOUPI_WEBHOOK_SECRET ?? "",
   updatedAt: new Date(0).toISOString(),
   updatedBy: "system",
 };
@@ -87,6 +105,10 @@ export function normalizeStoreSettings(input: unknown): StoreSettings {
     supportEmail: text(raw.supportEmail, base.supportEmail, 120),
     whatsapp: text(raw.whatsapp, base.whatsapp, 16),
     adminUrl: text(raw.adminUrl, base.adminUrl, 200),
+    youpiEnabled: typeof raw.youpiEnabled === "boolean" ? raw.youpiEnabled : base.youpiEnabled,
+    youpiPayUrl: text(raw.youpiPayUrl, base.youpiPayUrl, 200),
+    youpiMerchantId: text(raw.youpiMerchantId, base.youpiMerchantId, 120),
+    youpiWebhookSecret: text(raw.youpiWebhookSecret, base.youpiWebhookSecret, 200),
     updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : base.updatedAt,
     updatedBy: typeof raw.updatedBy === "string" ? raw.updatedBy : base.updatedBy,
   };
@@ -179,6 +201,11 @@ async function merge(options: { fresh?: boolean }): Promise<StoreSettings> {
         ...(sheet.gstin ? { gstin: sheet.gstin } : {}),
         ...(typeof sheet.freeShipping === "boolean" ? { freeShipping: sheet.freeShipping } : {}),
         ...(sheet.adminUrl ? { adminUrl: sheet.adminUrl } : {}),
+        /* R48 — YouPI PG live settings (URL/key sheet se, redeploy nahi) */
+        ...(typeof sheet.youpiEnabled === "boolean" ? { youpiEnabled: sheet.youpiEnabled } : {}),
+        ...(sheet.youpiPayUrl ? { youpiPayUrl: sheet.youpiPayUrl } : {}),
+        ...(sheet.youpiMerchantId ? { youpiMerchantId: sheet.youpiMerchantId } : {}),
+        ...(sheet.youpiWebhookSecret ? { youpiWebhookSecret: sheet.youpiWebhookSecret } : {}),
         ...(sheet.announcement || sheet.upiId || sheet.supportPhone
           ? { updatedAt: new Date().toISOString(), updatedBy: "google-sheet" }
           : {}),

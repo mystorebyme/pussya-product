@@ -208,6 +208,16 @@ check(
   "smooth page transition CSS live hai",
   /\.page-enter\{[^}]*animation:/.test(flatCss) && flatCss.includes("scroll-padding-top:118px"),
 );
+/* R48: palette polish + PDP hover zoom CSS live hai */
+check(
+  "R48 palette + CTA sheen CSS live hai",
+  /--noor-gold:#a67c2e/.test(flatCss) && /\.cta-sheen::?after\{/.test(flatCss) && flatCss.includes("@keyframesctaSheen"),
+);
+check(
+  "R48 PDP hover zoom CSS live hai (base image hat jaye)",
+  /\.gallery-slide\{[^}]*transition:opacity/.test(flatCss) &&
+    /\.gallery-zoom\{[^}]*transition:opacity/.test(flatCss),
+);
 /* R46 (owner): ek hi offer poster har device/window size par — ratio sab par same */
 check(
   "hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)",
@@ -269,6 +279,44 @@ check("header menu (bars) icon", /aria-label="Open menu"/.test(html));
 check("header Size guide (panel button)", /data-testid="header-size-guide"/.test(html));
 check("header Our story link", /data-testid="header-our-story"/.test(html) && /\/pages\/about-us/.test(html));
 check("category icons page par hain (unique)", [...new Set([...html.matchAll(/data-icon="([a-z]+)"/g)].map((m) => m[1]))].length >= 6);
+
+/* ── R48: category circles ki images unique + size guide ka poora content ── */
+const circleImages = [...html.matchAll(/data-testid="category-circle"[\s\S]{0,700}?<img src="([^"]+)"/g)].map(
+  (match) => match[1].split("?")[0],
+);
+check(
+  "7 category circles, har ek ki alag image",
+  circleImages.length === 7 && new Set(circleImages).size === circleImages.length,
+  `${circleImages.length} circles · ${new Set(circleImages).size} unique`,
+);
+
+const sizeGuide = await get(`${BASE}pages/size-guide/`);
+const sizeGuideHtml = sizeGuide.body;
+check(
+  "size guide: 3 tabs (Measurements Chart / Find My Size / How to Measure)",
+  ["size-tab-chart", "size-tab-find", "size-tab-how"].every((id) => sizeGuideHtml.includes(`data-testid="${id}"`)),
+);
+check(
+  "size guide: inches/centimeters toggle",
+  sizeGuideHtml.includes('data-testid="size-unit-toggle"') &&
+    sizeGuideHtml.includes("Inches (in)") &&
+    sizeGuideHtml.includes("Centimeters (cm)"),
+);
+check(
+  "size guide: chart XS se XXL (front length column ke saath)",
+  sizeGuideHtml.includes(">XS<") && sizeGuideHtml.includes(">XXL<") && sizeGuideHtml.includes("Front Length"),
+);
+check(
+  "size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL)",
+  sizeGuideHtml.includes('data-testid="unstitched-note"') &&
+    sizeGuideHtml.includes("2.5 m") &&
+    sizeGuideHtml.includes("2.25 m") &&
+    /XS se 5XL/.test(sizeGuideHtml),
+);
+check(
+  "size guide: front length value 46 (inches) chart me",
+  /data-column="frontLength"[^>]*>46</.test(sizeGuideHtml),
+);
 
 /* ── key pages (cart/checkout/track/policies) ────────────────────────────── */
 say("");

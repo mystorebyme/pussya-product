@@ -572,3 +572,142 @@ summary {
     display: none;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R48 — palette polish, "proper" animation, aur PDP hover zoom
+   ══════════════════════════════════════════════════════════════════════════
+
+   Owner (R48): "website ke colours achhe karo, proper animation" + "PDP par
+   hover karte hi purani image hat jaani chahiye aur zoom wali dikhni chahiye,
+   cursor hatne par image wapas pehle jaisi".
+
+   Sab kuch CSS me hai (koi naya JS nahi) — static export par bhi chalta hai,
+   aur `prefers-reduced-motion` par khud band ho jaata hai. */
+
+:root {
+  /* warm ivory + gold ramp — maroon (brand) ke saath ye kahin zyada premium lagta hai */
+  --noor-ivory: #fdfaf5;
+  --noor-ivory-deep: #f6efe6;
+  --noor-ink: #2f2a25;
+  --noor-muted: #6b6259;
+  --noor-gold: #a67c2e;
+  --noor-gold-soft: #e6d3a8;
+  --noor-hairline: #ece2d6;
+}
+
+/* body: flat white ki jagah halka warm wash (top par gold ka bohat halka glow) */
+body {
+  background-color: #fff;
+  background-image:
+    radial-gradient(1100px 520px at 50% -12%, rgba(214, 178, 106, 0.14), transparent 72%),
+    linear-gradient(180deg, var(--noor-ivory) 0%, #ffffff 42%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(166, 124, 46, 0.24);
+  color: #5c1010;
+}
+
+/* hare-khaas maroon/gold hairline — sections ke beech nazuk divider */
+.gold-hairline {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--noor-gold-soft), transparent);
+}
+
+/* ---------- CTA: hover par gold sheen (sirf pointer devices) ---------- */
+.cta-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 238, 200, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cta-sheen:hover::after {
+    opacity: 1;
+    animation: ctaSheen 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes ctaSheen {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* ---------- PDP gallery: hover = base image hat jaye, zoom aaye ---------- */
+.gallery-slide {
+  transition: opacity 0.18s ease;
+  will-change: opacity;
+}
+
+.gallery-zoom {
+  transition: opacity 0.18s ease;
+  will-change: opacity, background-position;
+}
+
+.gallery-frame.is-zoomed {
+  cursor: zoom-in;
+}
+
+/* ---------- nav / footer links: gold underline jo khud ko draw karta hai ---------- */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- buttons / cards: ek hi smooth curve poore site par ---------- */
+a,
+button {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- motion kam chahiye to R48 ki animation band ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cta-sheen::after {
+    display: none;
+  }
+  .gallery-slide,
+  .gallery-zoom,
+  .link-underline::after {
+    transition: none !important;
+  }
+  body {
+    background-attachment: scroll;
+  }
+}

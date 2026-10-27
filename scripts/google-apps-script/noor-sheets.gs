@@ -211,6 +211,14 @@ var DEFAULT_SETTINGS = [
   ['support_hours', 'Monday to Saturday, 10:00 AM – 8:00 PM IST'],
   ['return_window_days', '7'],
   ['instagram', 'https://www.instagram.com/noorethnicwear'],
+  // R48 — YouPI PG (UPI payment gateway). `youpi_pay_url` = aapka gateway origin
+  // (jaise https://pay.yourdomain.com), `youpi_merchant_id` = gateway ka merchant
+  // key, `youpi_webhook_secret` = webhook ka HMAC secret (ye sirf server padhta
+  // hai — website/public API me kabhi nahi jaata).
+  ['youpi_enabled', 'true'],
+  ['youpi_pay_url', ''],
+  ['youpi_merchant_id', ''],
+  ['youpi_webhook_secret', ''],
 ];
 
 /** Dashboard me jo metrics har baar likhe jaate hain. */
@@ -380,6 +388,9 @@ var PUBLIC_SETTING_KEYS = [
   'store_name', 'announcement', 'support_phone', 'phone', 'whatsapp', 'whatsapp_number',
   'upi_id', 'upi_name', 'gstin', 'free_shipping', 'order_prefix', 'prepaid_only',
   'support_hours', 'return_window_days', 'instagram',
+  // R48 — YouPI ka public hissa (browser youpi.js embed karta hai). Secret
+  // (`youpi_webhook_secret`) jaan-boojhkar is list me **nahi** hai.
+  'youpi_enabled', 'youpi_pay_url', 'youpi_merchant_id',
 ];
 
 /* ═══════════════════════════ 4. SHEET ACCESS ════════════════════════════════ */

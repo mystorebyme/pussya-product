@@ -31,6 +31,11 @@ async function handleGet(request: Request) {
         upiName: settings.upiName,
         supportPhone: settings.supportPhone,
         whatsapp: settings.whatsapp,
+        /* R48 — YouPI PG ka **public** hissa (youpi.js embed karne ke liye).
+           Webhook secret yahan kabhi nahi jaata. */
+        youpiEnabled: settings.youpiEnabled,
+        youpiPayUrl: settings.youpiPayUrl,
+        youpiMerchantId: settings.youpiMerchantId,
         updatedAt: settings.updatedAt,
         source: configured ? "google-sheet" : "admin",
       },
