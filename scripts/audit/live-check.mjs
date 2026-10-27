@@ -133,6 +133,7 @@ const ASSETS = [
   ["hero desktop", "images/banners/banner-desktop.webp"],
   ["hero tablet", "images/banners/banner-tablet.webp"],
   ["hero mobile", "images/banners/banner-mobile.webp"],
+  ["hero fluid", "images/banners/banner-fluid.webp"],
   ["favicon.ico", "favicon.ico"],
 ];
 
@@ -198,6 +199,11 @@ check(
 check("`.brand-lockup img` object-fit: contain", /\.brand-lockupimg\{[^}]*object-fit:contain/.test(flatCss));
 check("logo par koi display:none / visibility:hidden nahi", !/\.brand-lockup[^{]*\{[^}]*display:none/.test(flatCss));
 check("hero `object-fit: contain` (crop nahi)", /\.hero-mediaimg\{[^}]*object-fit:contain/.test(flatCss));
+/* R46 (owner): ek hi offer poster har device/window size par — ratio sab par same */
+check(
+  "hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi)",
+  flatCss.includes("aspect-ratio:1672/941") && !flatCss.includes("aspect-ratio:941/1672"),
+);
 
 /* ── copy: purana brand / hataya hua claim wapas na aaye ──────────────────── */
 say("");

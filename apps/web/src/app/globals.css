@@ -340,16 +340,17 @@ table {
   }
 }
 
-/* ---------- home hero (device-specific banner) ----------
-   R41 (owner): "koi crop nahi, koi stretch nahi". Har breakpoint ka poster alag
-   hai aur wrapper ka aspect-ratio **usi file** ka ratio hai, isliye `contain`
-   kabhi kuch nahi kaat-ta. `cover` par tablet par logo/SHOP NOW kat jaata tha. */
+/* ---------- home hero (owner ka ek hi offer poster) ----------
+   R41 rule: "koi crop nahi, koi stretch nahi". R46 (owner): "ye offer image
+   har device aur har window size ke liye" — isliye **ek hi** poster sab
+   breakpoints par jaata hai aur wrapper ka aspect-ratio usi file ka ratio
+   (1672:941) hai. Mobile par file sirf chhoti (1080px) hoti hai, art wahi.
+   `contain` = poora poster, kabhi kata hua nahi. */
 .hero-media {
   display: block;
   width: 100%;
   background: #fbf1e2;
-  /* mobile poster: 941×1672 (portrait) */
-  aspect-ratio: 941 / 1672;
+  aspect-ratio: 1672 / 941;
 }
 
 .hero-media img {
@@ -360,17 +361,5 @@ table {
   object-position: center;
 }
 
-@media (min-width: 768px) {
-  /* tablet poster: 1448×1086 */
-  .hero-media {
-    /* tablet: wahi wide Diwali banner (1672×941) */
-    aspect-ratio: 1672 / 941;
-  }
-}
-
-@media (min-width: 1024px) {
-  /* desktop poster: 1672×941 — poori width, poora frame */
-  .hero-media {
-    aspect-ratio: 1672 / 941;
-  }
-}
+/* R46: 768px aur 1024px par koi alag ratio nahi — wahi 1672:941 (ek poster).
+   `object-fit: contain` ki wajah se kisi bhi window size par kuch nahi katta. */

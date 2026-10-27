@@ -118,9 +118,9 @@ export default async function HomePage() {
       <section className="relative bg-[#fbf1e2]" data-testid="hero-banner" aria-label="Diwali Sale — up to 75% off">
         <div className="mx-auto w-full max-w-[1920px]">
           {/*
-            data-hero + CSS (.hero-media) me per-breakpoint aspect-ratio:
-            mobile 941/1672 · tablet + desktop 1672/941 — asli files
-            ke ratio hain, isliye crop/stretch dono zero.
+            R46 (owner): ek hi offer poster har device/window size par.
+            CSS (.hero-media) ka aspect-ratio 1672/941 = asli file ka ratio,
+            isliye crop/stretch dono zero. Mobile par sirf chhota file (1080px).
           */}
           <Link
             href={HERO_HREF}

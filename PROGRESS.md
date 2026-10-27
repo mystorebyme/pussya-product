@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R45: owner ka naya gold logo + naya Diwali banner + favicon/manifest bugs)
+**Last updated:** 2026-10-27 (R46: ek hi offer poster har device/window size par)
 
 ## Kya ready hai
 
@@ -14,7 +14,7 @@
 | Vercel deploy (button + GitHub Actions) | ✅ config + steps ready — bas Vercel secrets | `docs/09-devops/vercel-deploy.md` |
 | Payment page copy | ✅ koi technical "refresh kariye" line customer ko nahi dikhti | `apps/web/src/components/upi-payment.tsx` |
 | Header + logo | ✅ ek hi announcement strip, per-device logo size, nav child pages par active | `site-header.tsx`, `globals.css` |
-| **Diwali hero banners** (desktop / tablet / mobile) | ✅ owner ke teen posters — har device ki apni file, `object-fit: contain` + exact aspect-ratio, koi crop/stretch nahi; desktop full width | `assets/source/banners/`, `node scripts/brand/build-hero-banners.mjs` |
+| **Diwali hero banner** (R46) | ✅ owner ka **ek hi offer poster** har device/window size par — desktop/tablet native 1672×941, mobile wahi art 1080×608, `object-fit: contain` + ek hi aspect-ratio (1672:941), koi crop/stretch nahi, `?v=2` cache-bust | `assets/source/banners/banner-desktop.png`, `node scripts/brand/build-hero-banners.mjs` |
 | **"Free Shipping" claim** | ✅ poori site se hataya (header, strip, cart, PDP, policies, meta; admin toggle bhi) | `tests/unit/round41.test.ts` |
 | **R42 — header/footer contact** | ✅ ek hi WhatsApp number (`whatsapp` → warna `support_phone`), number na ho to button hi nahi (pehle `wa.me/` dead link), duplicate footer row gaya, announcement sirf English | `site-header.tsx`, `site-footer.tsx`, `floating-help.tsx` |
 | **R42 — sheet Settings parser** | ✅ **asli bug**: Settings tab me teesra `note` column hone se value `9876543211,,"DEMO…` ban jaati thi → ab sirf A=key, B=value padhe jaate hain | `lib/sheet-format.ts`, `tests/unit/round42.test.ts` |

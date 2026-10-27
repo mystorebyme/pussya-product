@@ -18,7 +18,7 @@ import { CANONICAL_ORIGIN } from "@/lib/domain";
  * Hero banner (owner ke diye hue Diwali posters se — koi crop nahi):
  *   - `banners/banner-desktop.webp` 1672×941 (≥1024px)
  *   - `banners/banner-tablet.webp`  1672×941 (768–1023px, wahi frame)
- *   - `banners/banner-mobile.webp`   941×1672 portrait (<768px)
+ *   - `banners/banner-mobile.webp`  1080×608 (<768px, wahi poster)
  *   - `banners/banner-fluid.webp`   desktop ka fluid copy
  */
 const ASSET_BASE = process.env.NEXT_PUBLIC_PAGES_BASE_PATH ?? "";
@@ -48,11 +48,17 @@ export const brandAssets = {
   mark128: `${ASSET_BASE}/images/brand/logo-mark-128.png${BRAND_V}`,
 } as const;
 
+/**
+ * R46: owner ka **ek hi offer poster** har device par — `?v=2` isliye ki purana
+ * banner (portrait/desktop) browsers ke cache se na dikhe.
+ */
+const BANNER_V = "?v=2";
+
 export const heroBanners = {
-  desktop: `${ASSET_BASE}/images/banners/banner-desktop.webp`,
-  tablet: `${ASSET_BASE}/images/banners/banner-tablet.webp`,
-  mobile: `${ASSET_BASE}/images/banners/banner-mobile.webp`,
-  fluid: `${ASSET_BASE}/images/banners/banner-fluid.webp`,
+  desktop: `${ASSET_BASE}/images/banners/banner-desktop.webp${BANNER_V}`,
+  tablet: `${ASSET_BASE}/images/banners/banner-tablet.webp${BANNER_V}`,
+  mobile: `${ASSET_BASE}/images/banners/banner-mobile.webp${BANNER_V}`,
+  fluid: `${ASSET_BASE}/images/banners/banner-fluid.webp${BANNER_V}`,
 } as const;
 
 /**
@@ -67,10 +73,10 @@ export const heroBanners = {
  * (`tests/unit/round41.test.ts` inhe asli file dimensions se match karta hai).
  */
 export const heroBannerSizes = {
-  // R45: owner ka naya clean Diwali banner (1672×941) — desktop + tablet dono
+  // R46: ek hi poster (1672×941) sab par — mobile sirf 1080 wide (same 1672:941)
   desktop: { width: 1672, height: 941 },
   tablet: { width: 1672, height: 941 },
-  mobile: { width: 941, height: 1672 },
+  mobile: { width: 1080, height: 608 },
 } as const;
 
 export const HERO_RATIO = {

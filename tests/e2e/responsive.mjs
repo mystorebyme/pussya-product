@@ -74,7 +74,7 @@ const assets = [
   ["images/brand/logo-mark-192.png", 192, 192, "PWA 192"],
   ["images/brand/logo-mark-512.png", 512, 512, "PWA 512 / invoice"],
   // R41 posters — owner ne jo bheja wahi size (downscale bhi nahi).
-  ["images/banners/banner-mobile.webp", 900, 1600, "mobile poster (portrait 941×1672)"],
+  ["images/banners/banner-mobile.webp", 1000, 560, "mobile poster (same art, 1080×608)"],
   ["images/banners/banner-tablet.webp", 1600, 900, "tablet banner (1672×941, wahi wide frame)"],
   ["images/banners/banner-desktop.webp", 1600, 900, "desktop banner (1672×941, full width)"],
   ["images/banners/banner-fluid.webp", 1600, 900, "fluid banner (= desktop copy)"],
@@ -119,7 +119,7 @@ const liveCss = cssHref ? (await get(cssHref)).text : "";
 
 /**
  * R41: hero ek `<picture>` hai jisme har breakpoint ki **apni** file hai, aur
- * `aspect-ratio` asli file ka hai (941/1672 · 1672/941) — isliye
+ * `aspect-ratio` asli file ka hai (1672/941, har device par wahi) — isliye
  * `object-fit: contain` ke saath kabhi crop/stretch nahi hota.
  */
 const heroPicture = home.text.match(/<picture>[\s\S]{0,900}?banner-mobile\.webp[\s\S]{0,300}?<\/picture>/)?.[0] ?? "";
@@ -129,14 +129,11 @@ check("hero: 768–1023px → banner-tablet.webp", /min-width:768px[^>]*banner-t
 check("hero: <768px → banner-mobile.webp (default img)", /<img[^>]*banner-mobile\.webp/.test(heroPicture));
 check(
   "hero reserves space with width/height (no layout shift)",
-  /width="941"[^>]*height="1672"/.test(heroPicture),
+  /width="1080"[^>]*height="608"/.test(heroPicture),
 );
 check(
-  "hero aspect ratios match the files (941/1672 · 1672/941)",
-  home.text.includes("hero-media") &&
-    liveCss.includes("941 / 1672") &&
-    liveCss.includes("1672 / 941") &&
-    liveCss.includes("1672 / 941"),
+  "hero aspect ratio ek hi poster ka hai (1672/941 har breakpoint par)",
+  home.text.includes("hero-media") && liveCss.includes("1672 / 941") && !liveCss.includes("941 / 1672"),
 );
 check("hero image loads eagerly (LCP) with high priority", /fetchPriority="high"|fetchpriority="high"/.test(heroPicture));
 

@@ -5,9 +5,11 @@
  * Rule: koi crop nahi, koi stretch nahi — poster ka poora frame WebP me convert
  * hota hai, usi ke aspect-ratio par page me baithta hai.
  *
- * R45 (owner ne naya clean banner bheja):
- *   assets/source/banners/banner-desktop.png  1672×941  → desktop **aur** tablet
- *   assets/source/banners/banner-mobile.png    941×1672 → mobile (portrait)
+ * R46 (owner: "ye offer image har device aur har window size ke liye"):
+ *   assets/source/banners/banner-desktop.png  1672×941 — **ek hi poster**, sab
+ *   breakpoints par. Sirf width chhoti hoti hai (mobile 1080) — **koi crop nahi**,
+ *   koi doosra art nahi. Isliye desktop, tablet, mobile teeno ka aspect-ratio
+ *   bilkul same (1672:941) rehta hai aur poster ka koi hissa kabhi nahi katta.
  *
  * ⚠️ `_unused-3up-sheet.png` (1983×793) ek **3-up mockup sheet** hai (3 layouts
  * side-by-side) — single banner ke liye use nahi hota, isliye ignore hai.
@@ -15,9 +17,9 @@
  * Na mile to purana generated fallback chalta hai (owner logo se).
  *
  * Output (apps/web/public/images/banners/):
- *   banner-desktop.webp  1672×941   (≥1024px)
- *   banner-tablet.webp   1672×941   (768–1023px, wahi 1.78:1 frame)
- *   banner-mobile.webp    941×1672  (<768px portrait)
+ *   banner-desktop.webp  1672×941   (≥1024px, native)
+ *   banner-tablet.webp   1672×941   (768–1023px, wahi file)
+ *   banner-mobile.webp   1080×608   (<768px, same poster 2.5× DPR tak sharp)
  *   banner-fluid.webp    desktop ka copy (flexible containers)
  *
  * Run: node scripts/brand/build-hero-banners.mjs
@@ -41,11 +43,14 @@ await fs.mkdir(OUT, { recursive: true });
    Har breakpoint ki apni file — tablet/mobile par desktop banner crop karne se
    logo aur "SHOP NOW" kat jaate the, isliye alag art use hoti hai. */
 const OWNER_DIR = path.join(ROOT, "assets/source/banners");
+/**
+ * Sab breakpoints ek hi owner poster se. `width` sirf download halka karne ke
+ * liye hai (mobile), aspect ratio same rehta hai — koi crop/stretch nahi.
+ */
 const OWNER = [
   { name: "banner-desktop", src: "banner-desktop.png" },
-  // tablet par wahi wide frame (chhota kuch nahi katta; koi doosra 3-up art nahi)
   { name: "banner-tablet", src: "banner-desktop.png" },
-  { name: "banner-mobile", src: "banner-mobile.png" },
+  { name: "banner-mobile", src: "banner-desktop.png", width: 1080 },
 ];
 
 async function fromOwnerBanners() {
@@ -62,12 +67,18 @@ async function fromOwnerBanners() {
   const sizes = {};
   for (const entry of found) {
     const meta = await sharp(entry.file).metadata();
-    // native size hi rakhte hain — upscale se poster blurry hota hai
-    const webp = await sharp(entry.file)
-      .webp({ quality: 84, effort: 5 })
-      .toBuffer();
+    // native size (ya sirf chhota) — upscale se poster blurry hota hai.
+    // `withoutEnlargement` = poster kabhi stretch/upscale nahi hota.
+    const native = { width: meta.width ?? 0, height: meta.height ?? 0 };
+    const target = entry.width && entry.width < native.width ? entry.width : native.width;
+    // aspect ratio exactly wahi (height round hoti hai → 1px tak)
+    const height = Math.round((target * native.height) / native.width);
+    const pipeline = target === native.width
+      ? sharp(entry.file)
+      : sharp(entry.file).resize({ width: target, height, fit: "fill" });
+    const webp = await pipeline.webp({ quality: 84, effort: 5 }).toBuffer();
     await fs.writeFile(path.join(OUT, `${entry.name}.webp`), webp);
-    sizes[entry.name] = { width: meta.width, height: meta.height };
+    sizes[entry.name] = { width: target, height };
   }
   // fluid fallback = desktop ka hi frame (aspect ratio kabhi nahi badalta)
   await fs.copyFile(path.join(OUT, "banner-desktop.webp"), path.join(OUT, "banner-fluid.webp"));

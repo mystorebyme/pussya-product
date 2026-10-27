@@ -48,12 +48,12 @@ test("R45-1: teeno header lockup naye gold logo (2.70:1) ke hain, koi crop nahi"
   assert.ok(exists("assets/source/logo-gold.png"), "owner ka gold logo source missing");
 });
 
-test("R45-2: hero banner asli owner poster se — desktop/tablet 1672×941, mobile 941×1672", async () => {
+test("R45-2: hero banner asli owner poster se (R46: sab par wahi 1672:941)", async () => {
   const site = read("apps/web/src/config/site.ts");
   const expected = {
     desktop: { width: 1672, height: 941 },
     tablet: { width: 1672, height: 941 },
-    mobile: { width: 941, height: 1672 },
+    mobile: { width: 1080, height: 608 }, // R46: same poster, chhoti width
   };
   for (const [name, size] of Object.entries(expected)) {
     const meta = await sharp(path.join(root, `apps/web/public/images/banners/banner-${name}.webp`)).metadata();
@@ -61,10 +61,11 @@ test("R45-2: hero banner asli owner poster se — desktop/tablet 1672×941, mobi
     assert.equal(meta.height, size.height, `${name} banner height`);
     assert.match(site, new RegExp(`${name}: \\{ width: ${size.width}, height: ${size.height} \\}`));
   }
-  // 3-up mockup sheet kabhi source na bane
+  // 3-up mockup sheet kabhi source na bane; R46 me sab par wahi ek poster
   const script = read("scripts/brand/build-hero-banners.mjs");
   assert.doesNotMatch(script, /banner-tablet\.png/, "3-up sheet source nahi honi chahiye");
-  assert.match(script, /banner-desktop\.png/, "tablet bhi wahi clean banner use karta hai");
+  assert.doesNotMatch(script, /banner-mobile\.png/, "alag portrait poster use nahi hota");
+  assert.match(script, /banner-desktop\.png/, "sab breakpoints wahi poster use karte hain");
 });
 
 test("R45-3: root `/favicon.ico` maujood hai aur asli ICO hai (pehle 404 tha)", () => {

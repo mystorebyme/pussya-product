@@ -30,11 +30,11 @@ const BANNERS = {
 
 /* ------------------------------------------------------------- assets */
 
-test("R41-1: teeno banner files maujood hain; mobile ka art desktop se alag hai", async () => {
+test("R41-1: teeno banner files maujood hain aur sab ek hi poster se hain", async () => {
   /**
-   * R45: owner ka naya clean banner 1672×941 hai — wahi **desktop aur tablet**
-   * dono par jaata hai (ek hi wide frame, crop-free). Mobile ka art alag hai
-   * (portrait 941×1672), isliye kam se kam **do** distinct files honi chahiye.
+   * R46 (owner: "ye offer image har device aur har window size ke liye"): ab
+   * **ek hi art** hai — mobile sirf chhoti width (1080) par, isliye teeno files
+   * ka aspect ratio same hona chahiye (1672:941). Koi alag portrait art nahi.
    */
   const digests = new Map<string, string>();
   for (const [name, file] of Object.entries(BANNERS)) {
@@ -43,8 +43,13 @@ test("R41-1: teeno banner files maujood hain; mobile ka art desktop se alag hai"
     assert.ok(buffer.length > 20_000, `${name} banner suspiciously small`);
     digests.set(name, buffer.subarray(0, 4096).toString("base64"));
   }
-  assert.notEqual(digests.get("desktop"), digests.get("mobile"), "mobile ka apna portrait art hona chahiye");
-  assert.equal(digests.get("desktop"), digests.get("tablet"), "desktop/tablet ek hi wide frame use karte hain");
+  const ratios: number[] = [];
+  for (const [name, file] of Object.entries(BANNERS)) {
+    const meta = await sharp(path.join(root, file)).metadata();
+    ratios.push((meta.width ?? 0) / (meta.height ?? 1));
+    assert.ok((meta.width ?? 0) > (meta.height ?? 0), `${name} landscape hona chahiye (ek hi poster)`);
+  }
+  for (const ratio of ratios) assert.ok(Math.abs(ratio - 1672 / 941) < 0.02, `ratio ${ratio.toFixed(3)} — sab 1672:941 hain`);
 });
 
 test("R41-2: banner ki asli dimensions config se match karti hain (crop/stretch nahi)", async () => {
@@ -52,7 +57,7 @@ test("R41-2: banner ki asli dimensions config se match karti hain (crop/stretch 
   const sizes = {
     desktop: { width: 1672, height: 941 },
     tablet: { width: 1672, height: 941 },
-    mobile: { width: 941, height: 1672 },
+    mobile: { width: 1080, height: 608 },
   };
   for (const [name, expected] of Object.entries(sizes)) {
     const meta = await sharp(path.join(root, BANNERS[name as keyof typeof BANNERS])).metadata();
@@ -64,11 +69,8 @@ test("R41-2: banner ki asli dimensions config se match karti hain (crop/stretch 
       `${name} size config me`,
     );
   }
-  // mobile portrait hi rahe (kabhi landscape na ho jaye)
-  const mobile = await sharp(path.join(root, BANNERS.mobile)).metadata();
-  assert.ok((mobile.height ?? 0) > (mobile.width ?? 0), "mobile banner portrait hai");
-  // desktop/tablet landscape
-  for (const name of ["desktop", "tablet"] as const) {
+  // R46: teeno landscape (ek hi poster)
+  for (const name of ["desktop", "tablet", "mobile"] as const) {
     const meta = await sharp(path.join(root, BANNERS[name])).metadata();
     assert.ok((meta.width ?? 0) > (meta.height ?? 0), `${name} landscape hai`);
   }
@@ -81,11 +83,13 @@ test("R41-3: banner build script owner ke posters se banata hai (koi crop nahi)"
   // crop/extract/resize-to-box jaisi koi cheez owner branch me nahi honi chahiye
   const ownerBranch = script.slice(script.indexOf("async function fromOwnerBanners"), script.indexOf("const ownerSizes"));
   assert.doesNotMatch(ownerBranch, /\.extract\(/, "crop nahi hota");
-  assert.doesNotMatch(ownerBranch, /\.resize\(/, "upscale/downscale force nahi hota");
+  // R46: mobile ke liye sirf **chhoti width** allowed hai (aspect ratio same),
+  // aur kabhi upscale nahi (`withoutEnlargement` / native width par no-resize).
+  assert.match(ownerBranch, /withoutEnlargement/, "upscale kabhi nahi");
+  assert.doesNotMatch(ownerBranch, /fit: "cover"|fit: "contain"/, "crop/letterbox fit nahi");
   // R45: tablet ka koi alag 3-up sheet nahi — wahi clean banner desktop+tablet
-  for (const file of ["banner-desktop.png", "banner-mobile.png"]) {
-    assert.ok(exists(`assets/source/banners/${file}`), `source ${file}`);
-  }
+  // R46: sirf ek source poster (desktop) — portrait poster use nahi hota
+  assert.ok(exists("assets/source/banners/banner-desktop.png"), "source banner-desktop.png");
   assert.doesNotMatch(script, /banner-tablet\.png/, "3-up sheet ko source banana nahi chahiye");
 });
 
@@ -101,9 +105,9 @@ test("R41-4: hero par device-wise <picture> + exact aspect-ratio (crop nahi)", (
   assert.match(page, /src=\{heroBanners\.mobile\}/);
 
   // CSS ratios = asli file ratios
-  assert.match(css, /\.hero-media \{[\s\S]*?aspect-ratio: 941 \/ 1672;/);
-  assert.match(css, /@media \(min-width: 768px\)[\s\S]*?aspect-ratio: 1672 \/ 941;/);
-  assert.match(css, /@media \(min-width: 1024px\)[\s\S]*?aspect-ratio: 1672 \/ 941;/);
+  // R46: ek hi ratio — mobile se desktop tak 1672/941
+  assert.match(css, /\.hero-media \{[\s\S]*?aspect-ratio: 1672 \/ 941;/);
+  assert.doesNotMatch(css, /aspect-ratio: 941 \/ 1672;/, "portrait ratio nahi hona chahiye");
 
   // `cover` crop karta hai — hero par kabhi nahi
   const heroCss = css.slice(css.indexOf("/* ---------- home hero"), css.indexOf("/* ----------", css.indexOf("/* ---------- home hero") + 10));

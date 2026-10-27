@@ -22,7 +22,7 @@
 | products | 446 |
 | collections | 11 |
 | sourceFiles | 254 |
-| sourceLines | 28036 |
+| sourceLines | 28042 |
 | testFiles | 53 |
 | skills | 20 |
 | docsPages | 131 |

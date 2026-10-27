@@ -210,3 +210,43 @@ Live report se seedha proof (`docs/09-devops/live-check.md`):
 - **Look ka final judgement** — ye aapka call hai: agar header me logo aur bada/chhota
   chahiye to bas `globals.css` me `height: 46/54/60px` badalna hai (script dobara chalane
   ki zaroorat nahi).
+
+---
+
+# Round 46 — ek hi offer poster, har device aur har window size par
+
+**Owner:** *"ye image hero section home page ki ye offer ki image change kar do — every device
+ke liye, every window size ke liye."* Bheji gayi file (`Noor Diwali Special Offer Banner.png`,
+1672×941) bilkul wahi art hai jo R45 me desktop par lagi thi — bas ab **phone par bhi wahi**
+poster jaata hai (pehle phone par alag portrait poster tha).
+
+| Kya | Pehle (R45) | Ab (R46) |
+| --- | --- | --- |
+| Mobile hero art | alag portrait poster (941×1672) | **wahi** offer poster |
+| Mobile file | 941×1672 | **1080×608** (same art, halki file — 149 KB) |
+| Hero aspect-ratio | mobile 941/1672, baaki 1672/941 | **har breakpoint 1672/941** (ek hi box) |
+| Desktop / tablet | 1672×941 | 1672×941 (unchanged) |
+| Cache | bina version | **`?v=2`** (purana banner cache se na aaye) |
+
+Iska matlab: 320px phone se 1920px monitor tak poster ka **koi hissa nahi katta, koi stretch
+nahi** — bas chhota/bada hota hai. `object-fit: contain` + wrapper ka fixed aspect-ratio
+yahi guarantee deta hai.
+
+Preview (asli files se bana, browser ke bina): `docs/09-devops/hero-preview.png`.
+
+**Trade-off (honest):** phone par ye poster poora dikhta hai, isliye hero ki height kam
+(~211px @375px) aur poster ka text chhota lagta hai. Agar aap phone par bada text chahte
+hain to do hi raaste hain — (a) alag portrait poster wapas (R45 jaisa, ek line ka switch),
+ya (b) mobile par offer panel ka zoom/crop (jo "koi crop nahi" rule todta hai). Abhi
+aapke instruction ke mutabik (a) **nahi** kiya gaya — sab par ek hi poster hai.
+
+## Tests (R46)
+
+| Suite | Result |
+| --- | --- |
+| `npm run test:unit` | 323 pass / 0 fail (R41/R45 guards naye rule par update) |
+| `npm run test:responsive` | 44 pass / 0 fail |
+| `breakpoints` (320→1440) | 50 pass / 0 fail |
+| live-check (local dev) | 97 ✅ / 0 ❌ — "hero ratio har breakpoint par ek hi (1672/941)" |
+| static audit (`dist`) | 486 pages · 34,877 refs · 0 broken |
+| smoke | 106 pass / 5 fail (wahi 5 = sandbox me sheet/UPI env nahi) |

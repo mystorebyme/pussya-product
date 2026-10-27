@@ -141,10 +141,10 @@ for (const src of new Set([heroPic.img, ...heroPic.sources.map((s) => s.src), br
 
 /**
  * Hero ratio — R41: CSS box ka aspect-ratio **owner ke poster** ka asli ratio hai
- * (mobile 941×1672, tablet + desktop 1672×941). Dono side match hone se
+ * (R46: ek hi poster — sab par 1672×941). Dono side match hone se
  * `object-fit: contain` ke baad koi crop/stretch nahi hota.
  */
-const boxRatio = { mobile: 941 / 1672, tablet: 1672 / 941, desktop: 1672 / 941 };
+const boxRatio = { mobile: 1672 / 941, tablet: 1672 / 941, desktop: 1672 / 941 };
 for (const [kind, expected] of Object.entries(boxRatio)) {
   const src = Object.keys(sizes).find((key) => key.includes(`banner-${kind}`));
   if (!src) continue;
