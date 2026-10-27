@@ -87,7 +87,7 @@ check("header me brand-lockup hai", /class="brand-lockup/.test(html));
 check("hero banner section hai", /data-testid="hero-banner"/.test(html) || /banner-mobile\.webp/.test(html));
 
 /* ── logo markup: base path + srcset ──────────────────────────────────────── */
-const picture = html.match(/<picture>[\s\S]{0,1200}?logo-mobile\.png[^>]*>[\s\S]{0,400}?<\/picture>/)?.[0] ?? "";
+const picture = html.match(/<picture[^>]*>[\s\S]{0,1500}?logo-mobile\.png[^>]*>[\s\S]{0,400}?<\/picture>/)?.[0] ?? "";
 const srcs = [...html.matchAll(/(?:src|srcSet)="([^"]*images\/brand\/[^"]+)"/g)].map((m) => m[1]);
 const uniqueSrcs = [...new Set(srcs)];
 check("header logo <picture> mila", picture.length > 0);
@@ -96,7 +96,22 @@ check(
   uniqueSrcs.length > 0 && uniqueSrcs.every((src) => src.startsWith(new URL(BASE).pathname)),
   uniqueSrcs.slice(0, 3).join(" · "),
 );
-check("logo img par alt text hai", /logo-mobile\.png[^>]*alt="Noor Ethnic Wear"/.test(html) || /alt="Noor Ethnic Wear"/.test(html));
+check(
+  "logo img par alt text hai",
+  /logo-(?:mobile|desktop|tablet)\.png[^>]*alt="Noor Ethnic Wear"/.test(html) || /alt="Noor Ethnic Wear"/.test(html),
+);
+check(
+  "logo img par `hidden` / `opacity-0` jaisi class nahi",
+  picture.length > 0 && !/\b(hidden|opacity-0|invisible)\b/.test(picture),
+);
+say("");
+say("<details><summary>header markup (proof)</summary>");
+say("");
+say("```html");
+say((html.match(/<a aria-label="Noor Ethnic Wear home"[\s\S]{0,900}?<\/a>/)?.[0] ?? picture ?? "(nahi mila)").slice(0, 900));
+say("```");
+say("");
+say("</details>");
 
 /* ── logo/favicon/banner assets: asli HTTP status ─────────────────────────── */
 say("");
@@ -132,7 +147,12 @@ for (const [label, file] of ASSETS) {
 
 /* ── CSS: asli rules (logo visible hone ke liye) ──────────────────────────── */
 const cssHref = html.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
-const css = cssHref ? await get(new URL(cssHref, BASE).toString()) : { ok: false, body: "" };
+/**
+ * `new URL("/_next/...", BASE)` root par chala jaata hai — GitHub Pages par asset
+ * `/pussya-product/_next/...` par hota hai. Isliye base path khud lagate hain.
+ */
+const cssUrl = cssHref ? new URL(cssHref.replace(/^\//, ""), BASE).toString() : "";
+const css = cssUrl ? await get(cssUrl) : { ok: false, body: "" };
 const flatCss = css.body.replace(/\s+/g, "");
 
 say("");
@@ -176,6 +196,29 @@ check(
 check("canonical", /<link rel="canonical" href="[^"]+"/.test(html), (html.match(/<link rel="canonical" href="([^"]+)/)?.[1] ?? ""));
 check("lang attribute", /<html[^>]+lang="en"/.test(html));
 check("favicon links", (html.match(/<link rel="(?:icon|shortcut icon)"/g) ?? []).length >= 2);
+
+/* ── key pages (cart/checkout/track/policies) ────────────────────────────── */
+say("");
+say("## Key pages");
+say("");
+say("| result | page | HTTP |");
+say("| --- | --- | --- |");
+const KEY_PAGES = [
+  ["collections index", "collections/"],
+  ["cart", "cart/"],
+  ["checkout", "checkout/"],
+  ["track order", "track-order/"],
+  ["contact", "pages/contact/"],
+  ["shipping policy", "policies/shipping-policy/"],
+  ["returns policy", "policies/refund-and-return-policy/"],
+  ["search", "search/"],
+];
+for (const [label, pagePath] of KEY_PAGES) {
+  const result = await get(`${BASE}${pagePath}`);
+  const ok = result.status === 200;
+  say(`| ${ok ? "✅" : "❌"} | ${label} (\`${pagePath}\`) | ${result.status} |`);
+  if (!ok) failures.push(`${label} → HTTP ${result.status}`);
+}
 
 /* ── internal links (sample, base path aware) ────────────────────────────── */
 say("");
