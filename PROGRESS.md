@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R43: logo crop fix + bada header logo + live-site smoke check)
+**Last updated:** 2026-10-27 (R44: logo kabhi invisible nahi + poora site audit, live verified)
 
 ## Kya ready hai
 
@@ -21,6 +21,8 @@
 | **R42 — purana brand saaf** | ✅ catalogue ka `meta.store`, 9 product handles, 240 vendor, reviews — sab se purana naam hata (catalog rebuild + verify pass) | `scripts/verify-catalog.mjs`, `database/seeds/live/*` |
 | **R42 — GitHub Pages preview** | ✅ branch se deploy ho raha hai; ab **post-deploy smoke job** live URL khol kar Noor content/banner check karta hai | `.github/workflows/pages.yml` |
 | **R43 — header logo** | ✅ asli bug: crop script image ki 55% height se kaat raha tha (N/O ke curve kat rahe the) → ab top row image se detect hoti hai; logo 44 → 52 → 58px, `?v=3` cache-bust | `scripts/brand/build-responsive-assets.mjs`, `globals.css` |
+| **R44 — logo kabhi invisible nahi** | ✅ `BrandMark` (onError → NOOR/ETHNIC WEAR text lockup, eager+high priority), apple icon 180×180 asli, `/contact` 404 fix | `brand-mark.tsx`, `layout.tsx`, `account/page.tsx` |
+| **R44 — site audit pipeline** | ✅ static audit (486 pages / 34k refs, 0 broken) + **live** audit har push par (`docs/09-devops/live-check.md`), report: `docs/09-devops/logo-and-site-audit.md` | `scripts/audit/*`, `.github/workflows/live-check.yml` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 287 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |
