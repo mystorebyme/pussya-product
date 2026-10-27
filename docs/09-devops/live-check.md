@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T18:04:49.880Z
+Ran: 2026-10-27T18:06:34.442Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 414192 bytes · 250ms |
+| ✅ | home page 200 — HTTP 200 · 449476 bytes · 229ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -60,13 +60,13 @@ Ran: 2026-10-27T18:04:49.880Z
 
 | result | rule |
 | --- | --- |
-| ✅ | stylesheet load hui — /_next/static/chunks/11b1hcfmepb19.css |
+| ✅ | stylesheet load hui — /_next/static/chunks/14y1pfikbf72q.css |
 | ✅ | `.brand-lockup img` heights (46 → 54 → 60) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
-| ❌ | category icon animation CSS live hai |
-| ❌ | smooth page transition CSS live hai |
+| ✅ | category icon animation CSS live hai |
+| ✅ | smooth page transition CSS live hai |
 | ✅ | hero ratio har breakpoint par ek hi (1672/941, koi portrait nahi) |
 
 ## Copy
@@ -91,9 +91,9 @@ Ran: 2026-10-27T18:04:49.880Z
 | ✅ | favicon page par declare hai |
 | ✅ | brand mark PNGs (128/180/192/512) square + maujood — 128×128 · 180×180 · 192×192 · 512×512 |
 | ✅ | header menu (bars) icon |
-| ❌ | header Size guide (panel button) |
-| ❌ | header Our story link |
-| ❌ | category icons page par hain (unique) |
+| ✅ | header Size guide (panel button) |
+| ✅ | header Our story link |
+| ✅ | category icons page par hain (unique) |
 
 ## Key pages
 
@@ -115,7 +115,7 @@ Ran: 2026-10-27T18:04:49.880Z
 | result | link | HTTP |
 | --- | --- | --- |
 | ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/11b1hcfmepb19.css` | 200 |
+| ✅ | `/pussya-product/_next/static/chunks/14y1pfikbf72q.css` | 200 |
 | ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
 | ✅ | `/pussya-product/manifest.webmanifest` | 200 |
 | ✅ | `/pussya-product/favicon.ico` | 200 |
@@ -134,20 +134,20 @@ Ran: 2026-10-27T18:04:49.880Z
 | ✅ | `/pussya-product/collections/new-arrivals/` | 200 |
 | ✅ | `/pussya-product/collections/sale/` | 200 |
 | ✅ | `/pussya-product/pages/contact/` | 200 |
+| ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/devine-maslin-anarkali-style-plazzo-suit-set-copy-1/` | 200 |
-| ✅ | `/pussya-product/products/ravisha-floral-anarkali-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nusrat-noor-black-color-embroidered-work-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/saakshi-s-cosmo-slit-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/siyara-pink-color-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/black-cosmo-slit-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/black-cosmo-slit-anarkali-premium-suit-set-10521452478596/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-creme-coloured-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-25/` | 200 |
-| ✅ | `/pussya-product/collections/trending/` | 200 |
-| ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/kurti-pant-and-dupatta-set-6014/` | 200 |
+| ✅ | `/pussya-product/products/anika-premium-black-party-wear-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/black-luxe-lucknowi-sequence-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/red-luxe-lucknowi-sequence-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/aniskas-lakhnawi-premium-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/rani-color-premium-quality-suit-set-dt-273-copy/` | 200 |
+| ✅ | `/pussya-product/products/radhikas-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/adeena-black-faux-blooming-anarkali-style-sarara-suit-set-copy/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
 | ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
@@ -157,12 +157,4 @@ Ran: 2026-10-27T18:04:49.880Z
 
 ## Summary
 
-❌ 5 problem mili:
-
-- category icon animation CSS live hai
-- smooth page transition CSS live hai
-- header Size guide (panel button)
-- header Our story link
-- category icons page par hain (unique)
-
-<!-- re-run after R47 deploy -->
+✔ Saare live checks pass.
