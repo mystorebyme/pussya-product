@@ -80,7 +80,41 @@ say("| --- | --- |");
 const home = await get(BASE);
 check("home page 200", home.ok, `HTTP ${home.status} · ${home.body.length} bytes · ${home.ms}ms`);
 
-const html = home.body;
+let html = home.body;
+
+/* ── deploy propagation wait ──────────────────────────────────────────────────
+ * Ye workflow push ke turant baad chalta hai, par GitHub Pages naya build
+ * publish karne me 1–3 minute leta hai. Purane HTML/CSS par nayi checks
+ * chalane se jhooti failure aati hai (aur purana CSS chunk 404 deta hai).
+ * Isliye pehle **naya deploy aane tak** rukte hain: jab tak home page ka CSS
+ * R49 ka marker (`#a10d1b` = footer gradient) na de. `LIVE_WAIT_MS=0` = band.
+ */
+const cssHrefOf = (pageHtml) => pageHtml.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
+const cssUrlOf = (href) => (href ? new URL(href.replace(/^\//, ""), BASE).toString() : "");
+
+let deployedCss = { ok: false, body: "", status: 0 };
+{
+  const firstHref = cssHrefOf(html);
+  if (firstHref) deployedCss = await get(cssUrlOf(firstHref));
+
+  const waitBudgetMs = Number(process.env.LIVE_WAIT_MS ?? 240_000);
+  const started = Date.now();
+  while (waitBudgetMs > 0 && !deployedCss.body.includes("#a10d1b")) {
+    const waited = Date.now() - started;
+    if (waited > waitBudgetMs) break;
+    await new Promise((resolve) => setTimeout(resolve, 15_000));
+    const fresh = await get(`${BASE}?deploy=${Date.now()}`);
+    const href = cssHrefOf(fresh.body);
+    if (fresh.ok && href) {
+      html = fresh.body; // naye deploy ka HTML (links/assets isi se check honge)
+      deployedCss = await get(cssUrlOf(href));
+    }
+    if (deployedCss.body.includes("#a10d1b")) {
+      notes.push(`deploy propagation: ${Math.round((Date.now() - started) / 1000)}s wait kiya`);
+      break;
+    }
+  }
+}
 check("brand name page par hai", /Noor Ethnic Wear/.test(html));
 check("header render hua hai", /<header[^>]*>/.test(html));
 check("header me brand-lockup hai", /class="brand-lockup/.test(html));
@@ -175,37 +209,8 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1366, 1440]) {
 }
 
 /* ── CSS: asli rules (logo visible hone ke liye) ──────────────────────────── */
-const cssHref = html.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
-/**
- * `new URL("/_next/...", BASE)` root par chala jaata hai — GitHub Pages par asset
- * `/pussya-product/_next/...` par hota hai. Isliye base path khud lagate hain.
- */
-const cssUrl = cssHref ? new URL(cssHref.replace(/^\//, ""), BASE).toString() : "";
-let css = cssUrl ? await get(cssUrl) : { ok: false, body: "" };
-
-/**
- * Deploy propagation: push ke turant baad ye workflow chalta hai, par GitHub
- * Pages naya build publish karne me 1–3 minute leta hai. Isliye CSS me R49 ka
- * marker (`#a10d1b` = footer gradient) aane tak thoda intezaar karte hain —
- * warna nayi CSS ki checks jhooti fail hoti hain. `LIVE_WAIT_MS=0` se band.
- */
-const waitBudgetMs = Number(process.env.LIVE_WAIT_MS ?? 240_000);
-if (waitBudgetMs > 0) {
-  const started = Date.now();
-  let waited = 0;
-  while (waited < waitBudgetMs && !css.body.includes("#a10d1b")) {
-    await new Promise((resolve) => setTimeout(resolve, 15_000));
-    waited = Date.now() - started;
-    const fresh = await get(`${BASE}?deploy=${Date.now()}`);
-    const href = fresh.body.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
-    if (href) css = await get(new URL(href.replace(/^\//, ""), BASE).toString());
-    if (css.body.includes("#a10d1b")) {
-      notes.push(`deploy propagation: ${Math.round(waited / 1000)}s wait kiya`);
-      break;
-    }
-  }
-}
-
+const css = deployedCss;
+const cssHref = cssHrefOf(html);
 const flatCss = css.body.replace(/\s+/g, "");
 
 say("");
