@@ -42,7 +42,32 @@ pehle theek kariye. Baaki cell khaali chhod sakte hain, wo site par dikhte hi na
 5. Browser me wo URL kholiye — JSON dikhna chahiye (`"ok":true`). HTML/login page aaye to
    step 4 dobara kariye ("Anyone" chuniye).
 
-## Kaam 3 — Hosting par 3 values (2 min)
+## Kaam 2b — GitHub secrets (2 min, **abhi kar lein**)
+
+Repo → **Settings → Secrets and variables → Actions → New repository secret**:
+
+| Name | Value |
+| --- | --- |
+| `GOOGLE_SHEETS_WEBAPP_URL` | `https://script.google.com/macros/s/…/exec` (jo deploy kiya) |
+| `GOOGLE_SHEETS_TOKEN` | lamba random token (wahi jo Apps Script me set kiya) |
+| `SHEET_EXPECTED_ID` | sheet URL ka id (`/d/<ID>/edit`) |
+
+Terminal se bhi ho jaata hai:
+
+```bash
+gh secret set GOOGLE_SHEETS_WEBAPP_URL --body "https://script.google.com/macros/s/<ID>/exec"
+gh secret set GOOGLE_SHEETS_TOKEN      --body "<token>"
+gh secret set SHEET_EXPECTED_ID        --body "<sheet id>"
+```
+
+In secrets ka use: **Actions → Sheet self-check → Run workflow**. Ye CI se hi
+health + Settings read + Audit tab me ek test write karta hai — yahi pakka proof hai
+ki "sheet me data ja raha hai".
+
+## Kaam 3 — Vercel par wahi 3 values (2 min)
+
+> GitHub secrets sirf CI ke liye hain; **site inhe Vercel se padhti hai**. Dono jagah
+> same values daalni hoti hain.
 
 Vercel → Project → **Settings → Environment Variables** (Production + Preview dono):
 

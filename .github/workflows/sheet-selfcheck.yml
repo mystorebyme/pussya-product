@@ -1,0 +1,71 @@
+name: Sheet self-check
+
+# Google Sheet bridge ka asli test — GitHub runner se (yahan se script.google.com
+# reachable hai). Ye workflow batata hai:
+#   1. Apps Script deployment zinda hai aur token match karta hai
+#   2. script **sahi sheet** pakde hue hai (SHEET_EXPECTED_ID)
+#   3. Settings tab padhi ja rahi hai (phone / UPI / announcement)
+#   4. Audit tab me ek test row likhi ja rahi hai  ← "sheet me data jayega ya nahi"
+#
+# Chahiye (Settings → Secrets and variables → Actions):
+#   GOOGLE_SHEETS_WEBAPP_URL = https://script.google.com/macros/s/…/exec
+#   GOOGLE_SHEETS_TOKEN      = lamba random token (wahi jo Apps Script me set kiya)
+#   SHEET_EXPECTED_ID        = sheet URL ka id
+# Secrets na hon to workflow fail nahi hota — sirf notice deta hai.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # roz 04:00 UTC = 09:30 IST — sheet bridge chup-chaap toota na rahe
+    - cron: "0 4 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sheet-selfcheck
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: health · settings · write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL }}
+      GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN }}
+      SHEET_EXPECTED_ID: ${{ secrets.SHEET_EXPECTED_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Secrets check
+        id: guard
+        run: |
+          if [ -z "$GOOGLE_SHEETS_WEBAPP_URL" ] || [ -z "$GOOGLE_SHEETS_TOKEN" ]; then
+            echo "::notice::GOOGLE_SHEETS_WEBAPP_URL / GOOGLE_SHEETS_TOKEN secret nahi hain — repo Settings → Secrets → Actions me daaliye. (docs/09-devops/owner-setup-checklist.md)"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Sheet self-check (health → settings → write)
+        if: steps.guard.outputs.ready == 'true'
+        run: node scripts/sheets-selfcheck.mjs "$GOOGLE_SHEETS_WEBAPP_URL" "$GOOGLE_SHEETS_TOKEN" "${SHEET_EXPECTED_ID:-}" | tee result.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Sheet self-check"
+            if [ -f result.txt ]; then
+              echo '```'
+              cat result.txt
+              echo '```'
+            else
+              echo "Skip — secrets set nahi hain."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
