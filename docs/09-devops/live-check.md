@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T18:45:49.798Z
+Ran: 2026-10-27T18:48:32.188Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 453690 bytes · 179ms |
+| ✅ | home page 200 — HTTP 200 · 453354 bytes · 184ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -145,15 +145,14 @@ Ran: 2026-10-27T18:45:49.798Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/star-georgette-slik-anarkali-suit-with-skirt/` | 200 |
-| ✅ | `/pussya-product/products/star-georgette-slik-anarkali-suit-with-skirt-10462901338244/` | 200 |
-| ✅ | `/pussya-product/products/red-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/marbel-multi-colored-suit/` | 200 |
-| ✅ | `/pussya-product/products/siyas-royal-purple-elegant-golden-border-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/bandhani-mehandi-color-anarkali-suit-set-td-141-copy/` | 200 |
-| ✅ | `/pussya-product/products/amani-floral-anarkali-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-lakhnawi-embroidered-georgette-anarkali-fully-stitched-suit-set-waite-115/` | 200 |
+| ✅ | `/pussya-product/products/malini-anarkali-dupatta-set/` | 200 |
+| ✅ | `/pussya-product/products/rimmy-red-coloured-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/green-bandhej-maslin-anarkali-suit-set-td-141-copy/` | 200 |
+| ✅ | `/pussya-product/products/dharanis-wine-coloured-anarkali-suit-set-12/` | 200 |
+| ✅ | `/pussya-product/products/rukmanis-red-coloured-anarkali-suit-set-td09/` | 200 |
+| ✅ | `/pussya-product/products/siyas-mustured-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/sanayas-designer-readymade-gown-collections-kkka-1079/` | 200 |
+| ✅ | `/pussya-product/products/daminis-black-coloured-anarkali-suit-set-td03/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -162,9 +161,8 @@ Ran: 2026-10-27T18:45:49.798Z
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
 
 ## Summary
 
 ✔ Saare live checks pass.
-
-_R48 final live-check re-run 2026-10-27T18:48:20Z (YouPI server-session flow)_
