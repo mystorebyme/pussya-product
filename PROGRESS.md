@@ -10,7 +10,7 @@
 | Owner panel (login, orders + timeline, stock, price, invoices, tracking, reviews, messages, coupons, settings, Sheet status) | ✅ chalta hai | `npm run dev:admin` → http://localhost:3001 |
 | REST API | ✅ chalta hai | `npm run dev:api` → http://localhost:4000 |
 | **Google Sheet = owner ka control panel** | ✅ **sheet ban gayi** — 16 tabs + headers + Settings keys ([link](https://docs.google.com/spreadsheets/d/1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo/edit)); Apps Script `/exec` URL + token env me daalne hain | `docs/09-devops/google-sheets.md` |
-| Sheet tabs ke ready CSV (16) | ✅ | `docs/09-devops/sheet-tabs/` |
+| Sheet tabs ke ready CSV (16) | ✅ saari **16 tabs me header row likh di gayi** (Settings/Payments pehle hi thi, aaj baaki 14 bhi) | `docs/09-devops/sheet-tabs/` |
 | Vercel deploy (button + GitHub Actions) | ✅ config + steps ready — bas Vercel secrets | `docs/09-devops/vercel-deploy.md` |
 | Payment page copy | ✅ koi technical "refresh kariye" line customer ko nahi dikhti | `apps/web/src/components/upi-payment.tsx` |
 | Header + logo | ✅ ek hi announcement strip, per-device logo size, nav child pages par active | `site-header.tsx`, `globals.css` |
