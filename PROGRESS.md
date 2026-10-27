@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R46: ek hi offer poster har device/window size par)
+**Last updated:** 2026-10-27 (R47: header menu/size guide/our story, animated category icons, smoothness)
 
 ## Kya ready hai
 
@@ -27,9 +27,10 @@
 | **R45 — naya Diwali banner** | ✅ desktop + tablet wahi 1672×941 frame, mobile 941×1672 portrait; hero CSS/config ratios update; 3-up mockup sheet (1983×793) use **nahi** hoti | `scripts/brand/build-hero-banners.mjs`, `config/site.ts`, `globals.css` |
 | **R45 — favicon + PWA** | ✅ root `/favicon.ico` asli ICO (32+48, pehle 404 tha), crown mark tile ki 92% width bharta hai (16px par dikhta hai), manifest splash cream (pehle kaala) | `app/favicon.ico`, `build-responsive-assets.mjs`, `manifest.ts` |
 | **R45 — live verify** | ✅ Pages deploy (build/deploy/smoke) + live-check report (`docs/09-devops/live-check.md`) — naya logo, banner ratio, favicon ICO sab live URL par check hote hain | `gh run list` |
+| **R47 — header + size guide + icons + smoothness** | ✅ header me bars icon (har screen), **Size guide** slide-over (inches/cm, chart, how to measure, fit tips, WhatsApp help) + **Our story** link; 7 unique animated gold category icons; page/drawer transitions, tap-highlight off, focus ring — report: `docs/09-devops/r47-reference-polish.md` | `site-header.tsx`, `size-guide-dialog.tsx`, `category-icon.tsx`, `globals.css` |
 | **R45 — chhote bugs** | ✅ footer ka saal hydration-safe (`suppressHydrationWarning`), manifest icons base path ke saath, live-check me favicon/ICO/mark checks | `site-footer.tsx`, `manifest.ts`, `scripts/audit/live-check.mjs` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
-| Unit tests | ✅ 323 pass | `npm run test:unit` |
+| Unit tests | ✅ 330 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |
 | Brand assets (logo ke saare sizes + banners + favicon) | ✅ aapke logo se bane | `node scripts/brand/build-responsive-assets.mjs` |
 
