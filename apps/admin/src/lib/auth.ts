@@ -11,10 +11,12 @@ const SECRET =
   process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_API_TOKEN || "dev-only-secret-change-me";
 const PASSWORD = process.env.ADMIN_PASSWORD ?? "noor2026";
 /**
- * Login email **env se** aata hai (`ADMIN_EMAIL`, comma-separated) — code me koi
- * brand email hardcoded nahi, kyunki domain abhi final nahi hai. Khaali chhoda ho
- * to koi bhi email chalega par **password phir bhi zaroori** hai (asli secret
- * password hi hai).
+ * Login email **env se** aata hai (`ADMIN_EMAIL`, comma-separated).
+ *
+ * R42: code me koi brand email hardcoded nahi (R33 guard). `ADMIN_EMAIL` khaali
+ * ho to email gate nahi lagta — **password hi asli gate hai** (aur production me
+ * `ADMIN_PASSWORD` set na ho to login bilkul band hai, neeche dekhein). Owner ko
+ * sirf apna email allow karana ho to `ADMIN_EMAIL=a@x.com,b@y.com` set karein.
  */
 const EMAILS = (process.env.ADMIN_EMAIL ?? "")
   .split(",")

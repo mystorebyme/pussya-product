@@ -7,7 +7,12 @@ import { whatsappNumber } from "@/lib/phone";
 
 export function FloatingHelp() {
   const { isOpen } = useCart();
-  const { whatsapp } = useStoreSettings();
+  const { whatsapp, supportPhone } = useStoreSettings();
+  /**
+   * R42: number sirf sheet se aata hai. Khaali ho to button **nahi** dikhta —
+   * pehle `https://wa.me/` (bina number) har page par dead link bana rehta tha.
+   */
+  const contactNumber = (whatsapp || supportPhone).replace(/\D/g, "").slice(-10);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -18,6 +23,8 @@ export function FloatingHelp() {
   }, []);
 
   if (isOpen) return null;
+  // kuch bhi dikhane layak nahi (na number, na back-to-top) to wrapper bhi nahi
+  if (!contactNumber && !visible) return null;
 
   return (
     <div className="fixed right-3 bottom-3 z-30 flex flex-col items-end gap-2 sm:right-5 sm:bottom-5">
@@ -33,18 +40,20 @@ export function FloatingHelp() {
           </svg>
         </button>
       ) : null}
+      {contactNumber ? (
       <a
-        href={`https://wa.me/${whatsappNumber(whatsapp.replace(/\D/g, "").slice(-10))}`}
+        href={`https://wa.me/${whatsappNumber(contactNumber)}`}
         target="_blank"
         rel="noreferrer"
         className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-105"
-        aria-label="Chat on WhatsApp"
+        aria-label={`Chat on WhatsApp ${contactNumber}`}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
           <path d="M20 12a8 8 0 0 1-11.7 7.1L4 20l1-4.2A8 8 0 1 1 20 12Z" />
           <path d="M9 9c.5 3 2.5 5 5.5 5.5" />
         </svg>
       </a>
+      ) : null}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { readJson } from "@/lib/http-json";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { navigationCollections } from "@/lib/collections";
 import { formatPrice, imageUrl } from "@/lib/format";
 import { useCart } from "@/components/cart-provider";
@@ -33,18 +33,27 @@ const quickLinks = [
 ];
 
 // Fallback copy — admin → Settings se announcement set ho to wahi dikhta hai.
-// R40: koi date/purana offer nahi (Diwali copy hata di) — sirf hamesha sach rehne wali baatein.
+// R42 (owner: "header fix"): poori site English hai, isliye ye lines bhi English —
+// pehle yahan Hinglish ("UPI se secure checkout") ghus gayi thi. Koi date/purana
+// offer bhi nahi (Diwali copy sheet se aati hai) — sirf hamesha sach rehne wali baatein.
 const defaultAnnouncements = [
-  "Prepaid orders — UPI se secure checkout",
-  "Secure prepaid checkout — UPI se seedha payment",
+  "Secure prepaid checkout — pay by UPI",
   "Same-day dispatch on prepaid orders",
   "Designer anarkali, lehenga choli & printed suit sets",
+  "Easy returns within 7 days",
 ];
 
 export function SiteHeader() {
   const { count, openCart, lines, removeLine, setQuantity, subtotal } = useCart();
   const { wishlist } = useWishlist();
   const { whatsapp, supportPhone, announcement } = useStoreSettings();
+  /**
+   * R42: ek hi contact number — sheet me `whatsapp` bhara ho to wahi, warna
+   * `support_phone`. Pehle sirf `support_phone` dekha jaata tha, isliye owner ne
+   * sheet me **sirf WhatsApp** bhara ho to header/footer par button gayab reh
+   * jaata tha (yehi "header fix" tha).
+   */
+  const contactNumber = (whatsapp || supportPhone).replace(/\D/g, "").slice(-10);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -55,6 +64,8 @@ export function SiteHeader() {
 
   // owner (admin ya Google Sheet) se announcement badalte hi header par wahi dikhta hai
   const announcements = announcement ? [announcement, ...defaultAnnouncements] : defaultAnnouncements;
+  // owner ne jo line set ki hai wo hamesha index 0 par rehti hai (rotate usse shuru)
+  const safeIndex = announcements.length ? bannerIndex % announcements.length : 0;
 
   // announcement strip khud rotate kare (R40) — pehle sirf dots se badalta tha
   useEffect(() => {
@@ -93,7 +104,20 @@ export function SiteHeader() {
   const [recommended, setRecommended] = useState<SearchHit[]>([]);
   // keyboard navigation (↑ ↓ Enter) + scroll-into-view — mobile par list ke end tak pahunchne ke liye
   const searchPanelRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
+  /**
+   * R42: highlight index ke saath uska term bhi rakhte hain. Isse query badalne
+   * par highlight **apne aap** reset ho jaata hai — pehle `useEffect` me
+   * `setActiveIndex(-1)` hota tha jo React Compiler ke liye cascading render tha
+   * (aur lint/CI red karta tha).
+   */
+  const [nav, setNav] = useState<{ term: string; index: number }>({ term: "", index: -1 });
+  const activeIndex = nav.term === query ? nav.index : -1;
+  const setActiveIndex = (next: number | ((current: number) => number)) => {
+    setNav((current) => {
+      const base = current.term === query ? current.index : -1;
+      return { term: query, index: typeof next === "function" ? next(base) : next };
+    });
+  };
 
   // search server par hoti hai -> client bundle me 400KB ka catalog nahi jaata
   useEffect(() => {
@@ -126,10 +150,6 @@ export function SiteHeader() {
     };
   }, [query, searchOpen]);
 
-  useEffect(() => {
-    setActiveIndex(-1);
-  }, [query, searchOpen]);
-
   // active item ko panel ke andar scroll karo (page scroll nahi hota)
   useEffect(() => {
     const panel = searchPanelRef.current;
@@ -140,8 +160,7 @@ export function SiteHeader() {
     item.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [activeIndex]);
 
-  const onSearchKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const onSearchKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       const panel = searchPanelRef.current;
       if (!panel) return;
       const items = panel.querySelectorAll<HTMLElement>("[data-search-item]");
@@ -158,19 +177,14 @@ export function SiteHeader() {
       } else if (event.key === "Escape") {
         setSearchOpen(false);
       }
-    },
-    [activeIndex],
-  );
+  };
 
-  const submitSearch = useCallback(
-    (event: React.FormEvent) => {
-      event.preventDefault();
-      if (!query.trim()) return;
-      setSearchOpen(false);
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-    },
-    [query, router],
-  );
+  const submitSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!query.trim()) return;
+    setSearchOpen(false);
+    router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+  };
 
   return (
     <>
@@ -178,17 +192,18 @@ export function SiteHeader() {
         <div className="mx-auto flex min-h-9 max-w-[1400px] items-center justify-between gap-3 px-4 py-1.5">
           {/* WhatsApp hi contact option hai — call nahi (owner request).
               Number sirf sheet/owner settings se; khaali ho to button nahi dikhta. */}
-          {supportPhone ? (
+          {contactNumber ? (
           <a
-            href={`https://wa.me/${whatsappNumber(supportPhone.replace(/\D/g, "").slice(-10))}`}
+            href={`https://wa.me/${whatsappNumber(contactNumber)}`}
             target="_blank"
             rel="noreferrer"
+            aria-label={`Chat on WhatsApp ${contactNumber}`}
             className="hidden shrink-0 items-center gap-1.5 text-[11px] tracking-[.06em] md:flex"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.6-.1a11.6 11.6 0 0 1-5.9-5.2c-.4-.7-.6-1.4-.6-2 0-.6.3-1.2.6-1.6.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.6l-.4.5c-.1.1-.2.3-.1.5a7.5 7.5 0 0 0 3.3 2.9c.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4 0 .2 0 .9-.2 1.4Z" />
             </svg>
-            WhatsApp {supportPhone.replace(/\D/g, "").slice(-10)}
+            WhatsApp {contactNumber}
           </a>
           ) : null}
 
@@ -197,7 +212,7 @@ export function SiteHeader() {
             key={bannerIndex}
             className="animate-[fadeIn_.5s_ease] flex-1 text-center text-[10.5px] leading-tight tracking-[.1em] uppercase sm:text-[11.5px]"
           >
-            {announcements[bannerIndex]}
+            {announcements[safeIndex]}
           </p>
 
           <div className="hidden shrink-0 items-center gap-2 lg:flex">
@@ -208,7 +223,8 @@ export function SiteHeader() {
                 type="button"
                 aria-label={`Announcement ${index + 1}`}
                 onClick={() => setBannerIndex(index)}
-                className={`h-1.5 w-1.5 rounded-full transition ${bannerIndex === index ? "bg-white" : "bg-white/40"}`}
+                aria-current={safeIndex === index ? "true" : undefined}
+                className={`h-1.5 w-1.5 rounded-full transition ${safeIndex === index ? "bg-white" : "bg-white/40"}`}
               />
             ))}
           </div>
@@ -321,14 +337,26 @@ export function SiteHeader() {
         >
           <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-x-5 gap-y-0.5 px-4 py-1.5 xl:gap-x-8">
             {quickLinks.map((link) => {
-              // collection child pages bhi apne nav item ko highlight karein
-              const active =
-                pathname === link.href ||
-                (link.href !== "/" && pathname.startsWith(`${link.href}/`));
+              /**
+               * R42: collection child pages apne nav item ko highlight karein, par
+               * SHOP (`/collections`) har collection page par highlight nahi hona
+               * chahiye — pehle ANARKALI page par SHOP + ANARKALI dono maroon ho
+               * jaate the. Ab exact match sabse pehle jeetta hai.
+               */
+              const exact = pathname === link.href;
+              const child = link.href !== "/" && pathname.startsWith(`${link.href}/`);
+              const moreSpecific = quickLinks.some(
+                (other) =>
+                  other.href !== link.href &&
+                  other.href.startsWith(`${link.href}/`) &&
+                  (pathname === other.href || pathname.startsWith(`${other.href}/`)),
+              );
+              const active = exact || (child && !moreSpecific);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={`relative whitespace-nowrap py-1 text-[10.5px] font-medium tracking-[.08em] transition-colors hover:text-[#862222] xl:text-[11.5px] xl:tracking-[.1em] ${
                     active ? "text-[#862222]" : "text-[#222]"
                   }`}
@@ -518,7 +546,16 @@ export function SiteHeader() {
               </div>
             </nav>
             <div className="border-t border-[#eee6de] px-5 py-4 text-[11.5px] text-[#5c534b]">
-              <p className="font-medium text-[#862222]">WhatsApp {whatsapp}</p>
+              {contactNumber ? (
+                <a
+                  href={`https://wa.me/${whatsappNumber(contactNumber)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-medium text-[#862222]"
+                >
+                  WhatsApp {contactNumber}
+                </a>
+              ) : null}
               <p className="mt-1">Support: Mon–Sat, 10 AM – 8 PM</p>
             </div>
           </div>

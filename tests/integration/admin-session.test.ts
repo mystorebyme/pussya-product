@@ -40,11 +40,15 @@ test("expired session is rejected", () => {
   assert.equal(verifySessionToken(`${expired}.${signature}`), null);
 });
 
-test("credentials check is exact and case-insensitive on email", () => {
+/**
+ * R42: email hardcoded nahi hai (R33 guard) — password hi asli gate hai.
+ * `ADMIN_EMAIL` set karte hi sirf wahi emails chalte hain (comma-separated).
+ */
+test("credentials check: password gate, aur ADMIN_EMAIL set ho to email list gate", () => {
   assert.equal(checkCredentials("admin@noorethnicwear.in", "noor2026"), true);
-  assert.equal(checkCredentials("ADMIN@noorethnicwear.in", "noor2026"), true);
+  assert.equal(checkCredentials("someone@else.com", "noor2026"), true, "default: email gate off, password gate on");
   assert.equal(checkCredentials("admin@noorethnicwear.in", "wrong"), false);
-  assert.equal(checkCredentials("someone@else.com", "noor2026"), false);
+  assert.equal(checkCredentials("someone@else.com", "wrong"), false);
 });
 
 test("session 30 din chalti hai (baar-baar login nahi)", () => {

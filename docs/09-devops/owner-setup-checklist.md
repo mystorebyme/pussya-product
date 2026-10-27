@@ -73,6 +73,19 @@ hai ya nahi dekhiye, aur `/api/sheet-health` kholkar exact error padhiye.
 
 ---
 
+## Kaam 4 — check: sheet ka data site par aa raha hai ya nahi (1 min)
+
+1. `https://<site>/api/settings` kholiye. `sheetSource` me `apps-script` (ya `csv`) aur
+   `supportPhone` / `upiId` me **aapki sheet wali value** dikhni chahiye.
+2. Sheet → Settings me number badal kar **3 second** baad page refresh — naya number.
+3. Likhne ka raasta: Order place kariye → Sheet → **Orders** tab me nayi row.
+   Row na aaye to `node scripts/sheets-selfcheck.mjs "<exec URL>" "<token>"` chalaiye —
+   ye health, Settings read aur Audit tab me test write, teeno check karta hai.
+4. Site par `/api/sheet-selftest?key=<SHEET_SELFTEST_KEY>` bhi yahi batata hai (browser se).
+
+> Sheet ke **Settings tab me teesra column (`note`) safe hai** — site sirf A (key) aur
+> B (value) padhti hai. (R42 me ye bug fix hua: pehle note column value me jud jaata tha.)
+
 ## Aage ke optional kaam
 
 - **Domain:** domain final hone par `NEXT_PUBLIC_SITE_URL` badal dijiye (WhatsApp/invoice

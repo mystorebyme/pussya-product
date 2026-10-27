@@ -74,9 +74,13 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    # NOTE: `environment: github-pages` jaan-boojh kar nahi lagaya —
+    # us environment par "sirf main branch" protection rule lagi hai, isliye
+    # feature/preview branch se bhi preview deploy ho sake. Live site ka URL
+    # wahi rehta hai: https://<owner>.github.io/<repo>/
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Print live URL
+        run: |
+          echo "### Live preview: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"

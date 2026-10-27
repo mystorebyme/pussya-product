@@ -101,24 +101,58 @@ export function orderSheetRow(
   };
 }
 
-/** CSV (key,value rows) → SheetSettings. Sirf 2-column layout expect karta hai. */
+/**
+ * CSV (key,value rows) → SheetSettings.
+ *
+ * Sheet ke **Settings tab me teesra column (`note`) hai** — pehle parser saare
+ * bache hue columns ko value me jod deta tha, isliye live sheet se aisi value
+ * aati thi: `9876543211,,"DEMO — apna asli number daaliye"`. Natija: site par
+ * phone/UPI kharab dikhta tha (owner ke liye "sheet ki value show nahi ho rahi").
+ * Ab sirf **A = key, B = value** padhe jaate hain, baaki columns ignore.
+ */
 export function parseSettingsCsv(csv: string): SheetSettings | null {
   const rows: Record<string, string> = {};
   for (const line of csv.split(/\r?\n/)) {
-    const cells = line.match(/("([^"]|"")*"|[^,]*)(,|$)/g);
-    if (!cells || cells.length < 2) continue;
-    const clean = (value: string) =>
-      value
-        .replace(/,$/, "")
-        .replace(/^"|"$/g, "")
-        .replace(/""/g, '"')
-        .trim();
-    const key = clean(cells[0]!).replace(/\s+/g, " ").toLowerCase().replace(/ /g, "_");
-    const value = clean(cells.slice(1).join(","));
+    const fields = splitCsvLine(line);
+    if (fields.length < 2) continue;
+    const key = fields[0].replace(/\s+/g, " ").trim().toLowerCase().replace(/ /g, "_");
+    const value = fields[1].trim();
     if (!key || key === "key" || !value) continue;
     rows[key] = value;
   }
   return normaliseSheetSettings(rows);
+}
+
+/**
+ * Ek CSV line ke fields — quoted field ke andar comma/quote handle karta hai
+ * (`"Mon–Sat, 10 AM – 8 PM IST"` jaisi value bhi sahi aati hai).
+ */
+function splitCsvLine(line: string): string[] {
+  const fields: string[] = [];
+  let current = "";
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (quoted) {
+      if (char === '"' && line[index + 1] === '"') {
+        current += '"';
+        index += 1;
+      } else if (char === '"') {
+        quoted = false;
+      } else {
+        current += char;
+      }
+    } else if (char === '"') {
+      quoted = true;
+    } else if (char === ",") {
+      fields.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  fields.push(current);
+  return fields;
 }
 
 /**

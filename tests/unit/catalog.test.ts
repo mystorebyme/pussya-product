@@ -100,7 +100,7 @@ test("nine live collections exist and membership is from the real set", () => {
   // 9 live collections + extra store ki alag collections (guest edits)
   for (const handle of [
     "lehnga-choli",
-    "likshas-choice",
+    "noors-choice",
     "new-arrivals",
     "party-wear-gown",
     "printed-suit-set",

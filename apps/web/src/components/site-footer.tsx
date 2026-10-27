@@ -46,6 +46,12 @@ const INSTAGRAM_URL = siteConfig.socials.instagram;
 
 export function SiteFooter() {
   const { whatsapp, supportPhone } = useStoreSettings();
+  /**
+   * R42: ek hi contact number (`whatsapp` → warna `support_phone`) aur khaali hone
+   * par row hi nahi. Pehle dono bhari hone par footer me **do same WhatsApp rows**
+   * dikhti thi, aur dono khaali hone par `wa.me/91` jaisa dead link ban jaata tha.
+   */
+  const contactNumber = (whatsapp || supportPhone).replace(/\D/g, "").slice(-10);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
@@ -86,36 +92,25 @@ export function SiteFooter() {
           <div>
             <h3 className="text-[15px] font-medium text-white">Contact Us</h3>
             <ul className="mt-4 space-y-2.5 text-[13.5px] text-[#ececec]">
-              <li className="flex items-start gap-2">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" className="mt-0.5 shrink-0" aria-hidden>
-                  <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" />
-                </svg>
-                <a
-                  href={`https://wa.me/${whatsappNumber(whatsapp.replace(/\D/g, "").slice(-10))}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="transition hover:text-[#e1d256]"
-                >
-                  WhatsApp {whatsapp}
-                </a>
-              </li>
-              {/* owner rule: site par support email kahin nahi — sirf WhatsApp/phone.
-                  Number sheet se aata hai; sheet me khaali ho to row dikhati hi nahi. */}
-              {supportPhone ? (
+              {contactNumber ? (
                 <li className="flex items-start gap-2">
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" className="mt-0.5 shrink-0" aria-hidden>
-                    <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2Z" />
+                    <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.1c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.6-.1a11.6 11.6 0 0 1-5.9-5.2c-.4-.7-.6-1.4-.6-2 0-.6.3-1.2.6-1.6.2-.2.4-.3.6-.3h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.6l-.4.5c-.1.1-.2.3-.1.5a7.5 7.5 0 0 0 3.3 2.9c.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.5-.1l1.6.8c.2.1.4.2.4.4 0 .2 0 .9-.2 1.4Z" />
                   </svg>
                   <a
-                    href={`https://wa.me/${whatsappNumber(supportPhone.replace(/\D/g, "").slice(-10))}`}
+                    href={`https://wa.me/${whatsappNumber(contactNumber)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="transition hover:text-[#e1d256]"
                   >
-                    WhatsApp {supportPhone}
+                    WhatsApp {contactNumber}
                   </a>
                 </li>
               ) : null}
+              {/* owner rule: site par support email kahin nahi — sirf WhatsApp.
+                  Number sheet se aata hai; sheet me khaali ho to row dikhati hi nahi. */}
+              {/* (R42: alag `support_phone` row hata di — upar wali WhatsApp row hi
+                  dono keys cover karti hai, warna footer me duplicate contact dikhta tha) */}
             </ul>
 
             <p className="mt-5 text-[15px] font-medium text-white">Follow Us :</p>
@@ -129,9 +124,11 @@ export function SiteFooter() {
                 </svg>
                 {INSTAGRAM_URL}
               </span>
-              {/* WhatsApp — customer isi par order/query bhejta hai */}
+              {/* WhatsApp — customer isi par order/query bhejta hai.
+                  R42: number na ho to button hi nahi (pehle `wa.me/91` dead link tha). */}
+              {contactNumber ? (
               <a
-                href={`https://wa.me/${whatsappNumber(whatsapp.replace(/\D/g, "").slice(-10))}`}
+                href={`https://wa.me/${whatsappNumber(contactNumber)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Chat on WhatsApp"
@@ -143,6 +140,7 @@ export function SiteFooter() {
                 </svg>
                 WhatsApp
               </a>
+              ) : null}
             </div>
           </div>
 
@@ -206,14 +204,14 @@ export function SiteFooter() {
                 <p className="mt-1.5 text-[11.5px] text-[#ffd6cf]">
                   Signup abhi save nahi hua.{" "}
                   <a
-                    href={`https://wa.me/${whatsappNumber(whatsapp.replace(/\D/g, "").slice(-10))}?text=${encodeURIComponent(
+                    href={`https://wa.me/${whatsappNumber(contactNumber)}?text=${encodeURIComponent(
                       `Hi Noor Ethnic Wear! Please add me to the sale list: ${email}`,
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="underline"
                   >
-                    WhatsApp par email bhejein
+                    send it to us on WhatsApp
                   </a>
                   .
                 </p>

@@ -15,7 +15,7 @@ const LIVE_COLLECTIONS = [
   "new-arrivals",
   "party-wear-gown",
   "saree",
-  "likshas-choice",
+  "noors-choice",
   "lehnga-choli",
   "printed-suit-set",
   "weddin-collection",

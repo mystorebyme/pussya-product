@@ -63,17 +63,21 @@ console.log(`\nresponsive checks → ${BASE}\n`);
 /* 1. asset files: existence + device-appropriate dimensions ------------------ */
 const assets = [
   // file, min width, min height, note
-  ["images/brand/logo-mobile.png", 380, 100, "mobile logo (horizontal, 2× of 40px display)"],
-  ["images/brand/logo-tablet.png", 520, 120, "tablet logo (horizontal, ~2.6× of 50px)"],
-  ["images/brand/logo-desktop.png", 600, 140, "desktop logo (horizontal lockup, 3× of 46px)"],
-  ["images/brand/logo-fluid.png", 600, 360, "fluid logo (stacked, footer/invoice)"],
+  // Minimum dims = file jo **asli me hai** (R41: owner ke apne logo/poster, koi
+  // upscale nahi). Logo display height 42/52/54px hai, isliye har file 2× DPR
+  // ke liye kaafi hai (84/104/108px needed).
+  ["images/brand/logo-mobile.png", 260, 96, "mobile logo (horizontal, 2× of 42px display)"],
+  ["images/brand/logo-tablet.png", 300, 110, "tablet logo (horizontal, 2× of 52px display)"],
+  ["images/brand/logo-desktop.png", 340, 120, "desktop logo (horizontal lockup, 2× of 54px)"],
+  ["images/brand/logo-fluid.png", 400, 320, "fluid logo (stacked, footer/invoice)"],
   ["images/brand/logo-mark-128.png", 128, 128, "favicon 128"],
   ["images/brand/logo-mark-192.png", 192, 192, "PWA 192"],
   ["images/brand/logo-mark-512.png", 512, 512, "PWA 512 / invoice"],
-  ["images/banners/banner-mobile.webp", 700, 1000, "mobile poster (portrait)"],
-  ["images/banners/banner-tablet.webp", 1100, 800, "tablet banner (4:3)"],
-  ["images/banners/banner-desktop.webp", 1700, 500, "desktop banner (wide, no baked arrows)"],
-  ["images/banners/banner-fluid.webp", 1500, 480, "fluid banner"],
+  // R41 posters — owner ne jo bheja wahi size (downscale bhi nahi).
+  ["images/banners/banner-mobile.webp", 900, 1600, "mobile poster (portrait 941×1672)"],
+  ["images/banners/banner-tablet.webp", 1400, 1000, "tablet banner (1448×1086)"],
+  ["images/banners/banner-desktop.webp", 1500, 1000, "desktop banner (1536×1024, full width)"],
+  ["images/banners/banner-fluid.webp", 1500, 1000, "fluid banner (= desktop copy)"],
 ];
 
 for (const [file, minW, minH, note] of assets) {
@@ -93,28 +97,46 @@ for (const [file, minW, minH, note] of assets) {
 /* 2. payload sanity: par-device file size (mobile = smallest banner) --------- */
 const sizeOf = async (file) => (await fs.stat(path.join(PUBLIC, file))).size;
 const mobileBanner = await sizeOf("images/banners/banner-mobile.webp");
+const tabletBanner = await sizeOf("images/banners/banner-tablet.webp");
 const desktopBanner = await sizeOf("images/banners/banner-desktop.webp");
+/**
+ * R41: mobile poster desktop se **chhota** nahi hai (941×1672 portrait, same
+ * quality) — isliye size barabar nahi, **budget** check karte hain: koi bhi
+ * banner 320KB se bada na ho, warna phone par LCP dheema ho jaata hai.
+ */
 check(
-  `mobile banner is lighter than desktop (${Math.round(mobileBanner / 1024)} KB vs ${Math.round(desktopBanner / 1024)} KB)`,
-  mobileBanner < 260 * 1024 && desktopBanner < 260 * 1024,
+  `every hero banner stays inside the 320KB budget (${Math.round(mobileBanner / 1024)} / ${Math.round(tabletBanner / 1024)} / ${Math.round(desktopBanner / 1024)} KB)`,
+  mobileBanner < 320 * 1024 && tabletBanner < 320 * 1024 && desktopBanner < 320 * 1024,
 );
 
 /* 3. home markup: breakpoints map to the right asset ------------------------ */
 const home = await get("/");
 check("home 200", home.status === 200, `status ${home.status}`);
 
-const heroPicture = home.text.match(/aspect-\[860\/1290\][\s\S]{0,900}?<\/picture>/)?.[0] ?? "";
+/** live stylesheet (dev server ya production build — dono se) */
+const cssHref = home.text.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
+const liveCss = cssHref ? (await get(cssHref)).text : "";
+
+/**
+ * R41: hero ek `<picture>` hai jisme har breakpoint ki **apni** file hai, aur
+ * `aspect-ratio` asli file ka hai (941/1672 · 1448/1086 · 1536/1024) — isliye
+ * `object-fit: contain` ke saath kabhi crop/stretch nahi hota.
+ */
+const heroPicture = home.text.match(/<picture>[\s\S]{0,900}?banner-mobile\.webp[\s\S]{0,300}?<\/picture>/)?.[0] ?? "";
 check("hero is a <picture> (only one file loads per device)", Boolean(heroPicture));
 check("hero: ≥1024px → banner-desktop.webp", /min-width:1024px[^>]*banner-desktop\.webp/.test(heroPicture));
 check("hero: 768–1023px → banner-tablet.webp", /min-width:768px[^>]*banner-tablet\.webp/.test(heroPicture));
 check("hero: <768px → banner-mobile.webp (default img)", /<img[^>]*banner-mobile\.webp/.test(heroPicture));
 check(
-  "hero reserves space with width/height + aspect-ratio (no layout shift)",
-  /width="1779"[^>]*height="594"/.test(heroPicture) && /width="860"[^>]*height="1290"/.test(heroPicture),
+  "hero reserves space with width/height (no layout shift)",
+  /width="941"[^>]*height="1672"/.test(heroPicture),
 );
 check(
-  "hero aspect ratios match the files (860/1290 · 4/3 · 1779/594)",
-  home.text.includes("aspect-[860/1290]") && home.text.includes("md:aspect-[4/3]") && home.text.includes("lg:aspect-[1779/594]"),
+  "hero aspect ratios match the files (941/1672 · 1448/1086 · 1536/1024)",
+  home.text.includes("hero-media") &&
+    liveCss.includes("941 / 1672") &&
+    liveCss.includes("1448 / 1086") &&
+    liveCss.includes("1536 / 1024"),
 );
 check("hero image loads eagerly (LCP) with high priority", /fetchPriority="high"|fetchpriority="high"/.test(heroPicture));
 
@@ -146,7 +168,16 @@ check(
   "instagram is not a clickable link yet (owner rule)",
   !/href="https:\/\/www\.instagram\.com/.test(home.text),
 );
-check("footer whatsapp link is live", /href="https:\/\/wa\.me\/91\d{10}/.test(home.text));
+/**
+ * WhatsApp link sirf tab banta hai jab owner ne sheet me number diya ho (koi
+ * hardcoded number nahi). Do hi valid states hain: 91+10 digit link, ya koi
+ * WhatsApp link **nahi**. Dead `wa.me/91` (bina number) kabhi nahi hona chahiye.
+ */
+check(
+  "whatsapp link is either absent or a full 91XXXXXXXXXX number (no wa.me/91 dead link)",
+  !/href="https:\/\/wa\.me\/91"/.test(home.text) &&
+    (!home.text.includes("wa.me") || /href="https:\/\/wa\.me\/91\d{10}/.test(home.text)),
+);
 check("no dummy facebook/pinterest links", !home.text.includes("facebook.com") && !home.text.includes("pinterest.com"));
 
 /* 6. collections index (SHOP landing) ------------------------------------- */
@@ -206,20 +237,20 @@ check(
 );
 
 /* 8. responsive CSS rules exist in the built stylesheet -------------------- */
-const cssDir = path.join(PUBLIC, "..", ".next/static/chunks");
-const cssFile = (await fs.readdir(cssDir).catch(() => [])).find((file) => file.endsWith(".css"));
-if (cssFile) {
-  const css = await fs.readFile(path.join(cssDir, cssFile), "utf8");
+if (liveCss) {
+  const css = liveCss;
   const flatCss = css.replace(/\s+/g, "");
+  // R42: logo heights 42 → 52 → 54 (owner ka asli lockup, file 2× DPR cover karti hai)
   check(
-    "CSS defines brand-lockup heights per breakpoint (40 → 50 → 46)",
-    flatCss.includes(".brand-lockupimg{width:auto;height:40px}") &&
-      flatCss.includes(".brand-lockupimg{height:50px}") &&
-      flatCss.includes(".brand-lockupimg{height:46px}"),
+    "CSS defines brand-lockup heights per breakpoint (42 → 52 → 54)",
+    // flattened CSS me class aur tag ke beech ka space bhi chala jaata hai
+    /\.brand-lockupimg\{[^}]*height:42px/.test(flatCss) &&
+      /\.brand-lockupimg\{[^}]*height:52px/.test(flatCss) &&
+      /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss),
   );
-  check("CSS keeps hero image inside its box (object-fit)", /\.hero-media img\{[^}]*object-fit/.test(css));
+  check("CSS keeps hero image inside its box (object-fit: contain, no crop)", /\.hero-mediaimg\{[^}]*object-fit:contain/.test(flatCss));
 } else {
-  console.log("  skip built CSS checks (production build ke baad chalayein)");
+  console.log("  skip stylesheet checks (koi .css link nahi mila)");
 }
 
 console.log(`\nresponsive: ${pass} passed, ${failures.length} failed`);

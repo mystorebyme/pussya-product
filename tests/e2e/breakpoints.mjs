@@ -137,8 +137,12 @@ for (const src of new Set([heroPic.img, ...heroPic.sources.map((s) => s.src), br
   check(`asset exists: ${label(src)}`, sizes[src].w > 0, "missing/unreadable");
 }
 
-/* hero ratio: har device asset ka ratio us breakpoint ke box se match kare (crop-free) */
-const boxRatio = { mobile: 860 / 1290, tablet: 4 / 3, desktop: 1779 / 594 };
+/**
+ * Hero ratio — R41: CSS box ka aspect-ratio **owner ke poster** ka asli ratio hai
+ * (mobile 941×1672, tablet 1448×1086, desktop 1536×1024). Dono side match hone se
+ * `object-fit: contain` ke baad koi crop/stretch nahi hota.
+ */
+const boxRatio = { mobile: 941 / 1672, tablet: 1448 / 1086, desktop: 1536 / 1024 };
 for (const [kind, expected] of Object.entries(boxRatio)) {
   const src = Object.keys(sizes).find((key) => key.includes(`banner-${kind}`));
   if (!src) continue;
@@ -159,9 +163,16 @@ check(
 const tabletAsset = sizes[heroPic.sources.find((s) => s.min === 768)?.src ?? ""];
 check("tablet banner ≥ 1200px wide (retina iPad)", (tabletAsset?.w ?? 0) >= 1200, `${tabletAsset?.w}px`);
 const desktopAsset = sizes[heroPic.sources.find((s) => s.min === 1024)?.src ?? ""];
-// wide source se hero ke dono baked carousel arrows crop kar diye (1779×594) — asli
-// asset ka width hi maximum hai, isliye retina laptop (1440 @1.2×) ke liye kaafi hai
-check("desktop banner ≥ 1779px wide (full source width)", (desktopAsset?.w ?? 0) >= 1779, `${desktopAsset?.w}px`);
+/**
+ * R41: desktop poster 1536×1024 hai — owner ki asli file, **upscale nahi ki**
+ * (upscale = blurry text). Hero container `max-w-[1920px]` hai par 1536px wide
+ * file 1440–1600px laptop par 1:1 sharp rehti hai.
+ */
+check(
+  "desktop banner ≥ 1500px wide (owner ka 1536px source, koi upscale nahi)",
+  (desktopAsset?.w ?? 0) >= 1500,
+  `${desktopAsset?.w}px`,
+);
 
 console.log(`\nbreakpoints: ${pass} passed, ${failures.length} failed`);
 if (failures.length) {

@@ -81,10 +81,10 @@ async function main() {
   }
 
   await prisma.user.upsert({
-    where: { email: process.env.ADMIN_EMAIL ?? "admin@likshaclothing.com" },
+    where: { email: process.env.ADMIN_EMAIL ?? "admin@noorethnicwear.in" },
     update: { role: "OWNER" },
     create: {
-      email: process.env.ADMIN_EMAIL ?? "admin@likshaclothing.com",
+      email: process.env.ADMIN_EMAIL ?? "admin@noorethnicwear.in",
       name: "Store Owner",
       role: "OWNER",
     },

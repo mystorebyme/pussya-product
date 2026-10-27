@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (owner ke Diwali posters — desktop/tablet/mobile, no crop; Free Shipping hataya)
+**Last updated:** 2026-10-27 (R42: header/WhatsApp fix, sheet parser bug, purana brand saaf, GitHub Pages preview)
 
 ## Kya ready hai
 
@@ -16,6 +16,10 @@
 | Header + logo | ✅ ek hi announcement strip, per-device logo size, nav child pages par active | `site-header.tsx`, `globals.css` |
 | **Diwali hero banners** (desktop / tablet / mobile) | ✅ owner ke teen posters — har device ki apni file, `object-fit: contain` + exact aspect-ratio, koi crop/stretch nahi; desktop full width | `assets/source/banners/`, `node scripts/brand/build-hero-banners.mjs` |
 | **"Free Shipping" claim** | ✅ poori site se hataya (header, strip, cart, PDP, policies, meta; admin toggle bhi) | `tests/unit/round41.test.ts` |
+| **R42 — header/footer contact** | ✅ ek hi WhatsApp number (`whatsapp` → warna `support_phone`), number na ho to button hi nahi (pehle `wa.me/` dead link), duplicate footer row gaya, announcement sirf English | `site-header.tsx`, `site-footer.tsx`, `floating-help.tsx` |
+| **R42 — sheet Settings parser** | ✅ **asli bug**: Settings tab me teesra `note` column hone se value `9876543211,,"DEMO…` ban jaati thi → ab sirf A=key, B=value padhe jaate hain | `lib/sheet-format.ts`, `tests/unit/round42.test.ts` |
+| **R42 — purana brand saaf** | ✅ catalogue ka `meta.store`, 9 product handles, 240 vendor, reviews — sab se purana naam hata (catalog rebuild + verify pass) | `scripts/verify-catalog.mjs`, `database/seeds/live/*` |
+| **R42 — GitHub Pages preview** | 🟡 workflow se live URL nikalta hai; is branch par deploy protection ki wajah se `environment:` hata ke try kiya ja raha hai | `.github/workflows/pages.yml` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 287 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |
