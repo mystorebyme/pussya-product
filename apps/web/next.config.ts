@@ -1,5 +1,18 @@
 import type { NextConfig } from "next";
 
+/** YouPI gateway origin (CSP ke liye) — sirf tab add hota hai jab env set ho */
+const youpiOrigin = (() => {
+  const raw = process.env.YOUPI_PAY_URL?.trim();
+  if (!raw) return "";
+  // same-origin path (reverse proxy / demo) → 'self' hi kaafi hai
+  if (raw.startsWith("/")) return "'self'";
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return "";
+  }
+})();
+
 /** Next dev sirf allowlisted hosts se HMR allow karta hai — sandbox preview isi list se aata hai. */
 const devOrigins = ["localhost:3000", "127.0.0.1:3000", "*.e2b.app", "3000-iu4hlpxjms5r4hq5t841e.e2b.app"];
 
@@ -18,6 +31,19 @@ const nextConfig: NextConfig = {
     : {}),
   // shared packages ko TS source se compile karna hai (no separate build step)
   transpilePackages: ["@noor/types", "@noor/validation", "@noor/api-client", "@noor/ui"],
+  /**
+   * Demo-only (owner ko live flow dikhane ke liye): `DEMO_GATEWAY=1` par
+   * `/demo-gateway/*` ko local demo gateway par proxy karte hain, taaki asli
+   * YouPI ke bina bhi wahi cross-origin/iframe flow chale. Production me ye
+   * rewrite kabhi register nahi hota.
+   */
+  ...(process.env.DEMO_GATEWAY === "1"
+    ? {
+        async rewrites() {
+          return [{ source: "/demo-gateway/:path*", destination: "http://127.0.0.1:6200/:path*" }];
+        },
+      }
+    : {}),
   allowedDevOrigins: devOrigins,
   // pdfkit native-style deps (fontkit) bundle karna theek nahi — runtime par node_modules se load
   serverExternalPackages: ["pdfkit"],
@@ -51,12 +77,16 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "img-src 'self' https://cdn.shopify.com https://*.shopifycdn.com data: blob:",
-              // koi third-party payment gateway nahi (owner rule) — sirf apni site
-              "script-src 'self' 'unsafe-inline'",
+              /*
+               * Payment gateway (YouPI) apne hi domain par chalta hai — jab
+               * `YOUPI_PAY_URL` set ho to usi origin ko allow karte hain
+               * (script + checkout iframe + API calls), warna kuch nahi.
+               */
+              `script-src 'self' 'unsafe-inline'${youpiOrigin ? ` ${youpiOrigin}` : ""}`,
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
-              "connect-src 'self'",
-              "frame-src 'none'",
+              `connect-src 'self'${youpiOrigin ? ` ${youpiOrigin}` : ""}`,
+              youpiOrigin ? `frame-src ${youpiOrigin}` : "frame-src 'none'",
               "form-action 'self'",
               "base-uri 'self'",
               "object-src 'none'",

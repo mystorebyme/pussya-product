@@ -30,8 +30,14 @@ import { getStoreSettings, type StoreSettings } from "@/lib/store-settings";
  */
 
 export type YoupiConfig = {
-  /** gateway origin, e.g. `https://pay.noorethnicwear.in` */
+  /** gateway origin, e.g. `https://pay.noorethnicwear.in` (browser isi par jaata hai) */
   payUrl: string;
+  /**
+   * Server-to-server calls ke liye alag origin (optional). Jab gateway public
+   * internet se na khulta ho (ya internal network me ho) to `YOUPI_PAY_URL_INTERNAL`
+   * set karein — server wahan baat karega, browser public `payUrl` par.
+   */
+  internalUrl: string;
   merchantId: string;
   /** sirf server par — browser ko kabhi nahi jaata */
   webhookSecret: string;
@@ -40,10 +46,17 @@ export type YoupiConfig = {
   source: "sheet" | "env" | "mixed";
 };
 
-/** `https://pay.x.com/` → `https://pay.x.com`; galat/khali → "" */
+/**
+ * `https://pay.x.com/` → `https://pay.x.com`; galat/khali → "".
+ *
+ * Same-origin path (`/pay`) bhi chalta hai — tab gateway site ke reverse proxy
+ * ke peeche hota hai (ya local demo). Aisa path jaisa hai waisa hi rakha jaata
+ * hai, browser usi origin par call karega.
+ */
 export function normalisePayUrl(raw?: string | null): string {
   const value = (raw ?? "").trim();
   if (!value) return "";
+  if (value.startsWith("/")) return value.replace(/\/+$/, "") || "/";
   const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
   try {
     const parsed = new URL(withScheme);
@@ -57,6 +70,7 @@ export function normalisePayUrl(raw?: string | null): string {
 function envConfig(): Partial<YoupiConfig> {
   return {
     payUrl: normalisePayUrl(process.env.YOUPI_PAY_URL),
+    internalUrl: normalisePayUrl(process.env.YOUPI_PAY_URL_INTERNAL),
     merchantId: (process.env.YOUPI_MERCHANT_ID ?? "").trim(),
     webhookSecret: (process.env.YOUPI_WEBHOOK_SECRET ?? "").trim(),
   };
@@ -84,7 +98,14 @@ export function resolveYoupiConfig(settings?: Partial<StoreSettings> | null): Yo
 
   const source: YoupiConfig["source"] =
     sheetUrl && sheetKey ? (sheetSecret || env.webhookSecret ? "mixed" : "sheet") : "env";
-  return { payUrl, merchantId, webhookSecret, currency: "INR", source };
+  return {
+    payUrl,
+    internalUrl: env.internalUrl || payUrl,
+    merchantId,
+    webhookSecret,
+    currency: "INR",
+    source,
+  };
 }
 
 /** Runtime config (sheet se live — `getStoreSettings` cached hai, payment page `fresh` bhejta hai) */
@@ -127,7 +148,9 @@ async function gatewayFetch(
   pathName: string,
   init: RequestInit = {},
 ): Promise<Response> {
-  return fetch(`${config.payUrl}${pathName}`, {
+  // server-to-server: internal origin (agar diya ho) warna public hi
+  const origin = config.internalUrl || config.payUrl;
+  return fetch(`${origin}${pathName}`, {
     ...init,
     headers: {
       "content-type": "application/json",

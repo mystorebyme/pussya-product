@@ -318,6 +318,28 @@ test("R48-5b: gateway client — youpi.js embed, sheet-driven config, server-sid
   assert.match(confirm, /RATE_LIMITS\.payments/, "rate limited");
 });
 
+test("R48-5d: gateway origin — absolute URL, same-origin path, aur server-only internal URL", () => {
+  const server = read("apps/web/src/lib/youpi.ts");
+
+  /*
+   * `youpi.ts` server-only hai (browser ke liye `youpi-pay.tsx`) — isliye
+   * behaviour parh kar check karte hain, import karke nahi.
+   */
+  assert.match(server, /export function normalisePayUrl/, "normalisePayUrl exported");
+  assert.match(server, /value\.startsWith\("\/"\)/, "same-origin path (reverse proxy) support");
+  assert.match(server, /\^https\?:\\\/\\\//, "bare domain par https lagta hai");
+  assert.match(server, /replace\(\/\\\/\+\$\/, ""\)/, "trailing slash hatta hai");
+  assert.match(server, /YOUPI_PAY_URL_INTERNAL/, "server-only internal origin support");
+  assert.match(server, /config\.internalUrl \|\| config\.payUrl/, "internal na ho to public URL se call");
+
+  // CSP frame-src/script-src gateway ko allow kare, warna checkout iframe block hoga
+  const nextConfig = read("apps/web/next.config.ts");
+  assert.match(nextConfig, /frame-src/);
+  assert.match(nextConfig, /youpiOrigin/);
+  assert.match(nextConfig, /script-src 'self' 'unsafe-inline'/);
+  assert.match(nextConfig, /connect-src 'self'/);
+});
+
 test("R48-5c: config sheet se live aati hai, secret public API me nahi jaata", () => {
   const settings = read("apps/web/src/lib/store-settings.ts");
   for (const field of ["youpiEnabled", "youpiPayUrl", "youpiMerchantId", "youpiWebhookSecret"]) {

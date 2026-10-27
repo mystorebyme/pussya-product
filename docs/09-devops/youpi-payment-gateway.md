@@ -142,9 +142,32 @@ YOUPI_MERCHANT_ID=<merchant key>
 YOUPI_WEBHOOK_SECRET=<webhook secret>
 NEXT_PUBLIC_YOUPI_PAY_URL=…       # sirf static build ke liye
 NEXT_PUBLIC_YOUPI_MERCHANT_ID=…   # sirf static build ke liye
+
+# optional — server-only calls ka origin (browser ko dikhta nahi)
+YOUPI_PAY_URL_INTERNAL=http://10.0.0.5:6100
+
+# demo-only — site ke andar /demo-gateway ko local demo gateway par proxy karta hai
+DEMO_GATEWAY=1
 ```
 
 Sheet ki value env se **jeet-ti** hai (owner bina redeploy badal sake).
+
+### 5b. `YOUPI_PAY_URL` ke 3 allowed shapes
+
+| value | kab | browser kya karta hai |
+| --- | --- | --- |
+| `https://pay.yourdomain.com` | normal production | gateway origin se `youpi.js` + checkout iframe |
+| `/demo-gateway` (same-origin path) | demo / reverse proxy | site ke hi origin par `/demo-gateway/youpi.js` |
+| `pay.yourdomain.com` (bina scheme) | owner ne scheme bhool di | `https://` laga kar chalega |
+
+- `YOUPI_PAY_URL_INTERNAL` sirf **server** use karta hai (`POST /api/v1/payments`,
+  `GET /api/v1/payments/{id}`) — jab gateway public internet se na khulta ho.
+  Browser ke liye hamesha `YOUPI_PAY_URL` hi rehta hai.
+- CSP (report-only) me gateway ka origin `script-src` + `connect-src` +
+  `frame-src` me automatically add hota hai — sirf tab jab env set ho.
+- Demo mode (`DEMO_GATEWAY=1` + `YOUPI_PAY_URL=/demo-gateway`) se owner bina
+  asli gateway ke poora flow dekh sakta hai: checkout modal → success/failed/
+  cancel → order `confirmed` + `paid`. Ye flag production me kabhi set na karein.
 
 ## 6. Tests
 
