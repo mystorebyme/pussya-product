@@ -77,6 +77,8 @@ ye layer `hidden` rehta hai (wahan swipe/counter chalta hai).
 ## 5. YouPI PG gateway
 
 Poora setup + security model: **[`youpi-payment-gateway.md`](./youpi-payment-gateway.md)**.
+Har step ka word-to-word guide (commands + panel ke exact button):
+**[`youpi-setup-word-to-word.md`](./youpi-setup-word-to-word.md)**.
 
 Short (YouPI repo ke `openapi.yaml` ke exactly hisaab se):
 

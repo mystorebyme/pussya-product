@@ -111,6 +111,10 @@ unhone aapko merchant account diya hai).
 | 4 | `youpi_webhook_secret` | **Webhook Signing Secret** — HMAC-SHA256, isse hi `X-Gateway-Signature` verify hota hai | Usi card me → "Webhook Secret (HMAC-SHA256 Signing)" → 📋 Copy | 64 hex characters (`a3f1…`) | **Secret** |
 | 5 | `youpi_enabled` | On/off switch | Aapka faisla | `true` / `false` | Public |
 
+> 🔎 **Har click, har command, har field ka naam chahiye?** →
+> [`youpi-setup-word-to-word.md`](./youpi-setup-word-to-word.md) (shuru se pehle
+> payment tak, screenshots ki tarah step-by-step).
+
 > **Naam ka chakkar:** YouPI ne in teeno ko alag-alag naam diye hain, par kaam
 > ek hi hai —
 > `Merchant ID / Publishable Key` = `data-youpi-key` = `X-Merchant-Id` = **hamara `youpi_merchant_id`**;
@@ -202,6 +206,7 @@ aur `webhookSecret` (→ `youpi_webhook_secret`) aate hain. Key badalni ho to
 | Webhook par `401` aur order auto-confirm nahi | `youpi_webhook_secret` match nahi kar raha | Dono taraf wahi secret; rotate kiya to Sheet bhi update |
 | `409 DUPLICATE_SESSION_DETECTED` | Customer ne dobara pay dabaya | Normal — site wahi purana session kholti hai |
 | Gateway modal hi nahi khulta | `youpi_pay_url` galat / `youpi.js` 404 / http (https nahi) | `…/youpi.js` browser me check kariye |
+| Modal khulta hai par **blank / "refused to connect"** | Gateway ke `.env` me `CHECKOUT_FRAME_ANCESTORS` me store ka origin nahi hai (production me default `frame-ancestors 'self'`) | Gateway `.env` me `CHECKOUT_FRAME_ANCESTORS=https://noorethnicwear.in` daalein → `docker compose up -d` |
 | Payment ho gaya par order pending | server deploy nahi (static Pages) ya webhook URL galat | Vercel/Render deploy + webhook URL, ya `/api/payments/youpi/confirm` route live hona chahiye |
 
 ### 3e. Ek nazar me verify (setup ke baad)

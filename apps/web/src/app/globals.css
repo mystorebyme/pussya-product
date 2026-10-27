@@ -697,15 +697,176 @@ button {
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ---------- motion kam chahiye to R48 ki animation band ---------- */
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R49 — "har button me feel aaye, colour dikhe, aur bilkul lag na ho"
+
+   Owner (R49): "every button mai feel aye animated, jinme colour hai unko
+   colour se karo, without lag".
+
+   Rules jo poore site par lagti hain (koi JS nahi, sirf transform/opacity —
+   isliye paint/layout dobara nahi hota aur scrolling smooth rehti hai):
+     1. har button/Link: hover par 1.5px uthna, click par dabna (spring curve),
+        gold focus ring (keyboard users ke liye)
+     2. maroon (brand) buttons: gold sheen + halka gradient — "colour wali feel"
+     3. hairlines me gold diamond — Noor ka apna signature ornament
+     4. sab kuch `prefers-reduced-motion` par band */
+
+/* ---------- 1. har button ki tactility ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  button,
+  [role="button"],
+  summary {
+    transition:
+      transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.28s ease,
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled):not([aria-disabled="true"]):hover,
+  [role="button"]:not([aria-disabled="true"]):hover {
+    transform: translateY(-1.5px);
+  }
+
+  /* dabaane par turant "press" feel — 90ms, isliye lag nahi lagta */
+  button:not(:disabled):not([aria-disabled="true"]):active,
+  [role="button"]:not([aria-disabled="true"]):active {
+    transform: translateY(0) scale(0.972);
+    transition-duration: 0.09s;
+  }
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid rgba(166, 124, 46, 0.72);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- 2. maroon CTA: sheen + mahogany gradient ---------- */
+button[class*="bg-[#862222]"],
+a[class*="bg-[#862222]"],
+button[class*="bg-maroon"],
+a[class*="bg-maroon"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(180deg, #9a2b2b 0%, #862222 58%, #741d1d 100%);
+}
+
+@media (hover: hover) {
+  button[class*="bg-[#862222]"]:hover,
+  a[class*="bg-[#862222]"]:hover,
+  button[class*="bg-maroon"]:hover,
+  a[class*="bg-maroon"]:hover {
+    box-shadow:
+      0 10px 24px -12px rgba(134, 34, 34, 0.55),
+      0 0 0 1px rgba(166, 124, 46, 0.35) inset;
+  }
+}
+
+button[class*="bg-[#862222]"]::after,
+a[class*="bg-[#862222]"]::after,
+button[class*="bg-maroon"]::after,
+a[class*="bg-maroon"]::after {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 238, 200, 0.5) 50%, transparent 62%);
+  transform: translateX(-130%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  button[class*="bg-[#862222]"]:hover::after,
+  a[class*="bg-[#862222]"]:hover::after,
+  button[class*="bg-maroon"]:hover::after,
+  a[class*="bg-maroon"]:hover::after {
+    opacity: 1;
+    animation: ctaSheen 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* ---------- 3. Noor ka signature ornament: hairline ke beech gold diamond ---------- */
+.gold-hairline {
+  position: relative;
+  overflow: visible;
+}
+
+.gold-hairline::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -4px 0 0 -4px;
+  background: linear-gradient(135deg, #e6d3a8, #a67c2e);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- 4. gold kicker text (section labels) ---------- */
+.noor-kicker {
+  letter-spacing: 0.22em;
+  color: var(--noor-gold);
+}
+
+
+
+/* ---------- 6. footer: deep maroon gradient + gold hairline (Noor look) ---------- */
+footer[class*="bg-[#8a000e]"] {
+  background-image: linear-gradient(180deg, #a10d1b 0%, #8a000e 42%, #6d0a12 100%);
+  border-top: 1px solid rgba(230, 211, 168, 0.28);
+}
+
+footer[class*="bg-[#8a000e]"] a {
+  transition: color 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  footer[class*="bg-[#8a000e]"] a:hover {
+    color: #f2dfae;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reduced motion — owner/customer ne system me "motion kam" chuna ho to poori
+   animation band (content turant, bina transition ke). Ye block **sabse aakhir**
+   me hai taaki upar ki saari animation isse override ho jaye.
+   ══════════════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .cta-sheen::after {
+    display: none;
+  }
+  button[class*="bg-[#862222]"]::after,
+  button[class*="bg-maroon"]::after,
+  a[class*="bg-[#862222]"]::after,
+  a[class*="bg-maroon"]::after {
     display: none;
   }
   .gallery-slide,
   .gallery-zoom,
   .link-underline::after {
     transition: none !important;
+  }
+  button,
+  [role="button"] {
+    transition: none !important;
+  }
+  button:hover,
+  [role="button"]:hover,
+  button:active,
+  [role="button"]:active {
+    transform: none !important;
   }
   body {
     background-attachment: scroll;

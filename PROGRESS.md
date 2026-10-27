@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R48: poora size guide (3 tabs/XS–XXL/in–cm/Find My Size), unique category images, palette + animation, PDP hover zoom, YouPI PG gateway)
+**Last updated:** 2026-10-27 (R49: har button ki feel + colour + word-to-word gateway doc; R48: poora size guide (3 tabs/XS–XXL/in–cm/Find My Size), unique category images, palette + animation, PDP hover zoom, YouPI PG gateway)
 
 ## Kya ready hai
 
@@ -32,6 +32,8 @@
 | **R48 — category images unique** | ✅ 7 circles ki 7 alag images (image + colour dono repeat na hon; deterministic) | `lib/circle-art.ts`, `app/page.tsx` |
 | **R48 — palette + animation** | ✅ warm ivory/gold tokens, CTA par gold sheen, nav link underline draw, PDP hover zoom, sab `prefers-reduced-motion` par band | `app/globals.css` |
 | **R48 — PDP hover** | ✅ hover par base image hat jaati hai aur zoom wali dikhti hai; cursor hatne par exactly pehle jaisi | `components/product-gallery.tsx` |
+| **R49 — har button me feel (koi lag nahi)** | ✅ poore site par ek hi physics: hover par 1.5px uthna, click par dabna (spring curve), gold focus ring; maroon CTA par gradient + gold sheen; footer maroon gradient + gold hairline; **sirf `transform`/`opacity`** animate hote hain (paint/layout dobara nahi) aur `prefers-reduced-motion` par sab band — bina JS, isliye scroll par lag nahi | `app/globals.css` |
+| **R49 — YouPI setup doc (word to word)** | ✅ shuru se pehle payment tak: server, docker, `.env` (har line), HTTPS, `CHECKOUT_FRAME_ANCESTORS` (iframe block ka asli fix), admin panel + `ADMIN_API_TOKEN` kahan, 5 Sheet keys, webhook, pehla test, troubleshooting, demo, roz ka checklist | `docs/09-devops/youpi-setup-word-to-word.md` |
 | **R48 — YouPI PG gateway** | ✅ `youpi.js` + `window.Youpi.pay()` checkout, HMAC webhook (`/api/payments/webhook/youpi`), server-to-server verify (`/api/payments/youpi/confirm`), sheet se live config; config na ho to seedha UPI QR flow — setup: `docs/09-devops/youpi-payment-gateway.md` | `lib/youpi.ts`, `lib/youpi-signature.ts`, `components/youpi-pay.tsx` |
 | **R45 — chhote bugs** | ✅ footer ka saal hydration-safe (`suppressHydrationWarning`), manifest icons base path ke saath, live-check me favicon/ICO/mark checks | `site-footer.tsx`, `manifest.ts`, `scripts/audit/live-check.mjs` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |

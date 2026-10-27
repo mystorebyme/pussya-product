@@ -120,6 +120,9 @@ Sab value **gateway ke Merchant Admin panel** se milti hai — Settings →
 Poori detail (kya galat ho sakta hai, error → fix, verify commands):
 `docs/09-devops/youpi-payment-gateway.md` → section 3.
 
+Sabse aasan rasta (har command + har button, word to word, shuru se pehle
+payment tak): **`docs/09-devops/youpi-setup-word-to-word.md`**.
+
 ### Pehla test (recommended)
 
 1. Ek chhota order khud place karein (₹499 wala product).

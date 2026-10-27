@@ -181,7 +181,31 @@ const cssHref = html.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
  * `/pussya-product/_next/...` par hota hai. Isliye base path khud lagate hain.
  */
 const cssUrl = cssHref ? new URL(cssHref.replace(/^\//, ""), BASE).toString() : "";
-const css = cssUrl ? await get(cssUrl) : { ok: false, body: "" };
+let css = cssUrl ? await get(cssUrl) : { ok: false, body: "" };
+
+/**
+ * Deploy propagation: push ke turant baad ye workflow chalta hai, par GitHub
+ * Pages naya build publish karne me 1–3 minute leta hai. Isliye CSS me R49 ka
+ * marker (`#a10d1b` = footer gradient) aane tak thoda intezaar karte hain —
+ * warna nayi CSS ki checks jhooti fail hoti hain. `LIVE_WAIT_MS=0` se band.
+ */
+const waitBudgetMs = Number(process.env.LIVE_WAIT_MS ?? 240_000);
+if (waitBudgetMs > 0) {
+  const started = Date.now();
+  let waited = 0;
+  while (waited < waitBudgetMs && !css.body.includes("#a10d1b")) {
+    await new Promise((resolve) => setTimeout(resolve, 15_000));
+    waited = Date.now() - started;
+    const fresh = await get(`${BASE}?deploy=${Date.now()}`);
+    const href = fresh.body.match(/\/_next\/static\/[^"']+\.css/)?.[0] ?? "";
+    if (href) css = await get(new URL(href.replace(/^\//, ""), BASE).toString());
+    if (css.body.includes("#a10d1b")) {
+      notes.push(`deploy propagation: ${Math.round(waited / 1000)}s wait kiya`);
+      break;
+    }
+  }
+}
+
 const flatCss = css.body.replace(/\s+/g, "");
 
 say("");
@@ -213,6 +237,18 @@ check(
   "R48 palette + CTA sheen CSS live hai",
   /--noor-gold:#a67c2e/.test(flatCss) && /\.cta-sheen::?after\{/.test(flatCss) && flatCss.includes("@keyframesctaSheen"),
 );
+/* R49: har button me feel (hover lift + press), maroon CTA par colour+sheen,
+   footer maroon gradient — sab CSS-only, isliye scroll par lag nahi */
+check(
+  "R49 button feel CSS live hai (hover lift + press)",
+  flatCss.includes("translateY(-1.5px)") && flatCss.includes("scale(.972)"),
+);
+check(
+  "R49 maroon CTA par gradient + gold sheen live hai",
+  flatCss.includes("#9a2b2b") && /button\[class\*=["']?bg-/.test(flatCss),
+);
+check("R49 footer maroon gradient + gold hairline live hai", flatCss.includes("#a10d1b"));
+
 check(
   "R48 PDP hover zoom CSS live hai (base image hat jaye)",
   /\.gallery-slide\{[^}]*transition:opacity/.test(flatCss) &&
