@@ -51,9 +51,10 @@ test("R40-2: logo per-device height + asli file ratio (stretch/crop nahi)", () =
   assert.match(css, /min-width: 768px\)[^@]*\.brand-lockup img \{[^}]*height: 52px/);
   assert.match(css, /min-width: 1024px\)[^@]*\.brand-lockup img \{[^}]*height: 58px/);
   assert.match(css, /\.brand-lockup img \{[^}]*object-fit: contain/, "kabhi stretch nahi");
-  // width/height attrs asli file ke hain (mobile 310×138, fluid 458×400)
-  assert.match(lockup, /width=\{310\}\s*\n?\s*height=\{138\}/);
-  assert.match(lockup, /width=\{458\}\s*\n?\s*height=\{400\}/);
+  // R44: image markup ab `brand-mark.tsx` me hai (ek hi jagah), lockup wahan se aata hai
+  const mark = read("apps/web/src/components/brand-mark.tsx");
+  assert.match(mark, /width=\{310\}\s*\n?\s*height=\{138\}/);
+  assert.match(lockup, /BrandMark/);
 });
 
 /* ------------------------------------------------------------------ 3. header */

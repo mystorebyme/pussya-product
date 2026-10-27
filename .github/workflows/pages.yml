@@ -12,6 +12,8 @@ on:
     paths-ignore:
       - ".reviews-sync-trigger"
       - "database/seeds/reviews/**"
+      # live-check workflow report commit karta hai — wo build dobara na chale
+      - "docs/09-devops/live-check.md"
   workflow_dispatch:
 
 # NOTE: empty commits path filters ke saath workflow trigger nahi karte —

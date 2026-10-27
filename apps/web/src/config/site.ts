@@ -42,6 +42,8 @@ export const brandAssets = {
   /** square mark — favicon / PWA / admin / WhatsApp thumb */
   mark: `${ASSET_BASE}/images/brand/logo-mark-512.png${BRAND_V}`,
   mark192: `${ASSET_BASE}/images/brand/logo-mark-192.png${BRAND_V}`,
+  /** Apple touch icon — iOS ka asli 180×180 */
+  mark180: `${ASSET_BASE}/images/brand/logo-mark-180.png${BRAND_V}`,
   mark128: `${ASSET_BASE}/images/brand/logo-mark-128.png${BRAND_V}`,
 } as const;
 

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
       { url: logoMark, sizes: "512x512", type: "image/png" },
     ],
     shortcut: [{ url: logoMark }],
-    apple: [{ url: brandAssets.mark192, sizes: "180x180" }],
+    apple: [{ url: brandAssets.mark180, sizes: "180x180", type: "image/png" }],
   },
   appleWebApp: { capable: true, title: "Noor Ethnic Wear", statusBarStyle: "default" },
   manifest: assetUrl("/manifest.webmanifest"),

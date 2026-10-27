@@ -23,6 +23,7 @@ const BASE_PATH = process.env.PAGES_BASE_PATH ?? "";
 const VIEWPORTS = [
   { name: "iPhone SE · portrait", w: 320, h: 568, expect: "mobile" },
   { name: "Android small · portrait", w: 360, h: 800, expect: "mobile" },
+  { name: "iPhone 6/7/8 · portrait", w: 375, h: 667, expect: "mobile" },
   { name: "iPhone 12/13 · portrait", w: 390, h: 844, expect: "mobile" },
   { name: "iPhone 14 Pro Max", w: 430, h: 932, expect: "mobile" },
   { name: "iPad mini · portrait", w: 768, h: 1024, expect: "tablet" },

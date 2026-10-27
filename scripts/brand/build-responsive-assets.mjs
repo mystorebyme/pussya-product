@@ -166,8 +166,12 @@ await fs.writeFile(
     .toBuffer(),
 );
 
-/** square mark — arch ko white square me center (favicon/PWA/admin/invoice) */
-for (const size of [128, 192, 512]) {
+/**
+ * square mark — arch ko white square me center (favicon/PWA/admin/invoice).
+ * 180 = Apple touch icon ka asli size (pehle 192 wali file par "180x180" likha
+ * tha — iOS galat scale karta tha).
+ */
+for (const size of [128, 180, 192, 512]) {
   const inner = Math.round(size * 0.86);
   const scaled = await sharp(markSource).resize({ width: inner, height: inner, fit: "inside" }).png().toBuffer();
   await sharp({ create: { width: size, height: size, channels: 3, background: "#ffffff" } })

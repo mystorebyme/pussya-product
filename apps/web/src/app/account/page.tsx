@@ -51,7 +51,7 @@ export default async function AccountPage() {
                   </a>
                 </>
               ) : (
-                <Link href="/contact" className="text-[#862222]">
+                <Link href="/pages/contact" className="text-[#862222]">
                   contact page
                 </Link>
               )}

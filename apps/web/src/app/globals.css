@@ -315,6 +315,19 @@ table {
   height: 40px;
 }
 
+/* R44: agar logo file load hi na ho to text lockup (BrandMark) — usse bhi header
+   me jagah milni chahiye, warna fallback 0-height ho kar invisible ho jaata. */
+.brand-lockup .brand-fallback {
+  min-height: 40px;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup .brand-fallback {
+    min-height: 48px;
+  }
+}
+
 /* footer / drawer — stacked fluid logo */
 .brand-lockup[data-variant="stacked"] img {
   height: 104px;

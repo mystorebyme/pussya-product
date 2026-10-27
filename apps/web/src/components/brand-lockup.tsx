@@ -1,4 +1,4 @@
-import { brandAssets } from "@/config/site";
+import { BrandMark } from "@/components/brand-mark";
 
 /**
  * Brand lockup — owner ka **original** logo (gold crown + gown + NOOR ETHNIC WEAR
@@ -39,33 +39,8 @@ export function BrandLockup({
         tone === "light" ? "rounded-sm bg-[#fdfaf4] px-2.5 py-2" : ""
       } ${className}`}
     >
-      {variant === "stacked" ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={brandAssets.fluid}
-          alt="Noor Ethnic Wear"
-          /* asli file: 458×400 — ratio wahi rakha hai taaki layout shift na ho */
-          width={458}
-          height={400}
-          decoding="async"
-          className="block w-auto max-w-full object-contain"
-        />
-      ) : (
-        <picture>
-          <source media="(min-width:1024px)" srcSet={brandAssets.desktop} />
-          <source media="(min-width:768px)" srcSet={brandAssets.tablet} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={brandAssets.mobile}
-            alt="Noor Ethnic Wear"
-            /* asli file: 310×138 (tablet 369×164, desktop 427×190) — ratio 2.25:1 */
-            width={310}
-            height={138}
-            decoding="async"
-            className="block w-auto max-w-full object-contain"
-          />
-        </picture>
-      )}
+      {/* asli logo file — fail ho to text lockup (BrandMark dekh lein) */}
+      <BrandMark variant={variant} tone={tone} />
     </span>
   );
 }
