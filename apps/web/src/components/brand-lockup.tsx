@@ -58,9 +58,9 @@ export function BrandLockup({
           <img
             src={brandAssets.mobile}
             alt="Noor Ethnic Wear"
-            /* asli file: 285×112 (desktop 382×150, tablet 331×130) */
-            width={285}
-            height={112}
+            /* asli file: 310×138 (tablet 369×164, desktop 427×190) — ratio 2.25:1 */
+            width={310}
+            height={138}
             decoding="async"
             className="block w-auto max-w-full object-contain"
           />

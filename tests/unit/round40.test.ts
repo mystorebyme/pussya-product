@@ -46,13 +46,13 @@ test("R40-1: customer ko koi technical payment line nahi (sirf skeleton, phir se
 test("R40-2: logo per-device height + asli file ratio (stretch/crop nahi)", () => {
   const css = read("apps/web/src/app/globals.css");
   const lockup = read("apps/web/src/components/brand-lockup.tsx");
-  // teen breakpoints ke liye teen heights
-  assert.match(css, /\.brand-lockup img \{[^}]*height: 42px/);
+  // teen breakpoints ke liye teen heights (R43: naye lockup ke saath 44 → 52 → 58)
+  assert.match(css, /\.brand-lockup img \{[^}]*height: 44px/);
   assert.match(css, /min-width: 768px\)[^@]*\.brand-lockup img \{[^}]*height: 52px/);
-  assert.match(css, /min-width: 1024px\)[^@]*\.brand-lockup img \{[^}]*height: 54px/);
+  assert.match(css, /min-width: 1024px\)[^@]*\.brand-lockup img \{[^}]*height: 58px/);
   assert.match(css, /\.brand-lockup img \{[^}]*object-fit: contain/, "kabhi stretch nahi");
-  // width/height attrs asli file ke hain (mobile 285×112, fluid 458×400)
-  assert.match(lockup, /width=\{285\}\s*\n?\s*height=\{112\}/);
+  // width/height attrs asli file ke hain (mobile 310×138, fluid 458×400)
+  assert.match(lockup, /width=\{310\}\s*\n?\s*height=\{138\}/);
   assert.match(lockup, /width=\{458\}\s*\n?\s*height=\{400\}/);
 });
 

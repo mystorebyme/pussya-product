@@ -117,7 +117,8 @@ for (const viewport of VIEWPORTS) {
 /* asset ke asli pixel size vs breakpoint (sharp/retina ke liye kaafi resolution?) */
 const sizes = {};
 for (const src of new Set([heroPic.img, ...heroPic.sources.map((s) => s.src), brandPic.img, ...brandPic.sources.map((s) => s.src)])) {
-  const rel = src.replace(BASE_PATH, "").replace(/^\//, "");
+  // `?v=3` jaisa cache-bust query file path me nahi hota
+  const rel = src.replace(BASE_PATH, "").split("?")[0].replace(/^\//, "");
   const file = path.join(PUBLIC, rel);
   try {
     const buffer = await fs.readFile(file);

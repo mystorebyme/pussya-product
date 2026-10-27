@@ -66,9 +66,9 @@ const assets = [
   // Minimum dims = file jo **asli me hai** (R41: owner ke apne logo/poster, koi
   // upscale nahi). Logo display height 42/52/54px hai, isliye har file 2× DPR
   // ke liye kaafi hai (84/104/108px needed).
-  ["images/brand/logo-mobile.png", 260, 96, "mobile logo (horizontal, 2× of 42px display)"],
-  ["images/brand/logo-tablet.png", 300, 110, "tablet logo (horizontal, 2× of 52px display)"],
-  ["images/brand/logo-desktop.png", 340, 120, "desktop logo (horizontal lockup, 2× of 54px)"],
+  ["images/brand/logo-mobile.png", 300, 130, "mobile logo (horizontal, 2× of 46px display)"],
+  ["images/brand/logo-tablet.png", 360, 158, "tablet logo (horizontal, 2× of 56px display)"],
+  ["images/brand/logo-desktop.png", 420, 186, "desktop logo (full lockup, 2.8× of 66px)"],
   ["images/brand/logo-fluid.png", 400, 320, "fluid logo (stacked, footer/invoice)"],
   ["images/brand/logo-mark-128.png", 128, 128, "favicon 128"],
   ["images/brand/logo-mark-192.png", 192, 192, "PWA 192"],
@@ -242,11 +242,11 @@ if (liveCss) {
   const flatCss = css.replace(/\s+/g, "");
   // R42: logo heights 42 → 52 → 54 (owner ka asli lockup, file 2× DPR cover karti hai)
   check(
-    "CSS defines brand-lockup heights per breakpoint (42 → 52 → 54)",
+    "CSS defines brand-lockup heights per breakpoint (44 → 52 → 58)",
     // flattened CSS me class aur tag ke beech ka space bhi chala jaata hai
-    /\.brand-lockupimg\{[^}]*height:42px/.test(flatCss) &&
+    /\.brand-lockupimg\{[^}]*height:44px/.test(flatCss) &&
       /\.brand-lockupimg\{[^}]*height:52px/.test(flatCss) &&
-      /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss),
+      /\.brand-lockupimg\{[^}]*height:58px/.test(flatCss),
   );
   check("CSS keeps hero image inside its box (object-fit: contain, no crop)", /\.hero-mediaimg\{[^}]*object-fit:contain/.test(flatCss));
 } else {

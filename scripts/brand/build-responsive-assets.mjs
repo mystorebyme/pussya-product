@@ -39,12 +39,76 @@ const trimmed = await sharp(SRC)
   .toBuffer();
 const { width: W, height: H } = await sharp(trimmed).metadata();
 
-/** 2. wordmark = neeche ka hissa (NOOR + ETHNIC WEAR + ornament line) */
+/**
+ * 2. wordmark = "NOOR" + "ETHNIC WEAR" band.
+ *
+ * R43 (owner: "header me logo theek dikh nahi raha"): pehle crop H ke **55%** se
+ * shuru hota tha, jo NOOR ke letters ka upar ka hissa (N/O ke curve) kaat deta
+ * tha — header me adhoora logo dikhta tha. Ab wordmark ki asli top row image se
+ * hi detect hoti hai (ink profile), isliye letters kabhi cut nahi hote.
+ */
+const wordmarkBox = await detectWordmarkBand(trimmed, W, H);
 const wordmark = await sharp(trimmed)
-  .extract({ left: 0, top: Math.round(H * 0.55), width: W, height: H - Math.round(H * 0.55) })
+  .extract(wordmarkBox)
   .trim({ threshold: 8 })
   .png()
   .toBuffer();
+
+/**
+ * Row-wise ink profile se "NOOR" ka top dhoondhta hai: jahan row ki ink width
+ * pehli baar poori width ke 22% se upar jaati hai (arch/figure ke patle hisse
+ * isse neeche rehte hain, letters nahi).
+ */
+async function detectWordmarkBand(input, width, height) {
+  const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  const ink = (y, fromX, toX) => {
+    let count = 0;
+    for (let x = fromX; x < toX; x += 1) {
+      const i = (y * width + x) * channels;
+      if (data[i + 3] > 10 && (data[i] < 238 || data[i + 1] < 238 || data[i + 2] < 238)) count += 1;
+    }
+    return count;
+  };
+
+  /**
+   * NOOR ka top: letters ke tips **left/right taraf** hote hain (beech me figure
+   * hai), isliye top sirf kinare wale hisson se detect karte hain — warna crop me
+   * upar figure ki gardan/necklace ka kata hua tukda aa jaata tha.
+   */
+  const leftEdge = Math.round(width * 0.24);
+  const rightEdge = Math.round(width * 0.76);
+  let top = Math.round(height * 0.4);
+  for (let y = Math.round(height * 0.35); y < height; y += 1) {
+    const sideInk = ink(y, 0, leftEdge) + ink(y, rightEdge, width);
+    if (sideInk >= 14 && ink(y + 1, 0, leftEdge) + ink(y + 1, rightEdge, width) >= 14) {
+      top = Math.max(0, y - 4);
+      break;
+    }
+  }
+
+  /**
+   * Band ka neeche ka kanta: NOOR ke baad ek chhota gap aata hai, phir "ETHNIC
+   * WEAR" ki patli line, phir gap — aur uske baad bottom ka crown (jo bahut
+   * chaura hai). Isliye pehle gap ko skip karke ETHNIC line tak jaate hain aur
+   * **uske baad** wale gap par band rokte hain. Isse na letters kutte hain na
+   * neeche ka crown ghus aata hai.
+   */
+  const x0 = Math.round(width * 0.12);
+  const x1 = Math.round(width * 0.88);
+  const isGap = (y) => ink(y, x0, x1) < 60 && ink(y + 1, x0, x1) < 60 && ink(y + 2, x0, x1) < 60;
+  let bottom = height;
+  let y = top + Math.round(height * 0.2);
+  // 1) NOOR ke baad ka pehla gap chhod do
+  while (y < height - 4 && !isGap(y)) y += 1;
+  // 2) ETHNIC WEAR line shuru hone tak aage badho
+  while (y < height - 4 && ink(y, x0, x1) < 100) y += 1;
+  // 3) ETHNIC line ke baad ka gap = band ka end
+  while (y < height - 4 && !isGap(y)) y += 1;
+  bottom = Math.min(height, y + 10);
+
+  return { left: 0, top, width, height: Math.max(40, bottom - top) };
+}
 
 /**
  * 3. mark = poora logo white square me (favicon / PWA / invoice) — koi crop nahi,
@@ -61,9 +125,9 @@ async function horizontal(height) {
     .toBuffer();
 }
 
-await fs.writeFile(path.join(BRAND, "logo-desktop.png"), await horizontal(150));
-await fs.writeFile(path.join(BRAND, "logo-tablet.png"), await horizontal(130));
-await fs.writeFile(path.join(BRAND, "logo-mobile.png"), await horizontal(112));
+await fs.writeFile(path.join(BRAND, "logo-desktop.png"), await horizontal(190));
+await fs.writeFile(path.join(BRAND, "logo-tablet.png"), await horizontal(164));
+await fs.writeFile(path.join(BRAND, "logo-mobile.png"), await horizontal(138));
 
 /** stacked / fluid — poora logo (footer, invoice, koi bhi container) */
 await fs.writeFile(

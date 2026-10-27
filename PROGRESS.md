@@ -1,6 +1,6 @@
 # Progress — Noor Ethnic Wear
 
-**Last updated:** 2026-10-27 (R42: header/WhatsApp fix, sheet parser bug, purana brand saaf, GitHub Pages preview)
+**Last updated:** 2026-10-27 (R43: logo crop fix + bada header logo + live-site smoke check)
 
 ## Kya ready hai
 
@@ -19,7 +19,8 @@
 | **R42 — header/footer contact** | ✅ ek hi WhatsApp number (`whatsapp` → warna `support_phone`), number na ho to button hi nahi (pehle `wa.me/` dead link), duplicate footer row gaya, announcement sirf English | `site-header.tsx`, `site-footer.tsx`, `floating-help.tsx` |
 | **R42 — sheet Settings parser** | ✅ **asli bug**: Settings tab me teesra `note` column hone se value `9876543211,,"DEMO…` ban jaati thi → ab sirf A=key, B=value padhe jaate hain | `lib/sheet-format.ts`, `tests/unit/round42.test.ts` |
 | **R42 — purana brand saaf** | ✅ catalogue ka `meta.store`, 9 product handles, 240 vendor, reviews — sab se purana naam hata (catalog rebuild + verify pass) | `scripts/verify-catalog.mjs`, `database/seeds/live/*` |
-| **R42 — GitHub Pages preview** | 🟡 workflow se live URL nikalta hai; is branch par deploy protection ki wajah se `environment:` hata ke try kiya ja raha hai | `.github/workflows/pages.yml` |
+| **R42 — GitHub Pages preview** | ✅ branch se deploy ho raha hai; ab **post-deploy smoke job** live URL khol kar Noor content/banner check karta hai | `.github/workflows/pages.yml` |
+| **R43 — header logo** | ✅ asli bug: crop script image ki 55% height se kaat raha tha (N/O ke curve kat rahe the) → ab top row image se detect hoti hai; logo 44 → 52 → 58px, `?v=3` cache-bust | `scripts/brand/build-responsive-assets.mjs`, `globals.css` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 287 pass | `npm run test:unit` |
 | Build | ✅ web + admin + api | `npm run build:all` |

@@ -23,19 +23,26 @@ import { CANONICAL_ORIGIN } from "@/lib/domain";
  */
 const ASSET_BASE = process.env.NEXT_PUBLIC_PAGES_BASE_PATH ?? "";
 
+/**
+ * R43: file ka naam wahi hai par content naya hai (logo ka crop badla), isliye
+ * URL par version lagate hain — warna browser / CDN purana (kata hua) logo
+ * cache se dikhata rehta hai. Naya asset banao to `?v=` badha do.
+ */
+const BRAND_V = "?v=3";
+
 export const brandAssets = {
-  /** horizontal lockup — desktop nav */
-  desktop: `${ASSET_BASE}/images/brand/logo-desktop.png`,
-  /** horizontal, mark bada — tablet */
-  tablet: `${ASSET_BASE}/images/brand/logo-tablet.png`,
-  /** compact horizontal — mobile */
-  mobile: `${ASSET_BASE}/images/brand/logo-mobile.png`,
+  /** full horizontal lockup (NOOR + ETHNIC WEAR) — desktop nav */
+  desktop: `${ASSET_BASE}/images/brand/logo-desktop.png${BRAND_V}`,
+  /** same lockup, tablet size */
+  tablet: `${ASSET_BASE}/images/brand/logo-tablet.png${BRAND_V}`,
+  /** compact lockup — mobile */
+  mobile: `${ASSET_BASE}/images/brand/logo-mobile.png${BRAND_V}`,
   /** stacked — footer / invoice / any fluid container */
-  fluid: `${ASSET_BASE}/images/brand/logo-fluid.png`,
+  fluid: `${ASSET_BASE}/images/brand/logo-fluid.png${BRAND_V}`,
   /** square mark — favicon / PWA / admin / WhatsApp thumb */
-  mark: `${ASSET_BASE}/images/brand/logo-mark-512.png`,
-  mark192: `${ASSET_BASE}/images/brand/logo-mark-192.png`,
-  mark128: `${ASSET_BASE}/images/brand/logo-mark-128.png`,
+  mark: `${ASSET_BASE}/images/brand/logo-mark-512.png${BRAND_V}`,
+  mark192: `${ASSET_BASE}/images/brand/logo-mark-192.png${BRAND_V}`,
+  mark128: `${ASSET_BASE}/images/brand/logo-mark-128.png${BRAND_V}`,
 } as const;
 
 export const heroBanners = {

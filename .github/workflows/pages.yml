@@ -84,3 +84,43 @@ jobs:
       - name: Print live URL
         run: |
           echo "### Live preview: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
+
+  # Live URL ko CI se check karte hain (runner se internet khulta hai) — warna
+  # "deploy ✓ par site par purana/Jekyll output" wali confusion bani rehti hai.
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Live site check
+        run: |
+          set -uo pipefail
+          URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "checking $URL"
+          CODE=000
+          for attempt in $(seq 1 9); do
+            CODE=$(curl -sL -o page.html -w '%{http_code}' "$URL" || echo 000)
+            echo "attempt $attempt → HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -qi "Noor Ethnic Wear" page.html; then break; fi
+            sleep 10
+          done
+
+          fail=0
+          if ! grep -qi "Noor Ethnic Wear" page.html; then echo "::error::Live page par Noor ka content nahi mila (HTTP $CODE)"; fail=1; fi
+          if ! grep -q "banner-desktop.webp" page.html; then echo "::error::Hero banner live page par nahi hai"; fail=1; fi
+          if grep -qi "liksha" page.html; then echo "::error::Purana brand (Liksha) live page par hai"; fail=1; fi
+          if grep -qi "free shipping" page.html; then echo "::error::'Free shipping' copy live page par hai"; fail=1; fi
+          if ! grep -q "logo-desktop.png?v=" page.html; then echo "::warning::Naya logo version live page par nahi dikha (cache / purana deploy)"; fi
+          if [ "$fail" = "0" ]; then
+            echo "✔ live site verified: $URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            exit 1
+          fi
+
+      - name: Upload fetched page (debug)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-page
+          path: page.html
+          retention-days: 3

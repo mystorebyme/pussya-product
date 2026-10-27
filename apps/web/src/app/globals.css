@@ -291,7 +291,9 @@ table {
 */
 .brand-lockup img {
   display: block;
-  height: 42px;
+  /* R43: logo ka naya crop (NOOR + ETHNIC WEAR, 2.25:1) — pehle 42px par bhi
+     letter-tops cut the, ab poora lockup dikhta hai aur bada bhi hai. */
+  height: 44px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
@@ -305,22 +307,22 @@ table {
 
 @media (min-width: 1024px) {
   .brand-lockup img {
-    height: 54px;
+    height: 58px;
   }
 }
 
 .brand-lockup[data-size="compact"] img {
-  height: 36px;
+  height: 40px;
 }
 
 /* footer / drawer — stacked fluid logo */
 .brand-lockup[data-variant="stacked"] img {
-  height: 96px;
+  height: 104px;
 }
 
 @media (min-width: 768px) {
   .brand-lockup[data-variant="stacked"] img {
-    height: 116px;
+    height: 128px;
   }
 }
 
