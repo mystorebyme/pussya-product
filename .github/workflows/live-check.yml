@@ -5,8 +5,13 @@ name: Live site check
 # har run ka proof `docs/09-devops/live-check.md` me rahe.
 #
 #   Actions → Live site check → Run workflow
+#   (workflow_dispatch sirf tab dikhta hai jab ye file default branch par ho, isliye
+#    branch push par bhi chalta hai — report commit par khud ko dobara nahi chalata.)
 
 on:
+  push:
+    branches:
+      - arena/f2c07741-pussya-product
   workflow_dispatch:
     inputs:
       base_url:
@@ -23,6 +28,8 @@ concurrency:
 
 jobs:
   check:
+    # report ka apna commit (chore(audit)) loop na banaye
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore(audit)')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
