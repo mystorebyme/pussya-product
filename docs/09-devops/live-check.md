@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T18:36:41.051Z
+Ran: 2026-10-27T18:39:14.395Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 453690 bytes · 695ms |
+| ✅ | home page 200 — HTTP 200 · 453690 bytes · 240ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -166,5 +166,3 @@ Ran: 2026-10-27T18:36:41.051Z
 ## Summary
 
 ✔ Saare live checks pass.
-
-_Final R48 live-check re-run 2026-10-27T18:39:02Z_
