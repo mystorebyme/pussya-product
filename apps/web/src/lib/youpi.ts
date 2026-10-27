@@ -38,7 +38,18 @@ export type YoupiConfig = {
    * set karein — server wahan baat karega, browser public `payUrl` par.
    */
   internalUrl: string;
+  /**
+   * Publishable Merchant ID (`data-youpi-key` / `X-Merchant-Id`) — public key.
+   * Merchant admin → Settings → "Merchant API Keys" card se copy hota hai.
+   */
   merchantId: string;
+  /**
+   * Secret Merchant API Key (`mk_live_…`, header `X-Merchant-Key`) — **sirf
+   * server**. Gateway iske bina non-default merchant ke liye session nahi
+   * banata (`401 MISSING_MERCHANT_KEY`), aur iske bina status ka private view
+   * (metadata/verification) nahi milta.
+   */
+  merchantKey: string;
   /** sirf server par — browser ko kabhi nahi jaata */
   webhookSecret: string;
   currency: string;
@@ -72,6 +83,7 @@ function envConfig(): Partial<YoupiConfig> {
     payUrl: normalisePayUrl(process.env.YOUPI_PAY_URL),
     internalUrl: normalisePayUrl(process.env.YOUPI_PAY_URL_INTERNAL),
     merchantId: (process.env.YOUPI_MERCHANT_ID ?? "").trim(),
+    merchantKey: (process.env.YOUPI_MERCHANT_KEY ?? "").trim(),
     webhookSecret: (process.env.YOUPI_WEBHOOK_SECRET ?? "").trim(),
   };
 }
@@ -88,10 +100,12 @@ export function resolveYoupiConfig(settings?: Partial<StoreSettings> | null): Yo
   const env = envConfig();
   const sheetUrl = normalisePayUrl(settings?.youpiPayUrl);
   const sheetKey = (settings?.youpiMerchantId ?? "").trim();
+  const sheetMerchantKey = (settings?.youpiMerchantKey ?? "").trim();
   const sheetSecret = (settings?.youpiWebhookSecret ?? "").trim();
 
   const payUrl = sheetUrl || env.payUrl || "";
   const merchantId = sheetKey || env.merchantId || "";
+  const merchantKey = sheetMerchantKey || env.merchantKey || "";
   const webhookSecret = sheetSecret || env.webhookSecret || "";
 
   if (!payUrl || !merchantId) return null;
@@ -102,6 +116,7 @@ export function resolveYoupiConfig(settings?: Partial<StoreSettings> | null): Yo
     payUrl,
     internalUrl: env.internalUrl || payUrl,
     merchantId,
+    merchantKey,
     webhookSecret,
     currency: "INR",
     source,
@@ -155,6 +170,8 @@ async function gatewayFetch(
     headers: {
       "content-type": "application/json",
       "x-merchant-id": config.merchantId,
+      // Secret key: non-default merchant ka session + status ka private view
+      ...(config.merchantKey ? { "x-merchant-key": config.merchantKey } : {}),
       ...(init.headers ?? {}),
     },
     cache: "no-store",

@@ -83,7 +83,7 @@ Warna purana code hi chalta rehta hai — owner ke saath yahi hua tha.
 
 ---
 
-## Poora code (2538 lines)
+## Poora code (2543 lines)
 
 ```javascript
 /**
@@ -299,14 +299,19 @@ var DEFAULT_SETTINGS = [
   ['support_hours', 'Monday to Saturday, 10:00 AM – 8:00 PM IST'],
   ['return_window_days', '7'],
   ['instagram', 'https://www.instagram.com/noorethnicwear'],
-  // R48 — YouPI PG (UPI payment gateway). `youpi_pay_url` = aapka gateway origin
-  // (jaise https://pay.yourdomain.com), `youpi_merchant_id` = gateway ka merchant
-  // key, `youpi_webhook_secret` = webhook ka HMAC secret (ye sirf server padhta
-  // hai — website/public API me kabhi nahi jaata).
+  // R48 — YouPI PG (UPI payment gateway). Values ka matlab:
+  //   youpi_pay_url        = gateway ka public https address (jaise https://pay.yourdomain.com)
+  //   youpi_merchant_id    = Publishable Merchant ID (UUID, data-youpi-key / X-Merchant-Id)
+  //   youpi_merchant_key   = Secret Merchant API Key (X-Merchant-Key) — SIRF server
+  //   youpi_webhook_secret = webhook ka HMAC signing secret — SIRF server
+  // Dono secrets website/public API me kabhi nahi jaate.
+  // Keys kahan se aati hain: gateway ka "Merchant Admin" panel → Settings →
+  // "Merchant API Keys, Webhook Endpoints & Cryptographic Secrets" card.
   ['youpi_enabled', 'true'],
-  ['youpi_pay_url', ''],
-  ['youpi_merchant_id', ''],
-  ['youpi_webhook_secret', ''],
+  ['youpi_pay_url', ''],          // gateway ka public URL (pay.yourdomain.com)
+  ['youpi_merchant_id', ''],      // Publishable Merchant ID (UUID)
+  ['youpi_merchant_key', ''],     // Secret Merchant API Key (mk_live_…) — server only
+  ['youpi_webhook_secret', ''],   // Webhook signing secret (64 hex) — server only
 ];
 
 /** Dashboard me jo metrics har baar likhe jaate hain. */

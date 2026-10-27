@@ -36,6 +36,12 @@ export type StoreSettings = {
   youpiPayUrl: string;
   youpiMerchantId: string;
   /**
+   * **Sirf server** — Secret Merchant API Key (`X-Merchant-Key`). Gateway
+   * non-default merchant ka session sirf iske saath banata hai, aur isi se
+   * payment status ka private view milta hai. Public API me kabhi nahi jaata.
+   */
+  youpiMerchantKey: string;
+  /**
    * **Sirf server** — webhook HMAC secret. Ye `/api/settings` (public) aur
    * client payload me kabhi nahi jaata; sirf webhook route padhta hai.
    */
@@ -73,6 +79,7 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   youpiEnabled: (process.env.YOUPI_ENABLED ?? "true").toLowerCase() !== "false",
   youpiPayUrl: process.env.YOUPI_PAY_URL ?? "",
   youpiMerchantId: process.env.YOUPI_MERCHANT_ID ?? "",
+  youpiMerchantKey: process.env.YOUPI_MERCHANT_KEY ?? "",
   youpiWebhookSecret: process.env.YOUPI_WEBHOOK_SECRET ?? "",
   updatedAt: new Date(0).toISOString(),
   updatedBy: "system",
@@ -108,6 +115,7 @@ export function normalizeStoreSettings(input: unknown): StoreSettings {
     youpiEnabled: typeof raw.youpiEnabled === "boolean" ? raw.youpiEnabled : base.youpiEnabled,
     youpiPayUrl: text(raw.youpiPayUrl, base.youpiPayUrl, 200),
     youpiMerchantId: text(raw.youpiMerchantId, base.youpiMerchantId, 120),
+    youpiMerchantKey: text(raw.youpiMerchantKey, base.youpiMerchantKey, 200),
     youpiWebhookSecret: text(raw.youpiWebhookSecret, base.youpiWebhookSecret, 200),
     updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : base.updatedAt,
     updatedBy: typeof raw.updatedBy === "string" ? raw.updatedBy : base.updatedBy,
@@ -205,6 +213,7 @@ async function merge(options: { fresh?: boolean }): Promise<StoreSettings> {
         ...(typeof sheet.youpiEnabled === "boolean" ? { youpiEnabled: sheet.youpiEnabled } : {}),
         ...(sheet.youpiPayUrl ? { youpiPayUrl: sheet.youpiPayUrl } : {}),
         ...(sheet.youpiMerchantId ? { youpiMerchantId: sheet.youpiMerchantId } : {}),
+        ...(sheet.youpiMerchantKey ? { youpiMerchantKey: sheet.youpiMerchantKey } : {}),
         ...(sheet.youpiWebhookSecret ? { youpiWebhookSecret: sheet.youpiWebhookSecret } : {}),
         ...(sheet.announcement || sheet.upiId || sheet.supportPhone
           ? { updatedAt: new Date().toISOString(), updatedBy: "google-sheet" }

@@ -19,6 +19,7 @@ export type SheetSettings = {
   youpiEnabled?: boolean;
   youpiPayUrl?: string;
   youpiMerchantId?: string;
+  youpiMerchantKey?: string;
   youpiWebhookSecret?: string;
 };
 
@@ -61,6 +62,10 @@ export function normaliseSheetSettings(payload: unknown): SheetSettings | null {
     youpiEnabled: truthy(source.youpiEnabled ?? source.youpi_enabled),
     youpiPayUrl: text(source.youpiPayUrl ?? source.youpi_pay_url ?? source.youpi_url, 200),
     youpiMerchantId: text(source.youpiMerchantId ?? source.youpi_merchant_id ?? source.youpi_key, 120),
+    youpiMerchantKey: text(
+      source.youpiMerchantKey ?? source.youpi_merchant_key ?? source.youpi_secret_key,
+      200,
+    ),
     youpiWebhookSecret: text(
       source.youpiWebhookSecret ?? source.youpi_webhook_secret ?? source.youpi_secret,
       200,

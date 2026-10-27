@@ -414,6 +414,7 @@ export async function writeSheetSettings(settings: {
   youpiEnabled?: boolean;
   youpiPayUrl?: string;
   youpiMerchantId?: string;
+  youpiMerchantKey?: string;
   youpiWebhookSecret?: string;
 }): Promise<boolean> {
   const config = googleSheetsConfig();
@@ -440,6 +441,7 @@ export async function writeSheetSettings(settings: {
           ...(typeof settings.youpiEnabled === "boolean" ? { youpi_enabled: settings.youpiEnabled } : {}),
           ...(settings.youpiPayUrl ? { youpi_pay_url: settings.youpiPayUrl } : {}),
           ...(settings.youpiMerchantId ? { youpi_merchant_id: settings.youpiMerchantId } : {}),
+          ...(settings.youpiMerchantKey ? { youpi_merchant_key: settings.youpiMerchantKey } : {}),
           ...(settings.youpiWebhookSecret ? { youpi_webhook_secret: settings.youpiWebhookSecret } : {}),
         },
       }),

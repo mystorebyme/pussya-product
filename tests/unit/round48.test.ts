@@ -340,25 +340,64 @@ test("R48-5d: gateway origin — absolute URL, same-origin path, aur server-only
   assert.match(nextConfig, /connect-src 'self'/);
 });
 
+test("R48-5d: X-Merchant-Key header — server hi secret merchant key bhejta hai", () => {
+  const server = read("apps/web/src/lib/youpi.ts");
+  assert.match(server, /merchantKey: string/, "config me merchantKey");
+  assert.match(server, /YOUPI_MERCHANT_KEY/, "env fallback");
+  assert.match(server, /youpiMerchantKey/, "sheet value padhi jaati hai");
+  assert.match(
+    server,
+    /config\.merchantKey \? \{ "x-merchant-key": config\.merchantKey \} : \{\}/,
+    "header sirf tab jab key ho (default merchant chalta rahe)",
+  );
+
+  // browser ko merchant key kabhi nahi
+  const client = read("apps/web/src/components/store-settings-provider.tsx");
+  assert.doesNotMatch(client, /youpiMerchantKey/);
+  const provider = read("apps/web/src/app/api/settings/route.ts");
+  assert.doesNotMatch(provider, /youpiMerchantKey/);
+
+  // docs me "kahan se laani hai" wala section maujood hai
+  const doc = read("docs/09-devops/youpi-payment-gateway.md");
+  assert.match(doc, /Publishable Merchant ID/);
+  assert.match(doc, /Secret Merchant API Key/);
+  assert.match(doc, /Webhook Secret/);
+  assert.match(doc, /Kahan se milegi/, "har key ka source likha ho");
+  assert.match(doc, /401 MISSING_MERCHANT_KEY/, "troubleshooting table");
+});
+
 test("R48-5c: config sheet se live aati hai, secret public API me nahi jaata", () => {
   const settings = read("apps/web/src/lib/store-settings.ts");
-  for (const field of ["youpiEnabled", "youpiPayUrl", "youpiMerchantId", "youpiWebhookSecret"]) {
+  for (const field of [
+    "youpiEnabled",
+    "youpiPayUrl",
+    "youpiMerchantId",
+    "youpiMerchantKey",
+    "youpiWebhookSecret",
+  ]) {
     assert.ok(settings.includes(field), `${field} store settings me missing`);
   }
   const sheet = read("apps/web/src/lib/sheet-format.ts");
-  for (const key of ["youpi_enabled", "youpi_pay_url", "youpi_merchant_id", "youpi_webhook_secret"]) {
+  for (const key of [
+    "youpi_enabled",
+    "youpi_pay_url",
+    "youpi_merchant_id",
+    "youpi_merchant_key",
+    "youpi_webhook_secret",
+  ]) {
     assert.ok(sheet.includes(key), `sheet key ${key} parse nahi hoti`);
   }
 
   const publicRoute = read("apps/web/src/app/api/settings/route.ts");
   assert.match(publicRoute, /youpiPayUrl: settings\.youpiPayUrl/);
   assert.doesNotMatch(publicRoute, /youpiWebhookSecret/, "webhook secret public API me nahi");
+  assert.doesNotMatch(publicRoute, /youpiMerchantKey/, "merchant secret key public API me nahi");
 
   const provider = read("apps/web/src/components/store-settings-provider.tsx");
   assert.doesNotMatch(provider, /youpiWebhookSecret/, "client provider secret nahi jaanta");
 
   const gas = read("scripts/google-apps-script/noor-sheets.gs");
-  for (const key of ["youpi_pay_url", "youpi_merchant_id", "youpi_enabled"]) {
+  for (const key of ["youpi_pay_url", "youpi_merchant_id", "youpi_merchant_key", "youpi_enabled"]) {
     assert.ok(gas.includes(key), `Apps Script defaults me ${key} missing`);
   }
   const publicKeys = gas
@@ -367,6 +406,7 @@ test("R48-5c: config sheet se live aati hai, secret public API me nahi jaata", (
     .replace(/\/\/.*$/gm, "");
   assert.match(publicKeys, /youpi_pay_url/);
   assert.doesNotMatch(publicKeys, /youpi_webhook_secret/, "secret public keys me nahi");
+  assert.doesNotMatch(publicKeys, /youpi_merchant_key/, "merchant secret public keys me nahi");
 
   assert.ok(exists("docs/09-devops/youpi-payment-gateway.md"), "setup doc missing");
 });

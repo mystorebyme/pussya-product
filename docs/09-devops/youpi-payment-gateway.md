@@ -60,6 +60,28 @@ Rules jo code me locked hain:
 - Amount mismatch → order **confirm nahi** hota, `ORDER_AMOUNT_MISMATCH` (409)
   aur order `failed` mark hota hai.
 
+## 1b. Gateway ke status ka matlab (aur hamara faisla)
+
+YouPI ke repo ke `MERCHANT_INTEGRATION.md` ke mutabik status ke naam ye hain:
+
+| Status | Matlab | Hamari site kya karti hai |
+| --- | --- | --- |
+| `OBSERVED_SUCCESS` | bank ka SMS/notification mila, par statement se reconcile **nahi** hua | order **confirm + paid** kar deti hai (customer ko turant confirmation) |
+| `RECONCILED` | owner ne bank statement CSV import ki, line match hui | wahi (already paid) — Sheet me payment row `verified` |
+| `SUCCESS` | COD / counter payment (UPI settlement nahi) | prepaid order par yahi aaye to bhi payment verify gateway API se hi hota hai |
+| `FAILED` / `EXPIRED` / `CANCELLED` | paisa nahi mila | order pending rehta hai, customer dobara try kar sakta hai |
+| `MANUAL_REVIEW` / `SUSPICIOUS` | do session ek hi alert se match hue | order **confirm nahi** hota, owner ko WhatsApp par screenshot |
+
+⚠️ **Jaan-boojh kar liya gaya faisla:** YouPI khud kehta hai "`OBSERVED_SUCCESS` par
+order fulfil mat karo" — kyunki wo bank settlement nahi hai. Chhoti store ke liye
+har order ko statement import tak roka nahi ja sakta, isliye hum `OBSERVED_SUCCESS`
+par bhi order confirm karte hain **aur owner ko daily bank statement se reconcile
+karna hota hai** (Sheet → Payments me UTR hota hai). Zyada volume par strict mode
+on karna ho to confirm/webhook me sirf `RECONCILED` allow kar dena — bata dein,
+kar denge.
+
+---
+
 ## 2. Files
 
 | File | Kaam |
@@ -73,34 +95,139 @@ Rules jo code me locked hain:
 | `apps/web/src/app/api/payments/youpi/confirm/route.ts` | Static/no-webhook fallback — server verify |
 | `scripts/google-apps-script/noor-sheets.gs` | Settings tab ke naye rows |
 
-## 3. Setup — owner ke liye (3 steps, redeploy nahi)
+## 3. Setup — owner ke liye (5 values, redeploy nahi)
 
-YouPI gateway deploy karne ke baad aapke paas ye 4 cheezein hongi:
+YouPI gateway deploy hone ke baad aapko **5 values** chahiye. Sab ek hi jagah se
+aati hain — gateway ke **Merchant Admin** panel se (ya hosting provider se, agar
+unhone aapko merchant account diya hai).
 
-| Kya | Kahan milega | Kahan daalna hai |
+### 3.0 Ek line me: kahan se kya
+
+| # | Sheet → Settings key | Ye kya hai | Kahan se milegi | Kaisa dikhta hai | Public / Secret |
+| --- | --- | --- | --- | --- | --- |
+| 1 | `youpi_pay_url` | Gateway ka **public HTTPS address** (yahi `youpi.js` aur checkout page ka ghar hai) | Aapka gateway **deploy** jahan chal raha hai — wo domain. Gateway ke `.env` me `BASE_CHECKOUT_URL` / `BASE_PAYMENT_API_URL` bhi yahi hota hai | `https://pay.noorethnicwear.in` | Public |
+| 2 | `youpi_merchant_id` | **Publishable Merchant ID** (UUID) — script tag ka `data-youpi-key`, API ka `X-Merchant-Id` | Merchant Admin → **Settings → Developer / Webhooks & Secrets** card → "Merchant ID / Publishable Key" → 📋 Copy | `7b1e2c3d-4f5a-6b7c-8d9e-0f1a2b3c4d5e` | Public |
+| 3 | `youpi_merchant_key` | **Secret Merchant API Key** — server-to-server calls ka `X-Merchant-Key` | Usi card me → "Secret Merchant API Key" → 📋 Copy (pehli baar khali ho to **🔄 Generate / Rotate Key**) | `mk_live_9f2c…` / `yp_live_…` (chhota secret string) | **Secret** |
+| 4 | `youpi_webhook_secret` | **Webhook Signing Secret** — HMAC-SHA256, isse hi `X-Gateway-Signature` verify hota hai | Usi card me → "Webhook Secret (HMAC-SHA256 Signing)" → 📋 Copy | 64 hex characters (`a3f1…`) | **Secret** |
+| 5 | `youpi_enabled` | On/off switch | Aapka faisla | `true` / `false` | Public |
+
+> **Naam ka chakkar:** YouPI ne in teeno ko alag-alag naam diye hain, par kaam
+> ek hi hai —
+> `Merchant ID / Publishable Key` = `data-youpi-key` = `X-Merchant-Id` = **hamara `youpi_merchant_id`**;
+> `Secret Merchant API Key` = `X-Merchant-Key` = **hamara `youpi_merchant_key`**;
+> `Webhook Secret` = **hamara `youpi_webhook_secret`**.
+
+### 3a. Step by step (jahan se laana hai)
+
+**(1) Gateway ka URL — `youpi_pay_url`**
+
+- Agar gateway aapne apne server/VPS par chalaya hai (Docker compose ya
+  `control-center`): jo domain reverse proxy se `7000` (Checkout Portal) par
+  point kiya ho, wahi ye value hai. SSL (https) zaroori hai.
+- Agar YouPI kisi **provider** ne host karke diya hai: wahi URL jo unhone diya,
+  jaise `https://pay.provider.com` (aapke merchant ke liye alag subdomain bhi ho
+  sakta hai).
+- Check: browser me `https://pay.noorethnicwear.in/youpi.js` kholiye — JavaScript
+  file download honi chahiye (404 nahi).
+
+**(2) + (3) + (4) — Merchant Admin panel se (teeno ek hi card me)**
+
+1. Gateway ka **Merchant Admin** kholiye → `https://<gateway-host>/admin`
+   (self-hosted par ye alag port `6001` hota hai: `http://<server-ip>:6001/admin`).
+2. Left menu → **Settings / Developer** → **3.4 Webhooks & Security Secrets**
+   (card ka naam: *"🔑 Merchant API Keys, Webhook Endpoints & Cryptographic
+   Secrets"*).
+3. Wahan se teen values copy kariye:
+   - **Merchant ID / Publishable Key** → `youpi_merchant_id`
+   - **Secret Merchant API Key** → `youpi_merchant_key` (khali dikhe to
+     **Generate / Rotate Key** dabaiye — naya key turant dikh jaayega)
+   - **Webhook Secret** → `youpi_webhook_secret`
+4. Usi card ke **"Webhook Destination URL"** box me *ulti disha* ki value
+   daaliye — hamari site ka endpoint:
+   `https://noorethnicwear.in/api/payments/webhook/youpi`
+   → phir **💾 Save Webhook Settings**.
+   (Agar site abhi Vercel/Render par deploy nahi hui, to ise khaali chhod dein —
+   payment phir bhi chalega, order browser ke confirm call se confirm hoga.)
+
+**(5) `youpi_enabled`** — sab values daalne ke baad `true` kariye. Galat kuch
+hua to `false` kar dein: gateway button turant gayab, UPI QR flow jaisa tha waisa.
+
+### 3b. Values Sheet me kahan daalni hain
+
+Google Sheet → **Settings** tab → har row me `key` | `value`:
+
+```
+youpi_pay_url         | https://pay.noorethnicwear.in
+youpi_merchant_id     | 7b1e2c3d-4f5a-6b7c-8d9e-0f1a2b3c4d5e
+youpi_merchant_key    | mk_live_9f2c…
+youpi_webhook_secret  | a3f1…(64 hex)
+youpi_enabled         | true
+```
+
+- Save karte hi site **3 second** me value utha leti hai (`/api/settings` poll) —
+  na redeploy, na rebuild.
+- `youpi_pay_url` **ya** `youpi_merchant_id` khaali ho to gateway button dikhta
+  hi nahi aur seedha UPI QR flow chalta hai — checkout kabhi tootta nahi.
+- ⚠️ `youpi_merchant_key` aur `youpi_webhook_secret` **sirf server** padhta hai:
+  ye `/api/settings` (public) aur browser ke kisi bhi response me nahi jaate.
+  Sheet ko sirf **owner** ke paas rakhein (Sheet sharing: "Anyone with link —
+  Viewer" **nahi**, sirf owner + editor). Sheet leak hone par gateway panel se
+  dono keys **rotate** kar dein aur nayi values Sheet me daal dein.
+
+### 3c. Bina panel ke (advanced) — admin API se
+
+Self-hosted gateway par merchant record khud bana sakte hain (owner ka
+`ADMIN_API_TOKEN` chahiye):
+
+```bash
+curl -X POST https://pay.noorethnicwear.in/api/v1/admin/merchants \
+  -H "Authorization: Bearer $ADMIN_API_TOKEN" \
+  -H "content-type: application/json" \
+  -d '{"businessName":"Noor Ethnic Wear","contactEmail":"info.noorethnicwear@gmail.com",
+       "upiId":"<owner-ka-upi>","webhookUrl":"https://noorethnicwear.in/api/payments/webhook/youpi"}'
+```
+
+Response me `merchant.id` (→ `youpi_merchant_id`), `apiKey` (→ `youpi_merchant_key`)
+aur `webhookSecret` (→ `youpi_webhook_secret`) aate hain. Key badalni ho to
+`POST /api/v1/admin/merchants/:id/rotate-key`, webhook secret ke liye
+`POST /api/v1/admin/merchant-key/rotate`.
+
+### 3d. Kya-kya galat ho sakta hai (error → matlab)
+
+| Gateway ka jawab | Matlab | Fix |
 | --- | --- | --- |
-| Gateway URL (`https://pay.…`) | aapka deployment | Sheet → **Settings** → `youpi_pay_url` |
-| Merchant key (`X-Merchant-Id`) | gateway ka merchant admin | Sheet → `youpi_merchant_id` |
-| Webhook secret | gateway ka dashboard/env | Sheet → `youpi_webhook_secret` (ya `YOUPI_WEBHOOK_SECRET` env) |
-| Toggle | — | Sheet → `youpi_enabled` = `true` / `false` |
+| `401 MISSING_MERCHANT_KEY` | `youpi_merchant_id` default merchant ka nahi hai aur `youpi_merchant_key` nahi diya | Secret Merchant API Key Sheet me daaliye |
+| `401 INVALID_MERCHANT_KEY` | `youpi_merchant_key` galat/purani hai (rotate ho gayi) | Panel se nayi copy kariye |
+| `400 Merchant not found or not configured` | `youpi_merchant_id` me typo / UUID ke bajaye naam | Panel se poora UUID copy kariye |
+| Webhook par `401` aur order auto-confirm nahi | `youpi_webhook_secret` match nahi kar raha | Dono taraf wahi secret; rotate kiya to Sheet bhi update |
+| `409 DUPLICATE_SESSION_DETECTED` | Customer ne dobara pay dabaya | Normal — site wahi purana session kholti hai |
+| Gateway modal hi nahi khulta | `youpi_pay_url` galat / `youpi.js` 404 / http (https nahi) | `…/youpi.js` browser me check kariye |
+| Payment ho gaya par order pending | server deploy nahi (static Pages) ya webhook URL galat | Vercel/Render deploy + webhook URL, ya `/api/payments/youpi/confirm` route live hona chahiye |
 
-Bas. Site 3 second me nayi value utha leti hai (`/api/settings` poll), koi
-redeploy nahi. `youpi_pay_url` ya `youpi_merchant_id` khaali ho to gateway
-button **gizhta hi nahi** aur seedha UPI QR flow chalta hai — checkout kabhi
-totta nahi.
+### 3e. Ek nazar me verify (setup ke baad)
 
-Static GitHub Pages preview par `/api/settings` nahi hota, isliye wahan ye
-public values build-time env se aati hain (optional):
+```bash
+curl -s https://noorethnicwear.in/api/settings | grep -o '"youpiPayUrl":"[^"]*"'
+curl -sI https://pay.noorethnicwear.in/youpi.js | head -1        # 200 hona chahiye
+curl -s -X POST https://noorethnicwear.in/api/payments/youpi/create \
+  -H 'content-type: application/json' -d '{"orderNumber":"NE-XXXX"}'   # 200 + checkoutUrl
+```
+
+Phir ek asli ₹1 test order karke `SUCCESS` → order `confirmed` + `paid` dekh
+lein (poora checklist: `docs/09-devops/payment-flow-owner-guide.md`).
+
+#### Static GitHub Pages preview (sirf browse)
+
+Pages par `/api/settings` nahi hota, isliye wahan public values build-time env se
+aati hain (optional) — secret **kabhi** `NEXT_PUBLIC_*` me na daalein:
 
 ```
 NEXT_PUBLIC_YOUPI_ENABLED=true
 NEXT_PUBLIC_YOUPI_PAY_URL=https://pay.yourdomain.com
-NEXT_PUBLIC_YOUPI_MERCHANT_ID=<merchant key>
+NEXT_PUBLIC_YOUPI_MERCHANT_ID=<merchant id>
 ```
 
-Secret **kabhi** `NEXT_PUBLIC_*` me na daalein.
-
-## 3b. Endpoints (hamari site)
+## 3f. Endpoints (hamari site)
 
 | Endpoint | Kaam |
 | --- | --- |
@@ -138,8 +265,9 @@ ho. Isliye owner ke liye do raste:
 ```
 YOUPI_ENABLED=true
 YOUPI_PAY_URL=https://pay.yourdomain.com
-YOUPI_MERCHANT_ID=<merchant key>
-YOUPI_WEBHOOK_SECRET=<webhook secret>
+YOUPI_MERCHANT_ID=<publishable merchant id (UUID)>
+YOUPI_MERCHANT_KEY=<secret merchant api key — sirf server>
+YOUPI_WEBHOOK_SECRET=<webhook signing secret — sirf server>
 NEXT_PUBLIC_YOUPI_PAY_URL=…       # sirf static build ke liye
 NEXT_PUBLIC_YOUPI_MERCHANT_ID=…   # sirf static build ke liye
 

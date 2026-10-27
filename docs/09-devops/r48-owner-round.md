@@ -90,7 +90,8 @@ Short (YouPI repo ke `openapi.yaml` ke exactly hisaab se):
    (`/api/payments/youpi/confirm`). Browser ke success ka UI matlab hai, order
    tabhi confirm hota hai jab server `GET /api/v1/payments/{id}` se amount +
    status match kare. Config sheet se live
-(`youpi_enabled`, `youpi_pay_url`, `youpi_merchant_id`, `youpi_webhook_secret`) —
+(`youpi_enabled`, `youpi_pay_url`, `youpi_merchant_id`, `youpi_merchant_key`,
+`youpi_webhook_secret`) —
 redeploy nahi. Config na ho to gateway button render hi nahi hota aur owner ka
 purana UPI QR flow chalta rehta hai.
 
@@ -111,7 +112,9 @@ purana UPI QR flow chalta rehta hai.
 1. YouPI gateway deploy karke **gateway URL**, **merchant id** aur **webhook
    secret** nikaalein.
 2. Sheet → **Settings** tab me `youpi_pay_url`, `youpi_merchant_id`,
-   `youpi_webhook_secret` bhar dein (`youpi_enabled` = `true`).
+   `youpi_merchant_key`, `youpi_webhook_secret` bhar dein (`youpi_enabled` = `true`).
+   Har value **kahan se laani hai** (gateway panel ka exact path): doc ka section 3
+   — `youpi-payment-gateway.md`.
 3. Automatic confirmation (webhook) ke liye site Vercel/Render par chahiye
    (GitHub Pages static hai — wahan webhook receive nahi ho sakta). Server na ho
    to bhi payment chalega par order confirm karne ke liye confirm-endpoint/server

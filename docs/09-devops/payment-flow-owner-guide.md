@@ -5,7 +5,8 @@ Ye poora flow hai — customer ko kya dikhega, peeche kya hota hai, aur aapko
 kahan farak padega.
 
 > Aaj ki sthiti: gateway **code me ready hai**, par aapke gateway ke 3 values
-> (`youpi_pay_url`, `youpi_merchant_id`, `youpi_webhook_secret`) Sheet me bharne
+> (`youpi_pay_url`, `youpi_merchant_id`, `youpi_merchant_key`, `youpi_webhook_secret`)
+> Sheet me bharne
 > tak button **chhupta** rehta hai — customer ko sirf wahi purana UPI QR dikhta
 > hai jo abhi dikh raha hai. Yaani kuch tootta nahi, sirf naya rasta late hai.
 
@@ -93,23 +94,31 @@ band nahi hota.**
 
 ---
 
-## 5. Ab bas 3 cheezein aapki taraf se
+## 5. Ab bas ye 5 values aapki taraf se
 
-1. **YouPI gateway deploy** karke nikaalein:
-   - gateway URL (jaise `https://pay.aapkadomain.com`)
-   - merchant id (`X-Merchant-Id`)
-   - webhook secret
-2. **Sheet → Settings** me bhar dein:
-   `youpi_pay_url`, `youpi_merchant_id`, `youpi_webhook_secret`, aur
-   `youpi_enabled` = `true`.
-   Bas — 3 second me site par button aa jaayega, koi redeploy nahi.
+Sab value **gateway ke Merchant Admin panel** se milti hai — Settings →
+**"🔑 Merchant API Keys, Webhook Endpoints & Cryptographic Secrets"** card
+(`https://<gateway-host>/admin`, self-hosted par port `6001`).
+
+| Sheet key | Kya hai | Kahan se |
+| --- | --- | --- |
+| `youpi_pay_url` | Gateway ka public https address | Aapka gateway deployment (jis domain par `youpi.js` khulta hai) |
+| `youpi_merchant_id` | Publishable Merchant ID (UUID) | Panel → "Merchant ID / Publishable Key" → Copy |
+| `youpi_merchant_key` | Secret Merchant API Key (server only) | Same card → "Secret Merchant API Key" → Copy (khali ho to **Generate / Rotate Key**) |
+| `youpi_webhook_secret` | Webhook signing secret (64 hex) | Same card → "Webhook Secret" → Copy |
+| `youpi_enabled` | On/off | Aapka faisla — `true` |
+
+1. Ye 5 values **Sheet → Settings** tab me `key | value` rows me daal dein.
+   Bas — 3 second me site par gateway button aa jaayega, koi redeploy nahi.
+2. Panel ke **"Webhook Destination URL"** me daalein:
+   `https://<aapka-domain>/api/payments/webhook/youpi` → **💾 Save Webhook Settings**.
 3. **Webhook ke liye server hosting** (Vercel/Render — guide:
    `docs/09-devops/vercel-deploy.md`). GitHub Pages static hai, wahan webhook
    receive nahi ho sakta. Server ke bina payment chalega par order apne aap
-   confirm nahi hoga (confirm endpoint/server chahiye).
+   confirm nahi hoga.
 
-Gateway dashboard me webhook URL:
-`https://<aapka-domain>/api/payments/webhook/youpi`
+Poori detail (kya galat ho sakta hai, error → fix, verify commands):
+`docs/09-devops/youpi-payment-gateway.md` → section 3.
 
 ### Pehla test (recommended)
 
