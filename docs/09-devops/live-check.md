@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T06:16:12.354Z
+Ran: 2026-10-27T06:17:56.795Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 413167 bytes · 214ms |
+| ✅ | home page 200 — HTTP 200 · 413167 bytes · 211ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -60,7 +60,7 @@ Ran: 2026-10-27T06:16:12.354Z
 | result | rule |
 | --- | --- |
 | ✅ | stylesheet load hui — /_next/static/chunks/0-p3dfmipj.qv.css |
-| ✅ | `.brand-lockup img` heights (44 → 52 → 58) |
+| ✅ | `.brand-lockup img` heights (46 → 54 → 60) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
