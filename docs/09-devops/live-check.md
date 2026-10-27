@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-27T05:55:15.900Z
+Ran: 2026-10-27T06:14:12.134Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 415955 bytes · 253ms |
+| ✅ | home page 200 — HTTP 200 · 415955 bytes · 338ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -40,26 +40,27 @@ Ran: 2026-10-27T05:55:15.900Z
 | ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 284 KB |
 | ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 272 KB |
 | ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 283 KB |
+| ❌ | favicon.ico (`favicon.ico`) | 404 | text/html; charset=utf-8 | 32 KB |
 
 ## Logo per viewport (browser ka `<source>` selection)
 
 | result | viewport | file | display height | file width | required |
 | --- | --- | --- | --- | --- | --- |
-| ✅ | 320px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
-| ✅ | 375px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
-| ✅ | 390px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
-| ✅ | 430px | `logo-mobile.png` | 44px | 310px | ≥ 88px |
-| ✅ | 768px | `logo-tablet.png` | 52px | 369px | ≥ 104px |
-| ✅ | 1024px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
-| ✅ | 1366px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
-| ✅ | 1440px | `logo-desktop.png` | 58px | 427px | ≥ 116px |
+| ✅ | 320px | `logo-mobile.png` | 46px | 310px | ≥ 92px |
+| ✅ | 375px | `logo-mobile.png` | 46px | 310px | ≥ 92px |
+| ✅ | 390px | `logo-mobile.png` | 46px | 310px | ≥ 92px |
+| ✅ | 430px | `logo-mobile.png` | 46px | 310px | ≥ 92px |
+| ✅ | 768px | `logo-tablet.png` | 54px | 369px | ≥ 108px |
+| ✅ | 1024px | `logo-desktop.png` | 60px | 427px | ≥ 120px |
+| ✅ | 1366px | `logo-desktop.png` | 60px | 427px | ≥ 120px |
+| ✅ | 1440px | `logo-desktop.png` | 60px | 427px | ≥ 120px |
 
 ## CSS (logo visibility)
 
 | result | rule |
 | --- | --- |
 | ✅ | stylesheet load hui — /_next/static/chunks/0dptp36scokt4.css |
-| ✅ | `.brand-lockup img` heights (44 → 52 → 58) |
+| ❌ | `.brand-lockup img` heights (44 → 52 → 58) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
 | ✅ | hero `object-fit: contain` (crop nahi) |
@@ -81,6 +82,10 @@ Ran: 2026-10-27T05:55:15.900Z
 | ✅ | canonical — https://mystorebyme.github.io/pussya-product/ |
 | ✅ | lang attribute |
 | ✅ | favicon links |
+| ❌ | root `/favicon.ico` 200 hai (browser ka default request) — HTTP 404 · text/html; charset=utf-8 · 32459 bytes |
+| ❌ | `/favicon.ico` asli ICO file hai (00 00 01 00 magic) — nahi mila |
+| ❌ | favicon page par declare hai |
+| ✅ | brand mark PNGs (128/180/192/512) square + maujood — 128×128 · 180×180 · 192×192 · 512×512 |
 
 ## Key pages
 
@@ -142,4 +147,10 @@ Ran: 2026-10-27T05:55:15.900Z
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 5 problem mili:
+
+- favicon.ico → HTTP 404 (favicon.ico)
+- `.brand-lockup img` heights (44 → 52 → 58)
+- root `/favicon.ico` 200 hai (browser ka default request) — HTTP 404 · text/html; charset=utf-8 · 32459 bytes
+- `/favicon.ico` asli ICO file hai (00 00 01 00 magic) — nahi mila
+- favicon page par declare hai
