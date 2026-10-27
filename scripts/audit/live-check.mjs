@@ -190,7 +190,7 @@ say("| result | rule |");
 say("| --- | --- |");
 check("stylesheet load hui", css.ok, cssHref || "koi css link nahi");
 check(
-  "`.brand-lockup img` heights (44 → 52 → 58)",
+  "`.brand-lockup img` heights (46 → 54 → 60)",
   /\.brand-lockupimg\{[^}]*height:46px/.test(flatCss) &&
     /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss) &&
     /\.brand-lockupimg\{[^}]*height:60px/.test(flatCss),

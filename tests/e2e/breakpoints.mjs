@@ -141,7 +141,7 @@ for (const src of new Set([heroPic.img, ...heroPic.sources.map((s) => s.src), br
 
 /**
  * Hero ratio — R41: CSS box ka aspect-ratio **owner ke poster** ka asli ratio hai
- * (mobile 941×1672, tablet 1448×1086, desktop 1536×1024). Dono side match hone se
+ * (mobile 941×1672, tablet + desktop 1672×941). Dono side match hone se
  * `object-fit: contain` ke baad koi crop/stretch nahi hota.
  */
 const boxRatio = { mobile: 941 / 1672, tablet: 1672 / 941, desktop: 1672 / 941 };
@@ -166,8 +166,8 @@ const tabletAsset = sizes[heroPic.sources.find((s) => s.min === 768)?.src ?? ""]
 check("tablet banner ≥ 1600px wide (wahi wide frame)", (tabletAsset?.w ?? 0) >= 1600, `${tabletAsset?.w}px`);
 const desktopAsset = sizes[heroPic.sources.find((s) => s.min === 1024)?.src ?? ""];
 /**
- * R41: desktop poster 1536×1024 hai — owner ki asli file, **upscale nahi ki**
- * (upscale = blurry text). Hero container `max-w-[1920px]` hai par 1536px wide
+ * R45: desktop poster 1672×941 hai — owner ki asli file, **upscale nahi ki**
+ * (upscale = blurry text). Hero container `max-w-[1920px]` hai par 1672px wide
  * file 1440–1600px laptop par 1:1 sharp rehti hai.
  */
 check(

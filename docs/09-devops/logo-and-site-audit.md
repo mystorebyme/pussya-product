@@ -182,9 +182,31 @@ stretch nahi hota.
 | static audit (`dist`, 486 pages) | 34,875 refs · **0 broken** · alt-missing 0 |
 | lint / typecheck | 0 errors / clean |
 
-## 11. Jo abhi bhi unverified hai
+## 11. Live verification (deploy ke baad, asli URL par)
 
-- **Browser me real screenshot** — sandbox me Chromium nahi; logo/ favicon ka render
-  sharp se bana kar dekha gaya (white background par poora lockup, crown tile fill).
-- **`/favicon.ico` live URL par** — deploy ke baad `docs/09-devops/live-check.md`
-  me naya check (`200 + ICO magic + 32/48 sizes`) khud proof deta hai.
+| Run | Kya | Result |
+| --- | --- | --- |
+| Pages build → deploy → smoke (`05113cf`) | naya build live hua | ✅ success |
+| Live site check (`21fbe12`, run `40460082203`) | 95 checks | **95 ✅ / 0 ❌** — "Saare live checks pass" |
+| Pages build → deploy → smoke (`21fbe12`) | dobara deploy | ✅ success |
+
+Live report se seedha proof (`docs/09-devops/live-check.md`):
+
+| Check | Live result |
+| --- | --- |
+| logo per viewport | 320/375/390/430 → `logo-mobile.png` 46px · 768 → `logo-tablet.png` 54px · 1024+ → `logo-desktop.png` 60px (sab ≥2× resolution) |
+| hero banners | desktop 279 KB · tablet 279 KB (wahi frame) · mobile 283 KB — sab 200 |
+| `/favicon.ico` | 200 · `image/vnd.microsoft.icon` · 2054 bytes · **2 icons (32+48)**, magic `00 00 01 00` |
+| brand marks | 128×128 · 180×180 · 192×192 · 512×512 — sab square |
+| `.brand-lockup img` heights | 46 → 54 → 60 ✅ |
+| `object-fit: contain`, koi `display:none` nahi | ✅ |
+| key pages + 40 internal links | ✅ sab 200 |
+
+## 12. Jo abhi bhi unverified hai
+
+- **Browser me real screenshot / console** — sandbox me Chromium nahi. Logo ka render
+  `docs/09-devops/header-logo-preview.png` me (sharp se, asli 46/54/60px heights par),
+  favicon ka 32px render alag se check kiya gaya. DevTools console aap khud dekh sakte hain.
+- **Look ka final judgement** — ye aapka call hai: agar header me logo aur bada/chhota
+  chahiye to bas `globals.css` me `height: 46/54/60px` badalna hai (script dobara chalane
+  ki zaroorat nahi).

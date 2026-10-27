@@ -119,7 +119,7 @@ const liveCss = cssHref ? (await get(cssHref)).text : "";
 
 /**
  * R41: hero ek `<picture>` hai jisme har breakpoint ki **apni** file hai, aur
- * `aspect-ratio` asli file ka hai (941/1672 · 1448/1086 · 1536/1024) — isliye
+ * `aspect-ratio` asli file ka hai (941/1672 · 1672/941) — isliye
  * `object-fit: contain` ke saath kabhi crop/stretch nahi hota.
  */
 const heroPicture = home.text.match(/<picture>[\s\S]{0,900}?banner-mobile\.webp[\s\S]{0,300}?<\/picture>/)?.[0] ?? "";
@@ -242,7 +242,7 @@ if (liveCss) {
   const flatCss = css.replace(/\s+/g, "");
   // R42: logo heights 42 → 52 → 54 (owner ka asli lockup, file 2× DPR cover karti hai)
   check(
-    "CSS defines brand-lockup heights per breakpoint (44 → 52 → 58)",
+    "CSS defines brand-lockup heights per breakpoint (46 → 54 → 60)",
     // flattened CSS me class aur tag ke beech ka space bhi chala jaata hai
     /\.brand-lockupimg\{[^}]*height:46px/.test(flatCss) &&
       /\.brand-lockupimg\{[^}]*height:54px/.test(flatCss) &&
