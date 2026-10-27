@@ -86,6 +86,15 @@ hai ya nahi dekhiye, aur `/api/sheet-health` kholkar exact error padhiye.
 > Sheet ke **Settings tab me teesra column (`note`) safe hai** — site sirf A (key) aur
 > B (value) padhti hai. (R42 me ye bug fix hua: pehle note column value me jud jaata tha.)
 
+## Live link (abhi ka)
+
+- **Preview (GitHub Actions se, har push par):**
+  https://mystorebyme.github.io/pussya-product/
+  Ye static preview hai — pages, banner, collections dikhte hain; order/payment
+  asli site (Vercel) par chalte hain.
+- **Asli site (Vercel):** neeche wale Deploy button se 2 minute me live ho jaati hai
+  (Root Directory `apps/web`), poora guide: `docs/09-devops/vercel-deploy.md`.
+
 ## Aage ke optional kaam
 
 - **Domain:** domain final hone par `NEXT_PUBLIC_SITE_URL` badal dijiye (WhatsApp/invoice
