@@ -26,6 +26,7 @@
 | **R45 — naya logo (owner ka gold emblem)** | ✅ poora lockup trim hota hai (koi crop nahi) → 514×190 / 444×164 / 374×138 (2.70:1), header me 46 → 54 → 60px, `?v=4` cache-bust | `assets/source/logo-gold.png`, `scripts/brand/build-responsive-assets.mjs`, `globals.css`, `brand-mark.tsx` |
 | **R45 — naya Diwali banner** | ✅ desktop + tablet wahi 1672×941 frame, mobile 941×1672 portrait; hero CSS/config ratios update; 3-up mockup sheet (1983×793) use **nahi** hoti | `scripts/brand/build-hero-banners.mjs`, `config/site.ts`, `globals.css` |
 | **R45 — favicon + PWA** | ✅ root `/favicon.ico` asli ICO (32+48, pehle 404 tha), crown mark tile ki 92% width bharta hai (16px par dikhta hai), manifest splash cream (pehle kaala) | `app/favicon.ico`, `build-responsive-assets.mjs`, `manifest.ts` |
+| **R45 — live verify** | ✅ Pages deploy (build/deploy/smoke) + live-check report (`docs/09-devops/live-check.md`) — naya logo, banner ratio, favicon ICO sab live URL par check hote hain | `gh run list` |
 | **R45 — chhote bugs** | ✅ footer ka saal hydration-safe (`suppressHydrationWarning`), manifest icons base path ke saath, live-check me favicon/ICO/mark checks | `site-footer.tsx`, `manifest.ts`, `scripts/audit/live-check.mjs` |
 | Scam-proofing | ✅ rate limit (orders/contact/newsletter/payment claim) + server-side price recompute | `apps/web/src/lib/rate-limit.ts` |
 | Unit tests | ✅ 323 pass | `npm run test:unit` |
