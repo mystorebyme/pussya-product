@@ -49,8 +49,8 @@ export function BrandMark({
       <img
         src={brandAssets.fluid}
         alt="Noor Ethnic Wear"
-        width={1083}
-        height={400}
+        width={758}
+        height={280}
         decoding="async"
         fetchPriority="high"
         onError={() => setFailed(true)}

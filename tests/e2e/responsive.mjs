@@ -69,7 +69,7 @@ const assets = [
   ["images/brand/logo-mobile.png", 360, 130, "mobile logo (gold lockup 374×138, 46px display)"],
   ["images/brand/logo-tablet.png", 430, 158, "tablet logo (gold lockup 444×164, 54px display)"],
   ["images/brand/logo-desktop.png", 500, 186, "desktop logo (gold lockup 514×190, 60px display)"],
-  ["images/brand/logo-fluid.png", 400, 320, "fluid logo (stacked, footer/invoice)"],
+  ["images/brand/logo-fluid.png", 700, 260, "fluid logo (stacked, footer/invoice — 758×280)"],
   ["images/brand/logo-mark-128.png", 128, 128, "favicon 128"],
   ["images/brand/logo-mark-192.png", 192, 192, "PWA 192"],
   ["images/brand/logo-mark-512.png", 512, 512, "PWA 512 / invoice"],

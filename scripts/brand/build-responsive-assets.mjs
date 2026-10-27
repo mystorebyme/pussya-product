@@ -8,7 +8,7 @@
  *     logo-desktop.png        header lockup, ≥1024px  (height 190)
  *     logo-tablet.png         header lockup, 768–1023 (height 164)
  *     logo-mobile.png         header lockup, <768     (height 138)
- *     logo-fluid.png          footer / invoice        (height 400)
+ *     logo-fluid.png          footer / invoice        (height 280)
  *     logo-mark-{128,180,192,512}.png  crown emblem, square (favicon / PWA / Apple)
  *     ../../og-image.jpg      social card
  *
@@ -55,7 +55,9 @@ async function lockup(height) {
 await fs.writeFile(path.join(BRAND, "logo-desktop.png"), await lockup(190));
 await fs.writeFile(path.join(BRAND, "logo-tablet.png"), await lockup(164));
 await fs.writeFile(path.join(BRAND, "logo-mobile.png"), await lockup(138));
-await fs.writeFile(path.join(BRAND, "logo-fluid.png"), await lockup(400));
+/* fluid: footer / invoice / social — display 100–150px, isliye 280px height hi
+   kaafi hai (2×+ retina) aur file 371 KB se ~180 KB par aa jaati hai */
+await fs.writeFile(path.join(BRAND, "logo-fluid.png"), await lockup(280));
 
 /* ─────────────────────────────── square mark ─────────────────────────────
  * Favicon/app icon me poora wordmark daalne par 16px par kuch padha nahi jaata.
