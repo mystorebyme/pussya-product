@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T05:12:42.122Z
+Ran: 2026-10-29T05:15:14.672Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 13963 bytes · 213ms |
+| ✅ | home page 200 — HTTP 200 · 447880 bytes · 169ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -20,7 +20,7 @@ Ran: 2026-10-29T05:12:42.122Z
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) |
 | ❌ | number 10 digit ka valid Indian mobile hai — — |
 | ✅ | checkout page 200 — HTTP 200 |
-| ❌ | checkout has the form |
+| ✅ | checkout page par WhatsApp hand-off copy hai |
 | ✅ | checkout par koi payment step / UPI nahi |
 | ✅ | checkout copy English hai (koi Hinglish marker nahi) |
 | ✅ | header logo <picture> mila |
@@ -180,10 +180,7 @@ Ran: 2026-10-29T05:12:42.122Z
 
 ## Summary
 
-❌ 3 problem mili:
+❌ 2 problem mili:
 
 - WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — wa.me par number nahi mila (chat picker = sheet se number nahi aaya)
 - number 10 digit ka valid Indian mobile hai — —
-- checkout has the form
-
-> deploy propagation: 75s wait kiya
