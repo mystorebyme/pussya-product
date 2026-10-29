@@ -32,13 +32,14 @@ const CANDIDATES = [
   args.find((a) => !a.startsWith("--")),
   process.env.LIVE_BASE_URL,
   "https://noorethnicwear.store/",
+  "http://noorethnicwear.store/",
   "https://mystorebyme.github.io/pussya-product/",
 ]
   .filter((value) => typeof value === "string" && value.trim())
   .map((value) => value.trim().replace(/\/?$/, "/"))
   .filter((value, index, list) => list.indexOf(value) === index);
 
-const BASE = await pickBase();
+let BASE = await pickBase();
 
 async function pickBase() {
   for (const candidate of CANDIDATES) {
@@ -108,6 +109,28 @@ check("home page 200", home.ok, `HTTP ${home.status} · ${home.body.length} byte
 
 let html = home.body;
 
+/**
+ * Base path HTML se hi pata kar lo.
+ *
+ * Site do tarah se deploy ho sakti hai:
+ *   - custom domain root      → assets `/_next/…`
+ *   - project page subpath    → assets `/pussya-product/_next/…`
+ * Agar checks galat prefix par chalein to sab asset 404 dikhta hai (jhoothi
+ * failure). Isliye page ke pehle asset URL se prefix nikaal kar BASE ko
+ * usi prefix par set kar dete hain.
+ */
+{
+  const detected = html.match(/(?:src|href)="([^"]*?)_next\/static\//)?.[1] ?? null;
+  if (detected !== null) {
+    const current = new URL(BASE).pathname.replace(/\/$/, "");
+    const prefix = detected.replace(/\/$/, "");
+    if (prefix !== current) {
+      BASE = `${new URL(BASE).origin}${prefix}/`;
+      notes.push(`base path HTML se detect hua: "${prefix || "/"}" → checks ${BASE} par`);
+    }
+  }
+}
+
 /* ── deploy propagation wait ──────────────────────────────────────────────────
  * Ye workflow push ke turant baad chalta hai, par GitHub Pages naya build
  * publish karne me 1–3 minute leta hai. Purane HTML/CSS par nayi checks
@@ -158,7 +181,7 @@ check(
 {
   /** href already `/pussya-product/products/…` hota hai — base path dobara na jode */
   const productHref = html.match(/href="[^"]*\/products\/[a-z0-9-]+\/?"/)?.[0]?.slice(6, -1) ?? "";
-  const basePath = new URL(BASE).pathname; // `/pussya-product/`
+  const basePath = new URL(BASE).pathname; // `/` ya `/pussya-product/`
   const productUrl = productHref
     ? new URL(`${basePath}${productHref.replace(basePath, "").replace(/^\//, "")}`.replace(/\/+/g, "/"), BASE).toString()
     : "";
