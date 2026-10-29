@@ -1,0 +1,23 @@
+{
+  "_readme": "Mirror of the owner's Google Sheet (tab: Settings). Source of truth is always the Sheet: at build time the site first tries the Apps Script web app, then the published Settings CSV, then the Sheet gviz CSV, then the live store API. Only when none of those are reachable does this file act as the last fallback, so a private Sheet never leaves the site without a WhatsApp number. Refresh it with: node scripts/sheets/settings-snapshot.mjs --from <csv-url-or-file>",
+  "source": "Google Sheet — Settings tab",
+  "sheetId": "1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo",
+  "capturedAt": "2026-10-29T00:00:00.000Z",
+  "settings": {
+    "store_name": "Noor Ethnic Wear",
+    "whatsapp": "9785795831",
+    "support_phone": "9785795831",
+    "support_email": "",
+    "announcement": "Diwali Sale — Up to 75% OFF",
+    "daily_special": "Today’s Special — Pick any look and order on WhatsApp in one tap",
+    "upi_id": "",
+    "upi_name": "Noor Ethnic Wear",
+    "free_shipping": "true",
+    "store_url": "",
+    "admin_url": "",
+    "order_prefix": "NE",
+    "prepaid_only": "true",
+    "support_hours": "Mon–Sat, 10 AM – 8 PM IST",
+    "return_window_days": "7"
+  }
+}

@@ -170,6 +170,18 @@ async function resolveSettings() {
    * purane/possible hosts bhi try hote hain. Jo pehla jawab de, wahi settings
    * deta hai; sab fail ho to sirf log.
    */
+  /**
+   * Repo snapshot — owner ki Sheet ka mirror (`config/store-settings.snapshot.json`).
+   * Sheet private ho aur koi secret set na ho to bhi site par asli number rehta hai.
+   * Sheet/API ka jawab aane par ye file kabhi istemaal nahi hoti.
+   */
+  const snapshotPath = path.join(ROOT, "config/store-settings.snapshot.json");
+  const fifth = await tried("repo-snapshot", async () => {
+    if (!fs.existsSync(snapshotPath)) return null;
+    const raw = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
+    return normaliseSettings(raw);
+  });
+
   const configuredBase = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").trim();
   const candidates = [
     configuredBase,
@@ -199,9 +211,16 @@ async function resolveSettings() {
     }
   }
   settingsAttempt = attempts.join(" · ");
-  if (fourth) console.log(`settings ← live-store (${settingsAttempt})`);
-  else console.log(`settings ← kuch nahi mila (${settingsAttempt})`);
-  return fourth;
+  if (fourth) {
+    console.log(`settings ← live-store (${settingsAttempt})`);
+    return fourth;
+  }
+  if (fifth) {
+    console.log(`settings ← repo-snapshot (${settingsAttempt})`);
+    return fifth;
+  }
+  console.log(`settings ← kuch nahi mila (${settingsAttempt})`);
+  return null;
 }
 
 const moved = [];
