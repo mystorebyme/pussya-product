@@ -165,16 +165,39 @@ async function resolveSettings() {
     return third;
   }
 
-  const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").trim();
-  const fourth = await tried("live-store", async () => {
-    if (!apiBase) return null;
-    const response = await fetch(`${apiBase.replace(/\/$/, "")}/api/settings`, {
-      signal: AbortSignal.timeout(12_000),
-      headers: { accept: "application/json" },
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return normaliseSettings(await response.json());
-  });
+  /**
+   * Live store — agar STORE_API_URL set na ho (ya wo down ho) to owner ke
+   * purane/possible hosts bhi try hote hain. Jo pehla jawab de, wahi settings
+   * deta hai; sab fail ho to sirf log.
+   */
+  const configuredBase = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").trim();
+  const candidates = [
+    configuredBase,
+    "https://noor-ethnic-wear.vercel.app",
+    "https://noorethnicwear.vercel.app",
+    "https://noor-ethnic-wear.netlify.app",
+    "https://noorethnicwear.netlify.app",
+  ].filter((value, index, list) => value && list.indexOf(value) === index);
+
+  let fourth = null;
+  for (const base of candidates) {
+    const value = await tried(
+      `live-store ${new URL(base).host}`,
+      async () => {
+        const response = await fetch(`${base.replace(/\/$/, "")}/api/settings`, {
+          signal: AbortSignal.timeout(10_000),
+          headers: { accept: "application/json" },
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return normaliseSettings(await response.json());
+      },
+    );
+    if (value) {
+      fourth = value;
+      process.env.NEXT_PUBLIC_API_BASE_URL = base;
+      break;
+    }
+  }
   settingsAttempt = attempts.join(" · ");
   if (fourth) console.log(`settings ← live-store (${settingsAttempt})`);
   else console.log(`settings ← kuch nahi mila (${settingsAttempt})`);
@@ -279,11 +302,23 @@ try {
    * phir bhi jeetti hai. Live store na mile to build fail nahi hota.
    */
   const liveSettings = await resolveSettings();
+  /**
+   * Sheet ki value hi jeetti hai. Sheet na padh paaye (private sheet / store down)
+   * to repo variable se diya hua fallback chalta hai — `vars.STORE_WHATSAPP` /
+   * `secrets.STORE_WHATSAPP` (pages.yml se env me aata hai), aur last me
+   * browser runtime par API se number maangta hai.
+   */
   const previewEnv = {};
+  const fallbackWhatsapp = (process.env.NEXT_PUBLIC_WHATSAPP ?? "").trim();
+  const fallbackDaily = (process.env.NEXT_PUBLIC_DAILY_SPECIAL ?? "").trim();
+  const fallbackAnnounce = (process.env.NEXT_PUBLIC_ANNOUNCEMENT ?? "").trim();
   if (liveSettings?.whatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = String(liveSettings.whatsapp);
+  else if (fallbackWhatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = fallbackWhatsapp;
   if (liveSettings?.supportPhone) previewEnv.NEXT_PUBLIC_SUPPORT_PHONE = String(liveSettings.supportPhone);
   if (liveSettings?.dailySpecial) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = String(liveSettings.dailySpecial);
+  else if (fallbackDaily) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = fallbackDaily;
   if (liveSettings?.announcement) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = String(liveSettings.announcement);
+  else if (fallbackAnnounce) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = fallbackAnnounce;
   if (Object.keys(previewEnv).length) {
     console.log(`preview settings → ${Object.keys(previewEnv).join(", ")}`);
   } else {
