@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T05:40:32.752Z
+Ran: 2026-10-29T05:47:16.352Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 447923 bytes · 231ms |
+| ✅ | home page 200 — HTTP 200 · 114 bytes · 247ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -161,16 +161,15 @@ Ran: 2026-10-29T05:40:32.752Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set-10521552060548/` | 200 |
-| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/diyas-new-design-premium-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/ranipink-trendy-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/red-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/ruby-royale-red-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-anarkali-suit-set-copy-3/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-bandhej-green-anarkali-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/nravya-purple-embroidered-suit-set-8182116483204/` | 200 |
+| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set-10340442833028/` | 200 |
+| ✅ | `/pussya-product/products/nikita-digital-printed-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/keshvis-orange-coloured-anarkali-suit-set-td05/` | 200 |
+| ✅ | `/pussya-product/products/priyas-designer-sequin-sharara-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-and-lightweight-anarkali-suit-set-1/` | 200 |
+| ✅ | `/pussya-product/products/ishva-floral-crunchy-silk-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/manyata-maroon-red-embroidered-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/gulabo-trendy-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -178,9 +177,11 @@ Ran: 2026-10-29T05:40:32.752Z
 | ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
 ✔ Saare live checks pass.
 
+> deploy propagation: 46s wait kiya
 > build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · repo-snapshot: ok · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
