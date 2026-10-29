@@ -2,11 +2,10 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+  # NOTE (R50): sirf manual. Is repo me GitHub Pages ka asli deployer
+  # `.github/workflows/pages.yml` hai — dono ek hi `pages` concurrency group me
+  # chalte the, isliye push par ek dusre ka deployment rad kar dete the aur live
+  # site khaali shell serve karti thi. Push trigger hata diya gaya hai.
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
