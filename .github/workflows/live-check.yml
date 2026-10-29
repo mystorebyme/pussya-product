@@ -61,6 +61,30 @@ jobs:
               read -r code redir <<<"$(curl -sS -o /dev/null -m 20 -w '%{http_code} %{redirect_url}' "$u" 2>/dev/null || echo '000 -')"
               echo "| $u | $dns | $code | ${redir:--} |"
             done
+            echo ""
+            echo "### DNS records (Google DNS se poocha gaya)"
+            echo ""
+            echo "| name | type | value |"
+            echo "| --- | --- | --- |"
+            for pair in "noorethnicwear.store A" "noorethnicwear.store AAAA" "noorethnicwear.store CNAME" "www.noorethnicwear.store A" "www.noorethnicwear.store CNAME"; do
+              name=${pair% *}
+              type=${pair#* }
+              curl -sS -m 15 "https://dns.google/resolve?name=${name}&type=${type}" \
+                | node -e '
+                  let raw = "";
+                  process.stdin.on("data", (d) => (raw += d)).on("end", () => {
+                    const [name, type] = process.argv.slice(1);
+                    try {
+                      const json = JSON.parse(raw);
+                      const wanted = { A: 1, CNAME: 5, AAAA: 28 }[type];
+                      for (const answer of json.Answer ?? []) {
+                        if (answer.type !== wanted) continue;
+                        console.log(`| ${name} | ${type} | ${String(answer.data).slice(0, 80)} |`);
+                      }
+                    } catch {}
+                  });
+                ' "$name" "$type" || true
+            done
           } > /tmp/urls.md
           cat /tmp/urls.md
 
