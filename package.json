@@ -57,7 +57,7 @@
     "@electric-sql/pglite": "^0.5.11",
     "@electric-sql/pglite-socket": "^0.2.14",
     "@types/pg": "^8.23.1",
-    "tsx": "4.21.0",
+    "tsx": "4.23.15",
     "typescript": "5.9.3"
   }
 }
