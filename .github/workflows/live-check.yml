@@ -85,6 +85,16 @@ jobs:
                   });
                 ' "$name" "$type" || true
             done
+            www_cname=$(curl -sS -m 15 "https://dns.google/resolve?name=www.noorethnicwear.store&type=CNAME" | node -e '
+              let raw="";process.stdin.on("data",d=>raw+=d).on("end",()=>{
+                try{const j=JSON.parse(raw);const a=(j.Answer||[]).find(x=>x.type===5);if(a)console.log(String(a.data));}catch{}
+              });' || true)
+            echo ""
+            if [ -n "$www_cname" ]; then
+              echo "www CNAME → $www_cname"
+            else
+              echo "⚠️ \`www.noorethnicwear.store\` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)"
+            fi
           } > /tmp/urls.md
           cat /tmp/urls.md
 
