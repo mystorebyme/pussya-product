@@ -2,13 +2,13 @@
 
 > URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:25:45.164Z
+Ran: 2026-10-29T06:41:27.624Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 443177 bytes · 12ms |
+| ✅ | home page 200 — HTTP 200 · 443177 bytes · 20ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -191,5 +191,16 @@ Ran: 2026-10-29T06:25:45.164Z
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 404 | - |
-| https://noorethnicwear.store/ | 185.199.109.153,185.199.110.153,185.199.108.153,185.199.111.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | http://noorethnicwear.store/ |
+| https://noorethnicwear.store/ | 185.199.111.153,185.199.110.153,185.199.108.153,185.199.109.153 | 000 | 000 - |
+
+### DNS records (Google DNS se poocha gaya)
+
+| name | type | value |
+| --- | --- | --- |
+| noorethnicwear.store | A | 185.199.108.153 |
+| noorethnicwear.store | A | 185.199.109.153 |
+| noorethnicwear.store | A | 185.199.110.153 |
+| noorethnicwear.store | A | 185.199.111.153 |
+| www.noorethnicwear.store | A | 104.21.43.105 |
+| www.noorethnicwear.store | A | 172.67.178.35 |
