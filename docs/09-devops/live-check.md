@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T05:37:46.486Z
+Ran: 2026-10-29T05:39:37.595Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 447880 bytes · 202ms |
+| ✅ | home page 200 — HTTP 200 · 447923 bytes · 358ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -16,10 +16,10 @@ Ran: 2026-10-29T05:37:46.486Z
 | ✅ | WhatsApp FAB home par (bottom-right) |
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
-| ❌ | build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404 |
-| ❌ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — wa.me par number nahi mila (chat picker = sheet se number nahi aaya) |
-| ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) |
-| ❌ | number 10 digit ka valid Indian mobile hai — — |
+| ✅ | build ne sheet se number liya (bake hua) — 10 digits |
+| ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
+| ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
+| ✅ | number 10 digit ka valid Indian mobile hai — 9785XXXXXX |
 | ✅ | checkout page 200 — HTTP 200 |
 | ✅ | checkout page par WhatsApp hand-off copy hai |
 | ✅ | checkout par koi payment step / UPI nahi |
@@ -147,6 +147,7 @@ Ran: 2026-10-29T05:37:46.486Z
 | ✅ | `/pussya-product/images/brand/logo-mark-128.png` | 200 |
 | ✅ | `/pussya-product/images/brand/logo-mark-192.png` | 200 |
 | ✅ | `/pussya-product/images/brand/logo-mark-180.png` | 200 |
+| ✅ | `/pussya-product/collections/sale/` | 200 |
 | ✅ | `/pussya-product/` | 200 |
 | ✅ | `/pussya-product/account/` | 200 |
 | ✅ | `/pussya-product/wishlist/` | 200 |
@@ -156,20 +157,20 @@ Ran: 2026-10-29T05:37:46.486Z
 | ✅ | `/pussya-product/collections/printed-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/best-seller/` | 200 |
 | ✅ | `/pussya-product/collections/new-arrivals/` | 200 |
-| ✅ | `/pussya-product/collections/sale/` | 200 |
 | ✅ | `/pussya-product/pages/contact/` | 200 |
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/pink-flared-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/adeena-black-faux-blooming-anarkali-style-sarara-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/poshaako-pink-suit/` | 200 |
-| ✅ | `/pussya-product/products/premium-maroon-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-pink-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-night-star-chocolate-colorembroidered-georgette-suit-set-td-120/` | 200 |
-| ✅ | `/pussya-product/products/gulabo-trendy-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/rukmanis-red-coloured-anarkali-suit-set-td09/` | 200 |
+| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set-10521552060548/` | 200 |
+| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/diyas-new-design-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/ranipink-trendy-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/red-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/ruby-royale-red-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-anarkali-suit-set-copy-3/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-bandhej-green-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/nravya-purple-embroidered-suit-set-8182116483204/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -177,14 +178,9 @@ Ran: 2026-10-29T05:37:46.486Z
 | ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
-❌ 3 problem mili:
+✔ Saare live checks pass.
 
-- build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
-- WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — wa.me par number nahi mila (chat picker = sheet se number nahi aaya)
-- number 10 digit ka valid Indian mobile hai — —
-
-> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
+> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · repo-snapshot: ok · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
