@@ -160,3 +160,49 @@ permission nahi hai, isliye main ye switch nahi kar sakta):
    (check redirect ke saath pass hota hai).
 2. Agar aap kabhi `*.github.io` link bhi chalu rakhna chahein, to domain hataana
    padega — GitHub ek hi waqt me dono nahi deta.
+
+## 11. Custom domain fix (29 Oct, later round)
+
+Two things were wrong on `noorethnicwear.store`:
+
+1. **Site usi base path par bani thi jo project page ke liye tha** (`/pussya-product/`).
+   Custom domain root par wahi paths 404 de rahe the, isliye CSS/JS/images nahi
+   khulte the → page toota hua lagta tha.
+   **Fix:** ab site root par banti hai (`/_next/…`, `/images/…`), `dist/CNAME` me
+   domain, aur canonical/OG URL = `https://noorethnicwear.store`.
+2. **HTTPS certificate abhi issue nahi hua hai** — `https://noorethnicwear.store/`
+   par TLS handshake fail hota hai (0 bytes), `http://noorethnicwear.store/`
+   bilkul theek chalta hai. Ye GitHub ka side hai, code ka nahi.
+
+**Aapko karna hai (2 click):** GitHub → repo → **Settings → Pages** →
+"Enforce HTTPS" ✅ (jab wo option dikhe; certificate banne me aam taur par
+15–60 minute lagte hain). Uske baad site `https://noorethnicwear.store` par
+poori tarah theek khulegi.
+
+### Sheet ab live padhi ja rahi hai (Apps Script se)
+
+Build ne is baar likha: `build settings: apps-script: ok` — yaani number,
+announcement aur daily special **aapki Sheet se** aaye, mirror se nahi.
+Deploy karte waqt ye order chalta hai: Apps Script → published CSV → Sheet CSV
+→ live store API → repo mirror (last resort).
+
+`daily_special` ko bhi Sheet se live chalane ke liye ek baar naya Apps Script
+code paste + **Deploy → New version** kar dijiye
+(`docs/00-overview/apps-script-code.md` — pura code wahin hai). Uske bina bhi
+Daily Special band dikhega, par who mirror copy se.
+
+### GitHub variables (main add nahi kar sakta)
+
+Actions token ke paas variables/secrets likhne ka permission nahi hai (403), so
+workflow me hi safe defaults daal diye hain — abhi kuch set karna zaroori nahi:
+
+| variable | default (workflow me) |
+| --- | --- |
+| `GOOGLE_SHEETS_WEBAPP_URL` | aapka Apps Script `/exec` URL |
+| `SHEET_ID` | `1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo` |
+| `SITE_URL` | `https://noorethnicwear.store` |
+| `CUSTOM_DOMAIN` | `noorethnicwear.store` |
+| `PAGES_BASE_PATH` | *(khaali = root)* |
+
+Baad me badalna ho to bas Settings → Secrets and variables → **Variables** me
+wahi naam use kijiye — code chhune ki zaroorat nahi.
