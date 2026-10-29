@@ -1,14 +1,14 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-> URLs tried (first live one wins): https://mystorebyme.github.io/pussya-product/ · https://noorethnicwear.store/
+> URLs tried (first live one wins): https://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:09:18.569Z
+Ran: 2026-10-29T06:17:42.311Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 453652 bytes · 21ms |
+| ✅ | home page 200 — HTTP 200 · 449846 bytes · 27ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -163,15 +163,16 @@ Ran: 2026-10-29T06:09:18.569Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-sanayas-readymade-alia-cut-gown-with-dupatta-set-kkka-1077/` | 200 |
-| ✅ | `/pussya-product/products/keshvis-orange-coloured-anarkali-suit-set-td05/` | 200 |
-| ✅ | `/pussya-product/products/anarkali-gown-duppta-full-set-with-pent-ready-to-wear-dkb-241/` | 200 |
-| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nirus-noir-black-elegance-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nirus-noir-black-elegance-anarkali-suit-set-10511760359556/` | 200 |
-| ✅ | `/pussya-product/products/malini-anarkali-dupatta-set/` | 200 |
-| ✅ | `/pussya-product/products/siyara-pink-color-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/minisa-designer-embroidered-zari-sequins-work-gown/` | 200 |
+| ✅ | `/pussya-product/products/millow-floral-anarkali-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-ivory-anarkali-with-royal-finish-elegance-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/priyankas-new-gown-with-dupatta-collaction-lw-9150/` | 200 |
+| ✅ | `/pussya-product/products/sandhiya-black-premium-quality-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/niyara-sky-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/jiyara-onionpink-color-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-maroon-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-pink-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/tridha-fendy-silk-blush-pink-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/mesta-trendy-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -179,7 +180,6 @@ Ran: 2026-10-29T06:09:18.569Z
 | ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
@@ -191,5 +191,5 @@ Ran: 2026-10-29T06:09:18.569Z
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8003::153,2606:50c0:8000::153,2606:50c0:8002::153,2606:50c0:8001::153 | 301 | http://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.108.153,185.199.111.153,185.199.110.153,185.199.109.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | http://noorethnicwear.store/ |
+| https://noorethnicwear.store/ | 185.199.108.153,185.199.109.153,185.199.111.153,185.199.110.153 | 000 | 000 - |
