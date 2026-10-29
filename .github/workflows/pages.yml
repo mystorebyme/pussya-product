@@ -98,9 +98,11 @@ jobs:
           # Custom domain (noorethnicwear.store) root par site chalti hai — isliye
           # base path khaali. Kisi din bina domain ke github.io/<repo>/ chahiye ho
           # to bas ek variable: PAGES_BASE_PATH=/pussya-product
-          PAGES_BASE_PATH: ${{ vars.PAGES_BASE_PATH }}
-          SITE_URL: ${{ vars.SITE_URL || 'https://noorethnicwear.store' }}
-          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN || 'noorethnicwear.store' }}
+          # NOTE: ye teen values neeche sanitise hoti hain — variable me galat value
+          # (jaise koi random text) ho to build tootti nahi, sirf ignore hoti hai.
+          PAGES_BASE_PATH_IN: ${{ vars.PAGES_BASE_PATH }}
+          SITE_URL_IN: ${{ vars.SITE_URL }}
+          CUSTOM_DOMAIN_IN: ${{ vars.CUSTOM_DOMAIN }}
           # Sheet na padhe to repo variable se fallback number
           NEXT_PUBLIC_WHATSAPP: ${{ vars.STORE_WHATSAPP || secrets.STORE_WHATSAPP }}
           NEXT_PUBLIC_DAILY_SPECIAL: ${{ vars.STORE_DAILY_SPECIAL }}
@@ -123,6 +125,31 @@ jobs:
           NEXT_PUBLIC_SHEETS_WEBAPP_URL: ${{ vars.GOOGLE_SHEETS_WEBAPP_URL || secrets.GOOGLE_SHEETS_WEBAPP_URL || 'https://script.google.com/macros/s/AKfycbxAeIVP9gGYeBoVcfXyIv5hwoQ_SK1grihBu3hqSR2nJ-KEzqi_vtLwt_BfhFWjE62CVg/exec' }}
         run: |
           set -o pipefail
+          # ── sanitise site env (galat variable build ko na tode) ──────────────
+          BASE_PATH="${PAGES_BASE_PATH_IN:-}"
+          case "$BASE_PATH" in
+            /*) BASE_PATH="$(echo "$BASE_PATH" | sed 's#/*$##')" ;;
+            *)  [ -n "$BASE_PATH" ] && echo "⚠ PAGES_BASE_PATH='$BASE_PATH' galat hai (start me '/' chahiye) — ignore kiya"
+                BASE_PATH="" ;;
+          esac
+          DOMAIN="${CUSTOM_DOMAIN_IN:-}"
+          if ! echo "$DOMAIN" | grep -qE '^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'; then
+            [ -n "$DOMAIN" ] && echo "⚠ CUSTOM_DOMAIN='$DOMAIN' galat hai — default use kiya"
+            DOMAIN="noorethnicwear.store"
+          fi
+          SITE="${SITE_URL_IN:-}"
+          case "$SITE" in
+            http*) SITE="$(echo "$SITE" | sed 's#/*$##')" ;;
+            *)     [ -n "$SITE" ] && echo "⚠ SITE_URL='$SITE' galat hai — default use kiya"
+                   SITE="https://$DOMAIN" ;;
+          esac
+          export PAGES_BASE_PATH="$BASE_PATH"
+          export CUSTOM_DOMAIN="$DOMAIN"
+          export SITE_URL="$SITE"
+          export NEXT_PUBLIC_SITE_URL="$SITE"
+          export NEXT_PUBLIC_SITE_HOSTS="${DOMAIN#www.}"
+          echo "site env → base='${BASE_PATH:-/}' · domain=$DOMAIN · site=$SITE"
+
           node scripts/pages/build-preview.mjs 2>&1 | tee build.log
           # custom domain: Pages ko CNAME chahiye (domain Settings me bhi set hai)
           if [ -n "${CUSTOM_DOMAIN:-}" ]; then echo "$CUSTOM_DOMAIN" > dist/CNAME; fi

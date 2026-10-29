@@ -17,7 +17,18 @@ const ROOT = path.resolve(import.meta.dirname, "..", "..");
 const APP = path.join(ROOT, "apps/web");
 const APP_DIR = path.join(APP, "src/app");
 const TMP = path.join(ROOT, ".pages-preview-tmp");
-const BASE_PATH = process.env.PAGES_BASE_PATH ?? "";
+/**
+ * Base path — khaali (root) ya `/something`.
+ *
+ * Owner ke GitHub variable me ek baar random text (`hgvkjhftg`) aa gaya tha aur
+ * Next ne `Specified basePath has to start with a /` keh kar **poora build tor
+ * diya**. Ab galat value chup-chaap ignore hoti hai: site root par banti hai.
+ */
+const RAW_BASE_PATH = (process.env.PAGES_BASE_PATH ?? "").trim();
+const BASE_PATH = /^\/[A-Za-z0-9._~\-/]*$/.test(RAW_BASE_PATH) ? RAW_BASE_PATH.replace(/\/+$/, "") : "";
+if (RAW_BASE_PATH && !BASE_PATH) {
+  console.warn(`⚠ PAGES_BASE_PATH='${RAW_BASE_PATH}' galat hai (start me '/' chahiye) — root par build ho raha hai`);
+}
 
 
 /* ═══════════════════════════ settings (R50) ═════════════════════════════════
