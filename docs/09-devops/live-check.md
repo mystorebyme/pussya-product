@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T04:48:37.185Z
+Ran: 2026-10-29T04:49:43.687Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 457119 bytes · 125ms |
+| ✅ | home page 200 — HTTP 200 · 457119 bytes · 130ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -103,7 +103,7 @@ Ran: 2026-10-29T04:48:37.185Z
 | ✅ | size guide: 3 tabs (Measurements Chart / Find My Size / How to Measure) |
 | ✅ | size guide: inches/centimeters toggle |
 | ✅ | size guide: chart XS se XXL (front length column ke saath) |
-| ❌ | size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL) |
+| ✅ | size guide: unstitched suit note (2.5 m + 2.25 m + XS to 5XL) |
 | ✅ | size guide: front length value 46 (inches) chart me |
 
 ## Key pages
@@ -168,6 +168,4 @@ Ran: 2026-10-29T04:48:37.185Z
 
 ## Summary
 
-❌ 1 problem mili:
-
-- size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL)
+✔ Saare live checks pass.
