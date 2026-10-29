@@ -130,8 +130,12 @@ check(
   /WhatsApp/.test(html) && !/Secure UPI|Pay online/i.test(html),
 );
 {
+  /** href already `/pussya-product/products/…` hota hai — base path dobara na jode */
   const productHref = html.match(/href="[^"]*\/products\/[a-z0-9-]+\/?"/)?.[0]?.slice(6, -1) ?? "";
-  const productUrl = productHref ? new URL(productHref.replace(/^\//, ""), BASE).toString() : "";
+  const basePath = new URL(BASE).pathname; // `/pussya-product/`
+  const productUrl = productHref
+    ? new URL(`${basePath}${productHref.replace(basePath, "").replace(/^\//, "")}`.replace(/\/+/g, "/"), BASE).toString()
+    : "";
   const productPage = productUrl ? await get(productUrl) : { ok: false, body: "" };
   const fab = (pageHtml) => pageHtml.includes('data-testid="whatsapp-fab"') && /wa\.me\//.test(pageHtml);
   check("WhatsApp FAB home par (bottom-right)", fab(html));
