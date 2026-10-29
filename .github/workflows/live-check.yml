@@ -37,6 +37,7 @@ jobs:
     timeout-minutes: 15
     env:
       BASE_URL: ${{ inputs.base_url || vars.SITE_URL || 'https://noorethnicwear.store/' }}
+      SHEETS_WEBAPP_URL: ${{ vars.GOOGLE_SHEETS_WEBAPP_URL || secrets.GOOGLE_SHEETS_WEBAPP_URL || 'https://script.google.com/macros/s/AKfycbxAeIVP9gGYeBoVcfXyIv5hwoQ_SK1grihBu3hqSR2nJ-KEzqi_vtLwt_BfhFWjE62CVg/exec' }}
     steps:
       - uses: actions/checkout@v4
         with:

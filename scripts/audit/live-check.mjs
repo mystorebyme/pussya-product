@@ -74,6 +74,26 @@ async function get(url, init = {}) {
   }
 }
 
+/** JSON POST (Apps Script) — CORS preflight se bachne ke liye text/plain */
+async function post(url, payload) {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+      redirect: "follow",
+    });
+    const text = await response.text();
+    let json = null;
+    try {
+      json = JSON.parse(text);
+    } catch {}
+    return { ok: response.ok, status: response.status, json, text };
+  } catch (error) {
+    return { ok: false, status: 0, json: null, text: String(error) };
+  }
+}
+
 /** binary asset: status / type / bytes — body download kiye bina */
 async function asset(url) {
   const started = Date.now();
@@ -190,6 +210,29 @@ check(
   check("WhatsApp FAB home par (bottom-right)", fab(html));
   check("WhatsApp FAB product page par bhi", productPage.ok && fab(productPage.body));
   check("Daily Special ribbon ya maroon announcement strip hai", /data-testid="daily-special"|data-testid="announcement/.test(html) || /Order in the bag/.test(html));
+}
+
+/* ── R50b: Apps Script par naya `place_order` deploy hua hai ya nahi ─────── */
+{
+  const url = (process.env.SHEETS_WEBAPP_URL ?? "").trim();
+  if (url) {
+    /**
+     * **Jaan-boojh kar khaali order** bhejte hain: naya script `no_items` ke saath
+     * mana kar deta hai (kuch likha nahi jaata), purana script `unauthorized`
+     * kehta hai. Isse pata chal jaata hai ki Sheet me order jayega ya nahi —
+     * bina ek bhi fake row banaye.
+     */
+    const probe = await post(url, { action: "place_order", order: { customer: {} } });
+    check(
+      "Apps Script par naya order code deploy hua hai (place_order)",
+      probe.json?.code === "no_items",
+      probe.json?.code === "no_items"
+        ? "place_order live hai — order seedha Sheet me jayega"
+        : `nahi — mila: ${probe.json?.code ?? probe.json?.error ?? probe.status} · Sheet me Apps Script ka naya code paste karke Deploy → New version karein`,
+    );
+  } else {
+    notes.push("SHEETS_WEBAPP_URL set nahi — place_order probe skip");
+  }
 }
 
 /* ── R50: build ne sheet se settings li ya nahi (site par proof file) ─────── */
