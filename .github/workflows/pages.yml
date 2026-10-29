@@ -52,7 +52,7 @@ jobs:
           GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL || vars.GOOGLE_SHEETS_WEBAPP_URL }}
           GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN || vars.GOOGLE_SHEETS_TOKEN }}
           GOOGLE_SHEETS_SETTINGS_CSV_URL: ${{ secrets.GOOGLE_SHEETS_SETTINGS_CSV_URL || vars.GOOGLE_SHEETS_SETTINGS_CSV_URL }}
-          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID }}
+          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID || '1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo' }}
           STORE_API_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
         run: |
           echo "apps-script url set: $([ -n "$GOOGLE_SHEETS_WEBAPP_URL" ] && echo yes || echo no)"
@@ -83,7 +83,7 @@ jobs:
           GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL || vars.GOOGLE_SHEETS_WEBAPP_URL }}
           GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN || vars.GOOGLE_SHEETS_TOKEN }}
           GOOGLE_SHEETS_SETTINGS_CSV_URL: ${{ secrets.GOOGLE_SHEETS_SETTINGS_CSV_URL || vars.GOOGLE_SHEETS_SETTINGS_CSV_URL }}
-          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID }}
+          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID || '1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo' }}
           # Live store (Vercel ya Netlify) ka URL — iske hone se Pages par
           # checkout/payment/tracking seedha live API par jaate hain.
           # Live store ka URL. Netlify par shift karne ke baad sirf ek repo variable

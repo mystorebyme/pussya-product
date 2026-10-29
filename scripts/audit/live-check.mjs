@@ -143,6 +143,24 @@ check(
   check("Daily Special ribbon ya maroon announcement strip hai", /data-testid="daily-special"|data-testid="announcement/.test(html) || /Order in the bag/.test(html));
 }
 
+/* ── R50: build ne sheet se settings li ya nahi (site par proof file) ─────── */
+{
+  const proof = await get(`${BASE}preview-settings.json`);
+  if (proof.ok) {
+    try {
+      const data = JSON.parse(proof.body);
+      notes.push(`build settings: ${data.attempt ?? "?"}`);
+      check(
+        "build ne sheet se number liya (bake hua)",
+        data.whatsappSet === true,
+        data.whatsappSet ? `${data.numberDigits} digits` : `nahi — ${data.attempt ?? "unknown"}`,
+      );
+    } catch {
+      check("preview-settings.json parse hui", false, proof.body.slice(0, 80));
+    }
+  }
+}
+
 /* ── R50: sheet ka asli number live hai? (FAB seedha chat kholta hai) ─────── */
 {
   const numbers = [...html.matchAll(/wa\.me\/(\d{10,15})/g)].map((m) => m[1]).filter(Boolean);
@@ -170,7 +188,10 @@ check(
   const checkout = await get(`${BASE}checkout/`);
   check("checkout page 200", checkout.ok, `HTTP ${checkout.status}`);
   const checkoutHtml = checkout.body;
-  check("checkout has the form", checkoutHtml.includes('data-testid="checkout-form"'));
+  check(
+    "checkout page par WhatsApp hand-off copy hai",
+    /WhatsApp/.test(checkoutHtml) && !/Pay on UPI/.test(checkoutHtml),
+  );
   check(
     "checkout par koi payment step / UPI nahi",
     !checkoutHtml.includes('data-testid="checkout-payment-step"') && !/Pay on UPI/.test(checkoutHtml),

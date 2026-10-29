@@ -289,11 +289,16 @@ try {
   } else {
     console.log("preview settings → koi setting nahi mili (number runtime par API se aayega)");
   }
+  const settingsProof = {
+    at: new Date().toISOString(),
+    attempt: settingsAttempt,
+    whatsappSet: Boolean(liveSettings?.whatsapp),
+    numberDigits: (liveSettings?.whatsapp ?? "").replace(/\D/g, "").length,
+    dailySpecialSet: Boolean(liveSettings?.dailySpecial),
+    announcementSet: Boolean(liveSettings?.announcement),
+  };
   try {
-    fs.writeFileSync(
-      path.join(ROOT, ".pages-preview-settings.json"),
-      JSON.stringify({ at: new Date().toISOString(), attempt: settingsAttempt, settings: liveSettings ?? null }, null, 2),
-    );
+    fs.writeFileSync(path.join(ROOT, ".pages-preview-settings.json"), JSON.stringify(settingsProof, null, 2));
   } catch (ignored) {}
 
   execSync("npm run build --workspace @noor/web", {
@@ -315,6 +320,12 @@ try {
   fs.cpSync(out, dist, { recursive: true });
   // GitHub Pages Jekyll ko bypass kare
   fs.writeFileSync(path.join(dist, ".nojekyll"), "");
+  /**
+   * R50 diagnostics: build ne settings kis source se li, ye site par hi ek chhoti
+   * JSON file me — live check isi ko padh kar bata deta hai ki number bake hua
+   * tha ya nahi (number khud is file me nahi jaata).
+   */
+  fs.writeFileSync(path.join(dist, "preview-settings.json"), JSON.stringify(settingsProof, null, 2));
 
   /**
    * `/orders/…` deep links chalein: order shell ka HTML `404.html` ke roop me
