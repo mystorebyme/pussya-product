@@ -2,13 +2,13 @@
 
 > URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:41:27.624Z
+Ran: 2026-10-29T06:42:52.202Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 443177 bytes · 20ms |
+| ✅ | home page 200 — HTTP 200 · 451031 bytes · 16ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -163,14 +163,15 @@ Ran: 2026-10-29T06:41:27.624Z
 | ✅ | `/pages/about-us/` | 200 |
 | ✅ | `/collections/noors-choice/` | 200 |
 | ✅ | `/collections/wedding-collection/` | 200 |
-| ✅ | `/products/kumkum-elegant-anarkali-suit-set/` | 200 |
-| ✅ | `/products/aaysha-white-floral-farshi-suit-set/` | 200 |
-| ✅ | `/products/vibhutis-wine-coloured-anarkali-suit-set-td08/` | 200 |
-| ✅ | `/products/trendy-off-white-suit-set-with-embroidery-and-sequnce-work-7287143530628/` | 200 |
-| ✅ | `/products/luxury-dark-pink-anarkali-suit-set/` | 200 |
-| ✅ | `/products/premium-and-lightweight-anarkali-suit-set-1/` | 200 |
-| ✅ | `/products/keshvis-orange-coloured-anarkali-suit-set-td05/` | 200 |
-| ✅ | `/products/pink-flared-anarkali-suit-set/` | 200 |
+| ✅ | `/products/premium-ivory-anarkali-with-royal-finish-elegance-anarkali-suit-set/` | 200 |
+| ✅ | `/products/western-style-sleeve-premium-readymade-kalamkari-designer-gown/` | 200 |
+| ✅ | `/products/star-georgette-slik-anarkali-suit-with-skirt/` | 200 |
+| ✅ | `/products/star-georgette-slik-anarkali-suit-with-skirt-10462901338244/` | 200 |
+| ✅ | `/products/ellies-party-wear-anarkali-suit-set/` | 200 |
+| ✅ | `/products/liksh-embroidered-georgette-anarkali-fully-stitched-suit-set-121/` | 200 |
+| ✅ | `/products/new-anarkali-2-layer-gown-duppta-set-ready-to-wear-fully-sttiched-dkb-6/` | 200 |
+| ✅ | `/products/noors-premium-quality-traditional-lehenga-choli-145/` | 200 |
+| ✅ | `/products/aadhya-purple-anarkali-suit-set-td01/` | 200 |
 | ✅ | `/collections/trending/` | 200 |
 | ✅ | `/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -179,7 +180,6 @@ Ran: 2026-10-29T06:41:27.624Z
 | ✅ | `/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/products/nehas-premium-anarkali-suit-set/` | 200 |
-| ✅ | `/products/premium-anarkali-suit-set-3-piece/` | 200 |
 
 ## Summary
 
@@ -191,16 +191,18 @@ Ran: 2026-10-29T06:41:27.624Z
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | http://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.111.153,185.199.110.153,185.199.108.153,185.199.109.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8003::153,2606:50c0:8002::153,2606:50c0:8000::153,2606:50c0:8001::153 | 301 | http://noorethnicwear.store/ |
+| https://noorethnicwear.store/ | 185.199.110.153,185.199.109.153,185.199.111.153,185.199.108.153 | 000 | 000 - |
 
 ### DNS records (Google DNS se poocha gaya)
 
 | name | type | value |
 | --- | --- | --- |
+| noorethnicwear.store | A | 185.199.111.153 |
 | noorethnicwear.store | A | 185.199.108.153 |
 | noorethnicwear.store | A | 185.199.109.153 |
 | noorethnicwear.store | A | 185.199.110.153 |
-| noorethnicwear.store | A | 185.199.111.153 |
-| www.noorethnicwear.store | A | 104.21.43.105 |
 | www.noorethnicwear.store | A | 172.67.178.35 |
+| www.noorethnicwear.store | A | 104.21.43.105 |
+
+⚠️ `www.noorethnicwear.store` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)
