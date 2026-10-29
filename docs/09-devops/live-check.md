@@ -1,14 +1,14 @@
-# Live site check — https://mystorebyme.github.io/pussya-product/
+# Live site check — http://noorethnicwear.store/
 
-> URLs tried (first live one wins): https://mystorebyme.github.io/pussya-product/ · https://noorethnicwear.store/
+> URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:09:18.569Z
+Ran: 2026-10-29T06:42:52.202Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 453652 bytes · 21ms |
+| ✅ | home page 200 — HTTP 200 · 451031 bytes · 16ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -18,7 +18,7 @@ Ran: 2026-10-29T06:09:18.569Z
 | ✅ | WhatsApp FAB home par (bottom-right) |
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
-| ✅ | build ne sheet se number liya (bake hua) — 10 digits |
+| ✅ | build ne sheet se number liya (bake hua) — 12 digits |
 | ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
 | ✅ | number 10 digit ka valid Indian mobile hai — 9785XXXXXX |
@@ -27,14 +27,14 @@ Ran: 2026-10-29T06:09:18.569Z
 | ✅ | checkout par koi payment step / UPI nahi |
 | ✅ | checkout copy English hai (koi Hinglish marker nahi) |
 | ✅ | header logo <picture> mila |
-| ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=4 · /pussya-product/images/brand/logo-tablet.png?v=4 · /pussya-product/images/brand/logo-mobile.png?v=4 |
+| ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /images/brand/logo-desktop.png?v=4 · /images/brand/logo-tablet.png?v=4 · /images/brand/logo-mobile.png?v=4 |
 | ✅ | logo img par alt text hai |
 | ✅ | logo img par `hidden` / `opacity-0` jaisi class nahi |
 
 <details><summary>header markup (proof)</summary>
 
 ```html
-<a aria-label="Noor Ethnic Wear home" class="col-start-2 row-start-1 flex min-w-0 shrink-0 items-center justify-center lg:col-start-2 lg:justify-center" href="/pussya-product/"><span data-size="header" data-variant="header" class="brand-lockup inline-flex items-center  "><picture data-tone="dark"><source media="(min-width:1024px)" srcSet="/pussya-product/images/brand/logo-desktop.png?v=4"/><source media="(min-width:768px)" srcSet="/pussya-product/images/brand/logo-tablet.png?v=4"/><img src="/pussya-product/images/brand/logo-mobile.png?v=4" alt="Noor Ethnic Wear" width="374" height="138" decoding="async" fetchPriority="high" class="block w-auto max-w-full object-contain"/></picture></span></a>
+<a aria-label="Noor Ethnic Wear home" class="col-start-2 row-start-1 flex min-w-0 shrink-0 items-center justify-center lg:col-start-2 lg:justify-center" href="/"><span data-size="header" data-variant="header" class="brand-lockup inline-flex items-center  "><picture data-tone="dark"><source media="(min-width:1024px)" srcSet="/images/brand/logo-desktop.png?v=4"/><source media="(min-width:768px)" srcSet="/images/brand/logo-tablet.png?v=4"/><img src="/images/brand/logo-mobile.png?v=4" alt="Noor Ethnic Wear" width="374" height="138" decoding="async" fetchPriority="high" class="block w-auto max-w-full object-contain"/></picture></span></a>
 ```
 
 </details>
@@ -51,7 +51,7 @@ Ran: 2026-10-29T06:09:18.569Z
 | ✅ | apple touch 180 (`images/brand/logo-mark-180.png`) | 200 | image/png | 11 KB |
 | ✅ | PWA 192 (`images/brand/logo-mark-192.png`) | 200 | image/png | 13 KB |
 | ✅ | PWA 512 (`images/brand/logo-mark-512.png`) | 200 | image/png | 77 KB |
-| ✅ | manifest (`manifest.webmanifest`) | 200 | text | 572 B |
+| ✅ | manifest (`manifest.webmanifest`) | 200 | text | 512 B |
 | ✅ | hero desktop (`images/banners/banner-desktop.webp`) | 200 | image/webp | 279 KB |
 | ✅ | hero tablet (`images/banners/banner-tablet.webp`) | 200 | image/webp | 279 KB |
 | ✅ | hero mobile (`images/banners/banner-mobile.webp`) | 200 | image/webp | 149 KB |
@@ -103,7 +103,7 @@ Ran: 2026-10-29T06:09:18.569Z
 | --- | --- |
 | ✅ | title — Noor Ethnic Wear | Designer Anarkali Suits, Lehenga Choli &amp; Suit S |
 | ✅ | meta description — Shop designer Anarkali suits, lehanga choli and printed suit |
-| ✅ | canonical — https://mystorebyme.github.io/pussya-product/ |
+| ✅ | canonical — https://noorethnicwear.store/ |
 | ✅ | lang attribute |
 | ✅ | favicon links |
 | ✅ | root `/favicon.ico` 200 hai (browser ka default request) — HTTP 200 · image/vnd.microsoft.icon · 2054 bytes |
@@ -140,56 +140,69 @@ Ran: 2026-10-29T06:09:18.569Z
 
 | result | link | HTTP |
 | --- | --- | --- |
-| ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/08s~r_fpivrn3.css` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
-| ✅ | `/pussya-product/manifest.webmanifest` | 200 |
-| ✅ | `/pussya-product/favicon.ico` | 200 |
-| ✅ | `/pussya-product/images/brand/logo-mark-512.png` | 200 |
-| ✅ | `/pussya-product/images/brand/logo-mark-128.png` | 200 |
-| ✅ | `/pussya-product/images/brand/logo-mark-192.png` | 200 |
-| ✅ | `/pussya-product/images/brand/logo-mark-180.png` | 200 |
-| ✅ | `/pussya-product/collections/sale/` | 200 |
-| ✅ | `/pussya-product/` | 200 |
-| ✅ | `/pussya-product/account/` | 200 |
-| ✅ | `/pussya-product/wishlist/` | 200 |
-| ✅ | `/pussya-product/collections/` | 200 |
-| ✅ | `/pussya-product/collections/party-wear-gown/` | 200 |
-| ✅ | `/pussya-product/collections/lehnga-choli/` | 200 |
-| ✅ | `/pussya-product/collections/printed-suit-set/` | 200 |
-| ✅ | `/pussya-product/collections/best-seller/` | 200 |
-| ✅ | `/pussya-product/collections/new-arrivals/` | 200 |
-| ✅ | `/pussya-product/pages/contact/` | 200 |
-| ✅ | `/pussya-product/pages/about-us/` | 200 |
-| ✅ | `/pussya-product/collections/noors-choice/` | 200 |
-| ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-sanayas-readymade-alia-cut-gown-with-dupatta-set-kkka-1077/` | 200 |
-| ✅ | `/pussya-product/products/keshvis-orange-coloured-anarkali-suit-set-td05/` | 200 |
-| ✅ | `/pussya-product/products/anarkali-gown-duppta-full-set-with-pent-ready-to-wear-dkb-241/` | 200 |
-| ✅ | `/pussya-product/products/sparkling-green-georgette-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nirus-noir-black-elegance-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nirus-noir-black-elegance-anarkali-suit-set-10511760359556/` | 200 |
-| ✅ | `/pussya-product/products/malini-anarkali-dupatta-set/` | 200 |
-| ✅ | `/pussya-product/products/siyara-pink-color-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/minisa-designer-embroidered-zari-sequins-work-gown/` | 200 |
-| ✅ | `/pussya-product/collections/trending/` | 200 |
-| ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
-| ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
-| ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
-| ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/images/brand/logo-fluid.png` | 200 |
+| ✅ | `/_next/static/chunks/08s~r_fpivrn3.css` | 200 |
+| ✅ | `/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
+| ✅ | `/manifest.webmanifest` | 200 |
+| ✅ | `/favicon.ico` | 200 |
+| ✅ | `/images/brand/logo-mark-512.png` | 200 |
+| ✅ | `/images/brand/logo-mark-128.png` | 200 |
+| ✅ | `/images/brand/logo-mark-192.png` | 200 |
+| ✅ | `/images/brand/logo-mark-180.png` | 200 |
+| ✅ | `/collections/sale/` | 200 |
+| ✅ | `/` | 200 |
+| ✅ | `/account/` | 200 |
+| ✅ | `/wishlist/` | 200 |
+| ✅ | `/collections/` | 200 |
+| ✅ | `/collections/party-wear-gown/` | 200 |
+| ✅ | `/collections/lehnga-choli/` | 200 |
+| ✅ | `/collections/printed-suit-set/` | 200 |
+| ✅ | `/collections/best-seller/` | 200 |
+| ✅ | `/collections/new-arrivals/` | 200 |
+| ✅ | `/pages/contact/` | 200 |
+| ✅ | `/pages/about-us/` | 200 |
+| ✅ | `/collections/noors-choice/` | 200 |
+| ✅ | `/collections/wedding-collection/` | 200 |
+| ✅ | `/products/premium-ivory-anarkali-with-royal-finish-elegance-anarkali-suit-set/` | 200 |
+| ✅ | `/products/western-style-sleeve-premium-readymade-kalamkari-designer-gown/` | 200 |
+| ✅ | `/products/star-georgette-slik-anarkali-suit-with-skirt/` | 200 |
+| ✅ | `/products/star-georgette-slik-anarkali-suit-with-skirt-10462901338244/` | 200 |
+| ✅ | `/products/ellies-party-wear-anarkali-suit-set/` | 200 |
+| ✅ | `/products/liksh-embroidered-georgette-anarkali-fully-stitched-suit-set-121/` | 200 |
+| ✅ | `/products/new-anarkali-2-layer-gown-duppta-set-ready-to-wear-fully-sttiched-dkb-6/` | 200 |
+| ✅ | `/products/noors-premium-quality-traditional-lehenga-choli-145/` | 200 |
+| ✅ | `/products/aadhya-purple-anarkali-suit-set-td01/` | 200 |
+| ✅ | `/collections/trending/` | 200 |
+| ✅ | `/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
+| ✅ | `/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
+| ✅ | `/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
+| ✅ | `/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
+| ✅ | `/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
+| ✅ | `/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
 ✔ Saare live checks pass.
 
-> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · repo-snapshot: ok · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
+> build settings: apps-script: ok
 
 ## URLs probed (DNS + HTTP)
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8003::153,2606:50c0:8000::153,2606:50c0:8002::153,2606:50c0:8001::153 | 301 | http://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.108.153,185.199.111.153,185.199.110.153,185.199.109.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8003::153,2606:50c0:8002::153,2606:50c0:8000::153,2606:50c0:8001::153 | 301 | http://noorethnicwear.store/ |
+| https://noorethnicwear.store/ | 185.199.110.153,185.199.109.153,185.199.111.153,185.199.108.153 | 000 | 000 - |
+
+### DNS records (Google DNS se poocha gaya)
+
+| name | type | value |
+| --- | --- | --- |
+| noorethnicwear.store | A | 185.199.111.153 |
+| noorethnicwear.store | A | 185.199.108.153 |
+| noorethnicwear.store | A | 185.199.109.153 |
+| noorethnicwear.store | A | 185.199.110.153 |
+| www.noorethnicwear.store | A | 172.67.178.35 |
+| www.noorethnicwear.store | A | 104.21.43.105 |
+
+⚠️ `www.noorethnicwear.store` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)

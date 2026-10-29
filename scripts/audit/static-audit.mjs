@@ -10,7 +10,7 @@
  *   • favicon + apple-touch-icon ka size file ke asli size se match
  *   • kitne pages, kitne links checked
  *
- *   node scripts/audit/static-audit.mjs [distDir] [--base=/pussya-product/]
+ *   node scripts/audit/static-audit.mjs [distDir] [--base=/]
  *
  * Exit 1 = kuch toota mila (CI gate).
  */
@@ -21,7 +21,9 @@ const ROOT = path.resolve(import.meta.dirname, "..", "..");
 const args = process.argv.slice(2);
 const distArg = args.find((arg) => !arg.startsWith("--")) ?? "dist";
 const DIST = path.isAbsolute(distArg) ? distArg : path.join(ROOT, distArg);
-const BASE = (args.find((arg) => arg.startsWith("--base="))?.slice(7) ?? "/pussya-product/").replace(/\/?$/, "/");
+// Site custom domain (noorethnicwear.store) ke root par deploy hoti hai — isliye
+// default base `/`. Base path wala build ho to `--base=/pussya-product/` dijiye.
+const BASE = (process.env.PAGES_BASE_PATH || args.find((arg) => arg.startsWith("--base="))?.slice(7) || "/").replace(/\/?$/, "/");
 
 if (!fs.existsSync(DIST)) {
   console.error(`dist folder nahi mila: ${DIST}\nPehle: node scripts/pages/build-preview.mjs`);

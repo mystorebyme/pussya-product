@@ -322,6 +322,28 @@ try {
    */
   const liveSettings = await resolveSettings();
   /**
+   * Sheet/API se jo mila use repo snapshot se **per-key** merge karte hain.
+   * Wajah: owner ki sheet me koi naya key (jaise `daily_special`) ho aur unka
+   * deployed Apps Script purana ho, to wo key response me hi nahi aati. Aise me
+   * snapshot ki value chalti hai — baaki sab kuch sheet se hi aata hai.
+   */
+  const snapshotSettings = (() => {
+    try {
+      const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "config/store-settings.snapshot.json"), "utf8"));
+      return normaliseSettings(raw);
+    } catch {
+      return null;
+    }
+  })();
+  const resolvedSettings = (() => {
+    if (!liveSettings && !snapshotSettings) return null;
+    const merged = { ...(snapshotSettings ?? {}) };
+    for (const [key, value] of Object.entries(liveSettings ?? {})) {
+      if (typeof value === "string" && value.trim()) merged[key] = value.trim();
+    }
+    return merged;
+  })();
+  /**
    * Sheet ki value hi jeetti hai. Sheet na padh paaye (private sheet / store down)
    * to repo variable se diya hua fallback chalta hai — `vars.STORE_WHATSAPP` /
    * `secrets.STORE_WHATSAPP` (pages.yml se env me aata hai), aur last me
@@ -331,12 +353,12 @@ try {
   const fallbackWhatsapp = (process.env.NEXT_PUBLIC_WHATSAPP ?? "").trim();
   const fallbackDaily = (process.env.NEXT_PUBLIC_DAILY_SPECIAL ?? "").trim();
   const fallbackAnnounce = (process.env.NEXT_PUBLIC_ANNOUNCEMENT ?? "").trim();
-  if (liveSettings?.whatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = String(liveSettings.whatsapp);
+  if (resolvedSettings?.whatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = String(resolvedSettings.whatsapp);
   else if (fallbackWhatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = fallbackWhatsapp;
-  if (liveSettings?.supportPhone) previewEnv.NEXT_PUBLIC_SUPPORT_PHONE = String(liveSettings.supportPhone);
-  if (liveSettings?.dailySpecial) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = String(liveSettings.dailySpecial);
+  if (resolvedSettings?.supportPhone) previewEnv.NEXT_PUBLIC_SUPPORT_PHONE = String(resolvedSettings.supportPhone);
+  if (resolvedSettings?.dailySpecial) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = String(resolvedSettings.dailySpecial);
   else if (fallbackDaily) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = fallbackDaily;
-  if (liveSettings?.announcement) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = String(liveSettings.announcement);
+  if (resolvedSettings?.announcement) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = String(resolvedSettings.announcement);
   else if (fallbackAnnounce) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = fallbackAnnounce;
   if (Object.keys(previewEnv).length) {
     console.log(`preview settings → ${Object.keys(previewEnv).join(", ")}`);
@@ -346,10 +368,10 @@ try {
   const settingsProof = {
     at: new Date().toISOString(),
     attempt: settingsAttempt,
-    whatsappSet: Boolean(liveSettings?.whatsapp),
-    numberDigits: (liveSettings?.whatsapp ?? "").replace(/\D/g, "").length,
-    dailySpecialSet: Boolean(liveSettings?.dailySpecial),
-    announcementSet: Boolean(liveSettings?.announcement),
+    whatsappSet: Boolean(resolvedSettings?.whatsapp),
+    numberDigits: (resolvedSettings?.whatsapp ?? "").replace(/\D/g, "").length,
+    dailySpecialSet: Boolean(resolvedSettings?.dailySpecial),
+    announcementSet: Boolean(resolvedSettings?.announcement),
   };
   try {
     fs.writeFileSync(path.join(ROOT, ".pages-preview-settings.json"), JSON.stringify(settingsProof, null, 2));
@@ -395,7 +417,7 @@ try {
       path.join(ordersDir, "index.html"),
       fs.readFileSync(orderShell, "utf8").replace(
         "</head>",
-        '<meta name="robots" content="noindex"><script>location.replace("/" + (location.pathname.split("/")[1] || "") + "/track-order/");</script></head>',
+        '<meta name="robots" content="noindex"><script>location.replace("' + BASE_PATH + '/track-order/");</script></head>',
       ),
     );
     console.log("order shell → dist/404.html (deep links ke liye)");

@@ -14,12 +14,13 @@ on:
       - main
       - arena/f2c07741-pussya-product
       - arena/47281d99-pussya-product
+      - arena/260f16c9-pussya-product
   workflow_dispatch:
     inputs:
       base_url:
         description: "Site URL"
         required: false
-        default: "https://mystorebyme.github.io/pussya-product/"
+        default: "https://noorethnicwear.store/"
 
 permissions:
   contents: write
@@ -35,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BASE_URL: ${{ inputs.base_url || 'https://mystorebyme.github.io/pussya-product/' }}
+      BASE_URL: ${{ inputs.base_url || 'https://noorethnicwear.store/' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,6 +61,40 @@ jobs:
               read -r code redir <<<"$(curl -sS -o /dev/null -m 20 -w '%{http_code} %{redirect_url}' "$u" 2>/dev/null || echo '000 -')"
               echo "| $u | $dns | $code | ${redir:--} |"
             done
+            echo ""
+            echo "### DNS records (Google DNS se poocha gaya)"
+            echo ""
+            echo "| name | type | value |"
+            echo "| --- | --- | --- |"
+            for pair in "noorethnicwear.store A" "noorethnicwear.store AAAA" "noorethnicwear.store CNAME" "www.noorethnicwear.store A" "www.noorethnicwear.store CNAME"; do
+              name=${pair% *}
+              type=${pair#* }
+              curl -sS -m 15 "https://dns.google/resolve?name=${name}&type=${type}" \
+                | node -e '
+                  let raw = "";
+                  process.stdin.on("data", (d) => (raw += d)).on("end", () => {
+                    const [name, type] = process.argv.slice(1);
+                    try {
+                      const json = JSON.parse(raw);
+                      const wanted = { A: 1, CNAME: 5, AAAA: 28 }[type];
+                      for (const answer of json.Answer ?? []) {
+                        if (answer.type !== wanted) continue;
+                        console.log(`| ${name} | ${type} | ${String(answer.data).slice(0, 80)} |`);
+                      }
+                    } catch {}
+                  });
+                ' "$name" "$type" || true
+            done
+            www_cname=$(curl -sS -m 15 "https://dns.google/resolve?name=www.noorethnicwear.store&type=CNAME" | node -e '
+              let raw="";process.stdin.on("data",d=>raw+=d).on("end",()=>{
+                try{const j=JSON.parse(raw);const a=(j.Answer||[]).find(x=>x.type===5);if(a)console.log(String(a.data));}catch{}
+              });' || true)
+            echo ""
+            if [ -n "$www_cname" ]; then
+              echo "www CNAME → $www_cname"
+            else
+              echo "⚠️ \`www.noorethnicwear.store\` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)"
+            fi
           } > /tmp/urls.md
           cat /tmp/urls.md
 
