@@ -42,3 +42,6 @@ apps/web/.dev.vars
 .dev.vars
 .wrangler/
 apps/web/.wrangler/
+
+# Pages preview build artifact (settings snapshot, never committed)
+.pages-preview-settings.json
