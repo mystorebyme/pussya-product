@@ -122,11 +122,28 @@ jobs:
           # R50b: browser seedha Apps Script par order bhejta hai (Sheet me row)
           NEXT_PUBLIC_SHEETS_WEBAPP_URL: ${{ vars.GOOGLE_SHEETS_WEBAPP_URL || secrets.GOOGLE_SHEETS_WEBAPP_URL || 'https://script.google.com/macros/s/AKfycbxAeIVP9gGYeBoVcfXyIv5hwoQ_SK1grihBu3hqSR2nJ-KEzqi_vtLwt_BfhFWjE62CVg/exec' }}
         run: |
-          node scripts/pages/build-preview.mjs
+          set -o pipefail
+          node scripts/pages/build-preview.mjs 2>&1 | tee build.log
           # custom domain: Pages ko CNAME chahiye (domain Settings me bhi set hai)
           if [ -n "${CUSTOM_DOMAIN:-}" ]; then echo "$CUSTOM_DOMAIN" > dist/CNAME; fi
           echo "── settings used by this build ──"
           cat .pages-preview-settings.json || true
+
+      # Fail hone par log chat me/GitHub par padhne layak ho: last lines ek
+      # annotation me (aur artifact me poora log) — warna `gh run view --log`
+      # kabhi-kabhi EOF deta hai.
+      - name: Build log (failure)
+        if: failure()
+        run: |
+          echo "::error::build failed — last 25 lines:"
+          tail -25 build.log 2>/dev/null | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-log
+          path: build.log
+          retention-days: 3
 
       # Pages site pehle se enable hai (Settings → Pages → Source: GitHub Actions).
       # `enablement: true` se agar enable nahi hai to workflow khud try karta hai.
