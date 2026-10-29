@@ -20,29 +20,207 @@ const TMP = path.join(ROOT, ".pages-preview-tmp");
 const BASE_PATH = process.env.PAGES_BASE_PATH ?? "";
 
 
-/**
- * Live store ki `/api/settings` — sirf public keys (number, Daily Special,
- * announcement). Kuch bhi na mile to `null` (build chalta rahega).
- */
-async function readLiveSettings(base) {
-  if (!base) return null;
-  try {
-    const response = await fetch(`${base.replace(/\/$/, "")}/api/settings`, {
-      signal: AbortSignal.timeout(8000),
+/* ═══════════════════════════ settings (R50) ═════════════════════════════════
+ * Owner ki Google Sheet hi settings ka source hai — par GitHub Pages par koi
+ * server nahi hota, isliye build ke waqt hi values padhni padti hain.
+ *
+ * Order (jo pehle mile wahi jeetta hai):
+ *   1. Apps Script web app  → GOOGLE_SHEETS_WEBAPP_URL [+ GOOGLE_SHEETS_TOKEN]
+ *   2. Published Settings CSV → GOOGLE_SHEETS_SETTINGS_CSV_URL
+ *   3. Sheet ki `gviz` CSV   → SHEET_ID (sheet "anyone with link" ho to)
+ *   4. Live store ka API     → NEXT_PUBLIC_API_BASE_URL/api/settings
+ *
+ * Kuch bhi na mile to build nahi rukta; bas number bake nahi hota aur runtime
+ * par browser wahi (4) dobara try karta hai.
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+/** CSV ek line → fields (quoted comma/quote bhi sahi) */
+function parseCsvLine(line) {
+  const fields = [];
+  let current = "";
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+    if (quoted) {
+      if (char === '"' && line[index + 1] === '"') {
+        current += '"';
+        index += 1;
+      } else if (char === '"') {
+        quoted = false;
+      } else {
+        current += char;
+      }
+    } else if (char === '"') {
+      quoted = true;
+    } else if (char === ",") {
+      fields.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  fields.push(current);
+  return fields;
+}
+
+/** Settings CSV (`key,value` rows) → flat object */
+function settingsFromCsv(csv) {
+  const rows = {};
+  for (const line of csv.split(/\r?\n/)) {
+    const fields = parseCsvLine(line);
+    if (fields.length < 2) continue;
+    const key = fields[0].replace(/\s+/g, " ").trim().toLowerCase().replace(/ /g, "_");
+    const value = fields[1].trim();
+    if (!key || key === "key" || !value) continue;
+    rows[key] = value;
+  }
+  return rows;
+}
+
+/** Alag-alag naam → ek shape */
+function normaliseSettings(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const source = raw.settings ?? raw.data ?? raw;
+  if (!source || typeof source !== "object") return null;
+  const pick = (...keys) => {
+    for (const key of keys) {
+      const value = source[key];
+      if (typeof value === "string" && value.trim()) return value.trim();
+      if (typeof value === "number" && Number.isFinite(value)) return String(value);
+    }
+    return "";
+  };
+  const settings = {
+    whatsapp: pick("whatsapp", "whatsapp_number", "WhatsApp"),
+    supportPhone: pick("support_phone", "supportPhone", "phone"),
+    dailySpecial: pick("daily_special", "dailySpecial", "special_bar"),
+    announcement: pick("announcement", "Announcement"),
+    upiId: pick("upi_id", "upiId", "upi"),
+  };
+  return Object.values(settings).some(Boolean) ? settings : null;
+}
+
+let settingsAttempt = null;
+
+async function resolveSettings() {
+  const attempts = [];
+  const tried = async (label, run) => {
+    try {
+      const value = await run();
+      attempts.push(`${label}: ${value ? "ok" : "empty"}`);
+      return value ?? null;
+    } catch (error) {
+      attempts.push(`${label}: ${String(error?.message ?? error).slice(0, 80)}`);
+      return null;
+    }
+  };
+
+  const webapp = (process.env.GOOGLE_SHEETS_WEBAPP_URL ?? "").trim();
+  const first = await tried("apps-script", async () => {
+    if (!/^https:\/\/script\.google\.com\//.test(webapp)) return null;
+    const endpoint = new URL(webapp);
+    endpoint.searchParams.set("action", "settings");
+    const token = (process.env.GOOGLE_SHEETS_TOKEN ?? "").trim();
+    if (token) endpoint.searchParams.set("token", token);
+    endpoint.searchParams.set("_ts", String(Date.now()));
+    const response = await fetch(endpoint, {
+      signal: AbortSignal.timeout(12_000),
       headers: { accept: "application/json" },
     });
-    if (!response.ok) return null;
-    const payload = await response.json();
-    const data = payload?.data ?? payload;
-    if (!data || typeof data !== "object") return null;
-    return {
-      whatsapp: typeof data.whatsapp === "string" ? data.whatsapp : "",
-      dailySpecial: typeof data.dailySpecial === "string" ? data.dailySpecial : "",
-      announcement: typeof data.announcement === "string" ? data.announcement : "",
-    };
-  } catch {
-    return null;
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return normaliseSettings(await response.json());
+  });
+  if (first) {
+    settingsAttempt = attempts.join(" · ");
+    console.log(`settings ← apps-script (${settingsAttempt})`);
+    return first;
   }
+
+  const csvUrl = (process.env.GOOGLE_SHEETS_SETTINGS_CSV_URL ?? "").trim();
+  const second = await tried("published-csv", async () => {
+    if (!/^https:\/\/docs\.google\.com\/spreadsheets\//.test(csvUrl)) return null;
+    const response = await fetch(csvUrl, { signal: AbortSignal.timeout(12_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return normaliseSettings(settingsFromCsv(await response.text()));
+  });
+  if (second) {
+    settingsAttempt = attempts.join(" · ");
+    console.log(`settings ← published-csv (${settingsAttempt})`);
+    return second;
+  }
+
+  const sheetId = (process.env.SHEET_ID ?? process.env.SHEET_EXPECTED_ID ?? "").trim();
+  const third = await tried("sheet-gviz", async () => {
+    if (!/^[A-Za-z0-9_-]{20,}$/.test(sheetId)) return null;
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=Settings`;
+    const response = await fetch(url, { signal: AbortSignal.timeout(12_000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const body = await response.text();
+    if (!body.includes(",")) throw new Error("not a CSV (sheet is private?)");
+    return normaliseSettings(settingsFromCsv(body));
+  });
+  if (third) {
+    settingsAttempt = attempts.join(" · ");
+    console.log(`settings ← sheet-gviz (${settingsAttempt})`);
+    return third;
+  }
+
+  /**
+   * Live store — agar STORE_API_URL set na ho (ya wo down ho) to owner ke
+   * purane/possible hosts bhi try hote hain. Jo pehla jawab de, wahi settings
+   * deta hai; sab fail ho to sirf log.
+   */
+  /**
+   * Repo snapshot — owner ki Sheet ka mirror (`config/store-settings.snapshot.json`).
+   * Sheet private ho aur koi secret set na ho to bhi site par asli number rehta hai.
+   * Sheet/API ka jawab aane par ye file kabhi istemaal nahi hoti.
+   */
+  const snapshotPath = path.join(ROOT, "config/store-settings.snapshot.json");
+  const fifth = await tried("repo-snapshot", async () => {
+    if (!fs.existsSync(snapshotPath)) return null;
+    const raw = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
+    return normaliseSettings(raw);
+  });
+
+  const configuredBase = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").trim();
+  const candidates = [
+    configuredBase,
+    "https://noor-ethnic-wear.vercel.app",
+    "https://noorethnicwear.vercel.app",
+    "https://noor-ethnic-wear.netlify.app",
+    "https://noorethnicwear.netlify.app",
+  ].filter((value, index, list) => value && list.indexOf(value) === index);
+
+  let fourth = null;
+  for (const base of candidates) {
+    const value = await tried(
+      `live-store ${new URL(base).host}`,
+      async () => {
+        const response = await fetch(`${base.replace(/\/$/, "")}/api/settings`, {
+          signal: AbortSignal.timeout(10_000),
+          headers: { accept: "application/json" },
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return normaliseSettings(await response.json());
+      },
+    );
+    if (value) {
+      fourth = value;
+      process.env.NEXT_PUBLIC_API_BASE_URL = base;
+      break;
+    }
+  }
+  settingsAttempt = attempts.join(" · ");
+  if (fourth) {
+    console.log(`settings ← live-store (${settingsAttempt})`);
+    return fourth;
+  }
+  if (fifth) {
+    console.log(`settings ← repo-snapshot (${settingsAttempt})`);
+    return fifth;
+  }
+  console.log(`settings ← kuch nahi mila (${settingsAttempt})`);
+  return null;
 }
 
 const moved = [];
@@ -142,14 +320,40 @@ try {
    * maujood hota hai (JS ka intezaar nahi), aur runtime par sheet ki nayi value
    * phir bhi jeetti hai. Live store na mile to build fail nahi hota.
    */
-  const liveSettings = await readLiveSettings(process.env.NEXT_PUBLIC_API_BASE_URL ?? "");
+  const liveSettings = await resolveSettings();
+  /**
+   * Sheet ki value hi jeetti hai. Sheet na padh paaye (private sheet / store down)
+   * to repo variable se diya hua fallback chalta hai — `vars.STORE_WHATSAPP` /
+   * `secrets.STORE_WHATSAPP` (pages.yml se env me aata hai), aur last me
+   * browser runtime par API se number maangta hai.
+   */
   const previewEnv = {};
+  const fallbackWhatsapp = (process.env.NEXT_PUBLIC_WHATSAPP ?? "").trim();
+  const fallbackDaily = (process.env.NEXT_PUBLIC_DAILY_SPECIAL ?? "").trim();
+  const fallbackAnnounce = (process.env.NEXT_PUBLIC_ANNOUNCEMENT ?? "").trim();
   if (liveSettings?.whatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = String(liveSettings.whatsapp);
+  else if (fallbackWhatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = fallbackWhatsapp;
+  if (liveSettings?.supportPhone) previewEnv.NEXT_PUBLIC_SUPPORT_PHONE = String(liveSettings.supportPhone);
   if (liveSettings?.dailySpecial) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = String(liveSettings.dailySpecial);
+  else if (fallbackDaily) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = fallbackDaily;
   if (liveSettings?.announcement) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = String(liveSettings.announcement);
+  else if (fallbackAnnounce) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = fallbackAnnounce;
   if (Object.keys(previewEnv).length) {
     console.log(`preview settings → ${Object.keys(previewEnv).join(", ")}`);
+  } else {
+    console.log("preview settings → koi setting nahi mili (number runtime par API se aayega)");
   }
+  const settingsProof = {
+    at: new Date().toISOString(),
+    attempt: settingsAttempt,
+    whatsappSet: Boolean(liveSettings?.whatsapp),
+    numberDigits: (liveSettings?.whatsapp ?? "").replace(/\D/g, "").length,
+    dailySpecialSet: Boolean(liveSettings?.dailySpecial),
+    announcementSet: Boolean(liveSettings?.announcement),
+  };
+  try {
+    fs.writeFileSync(path.join(ROOT, ".pages-preview-settings.json"), JSON.stringify(settingsProof, null, 2));
+  } catch (ignored) {}
 
   execSync("npm run build --workspace @noor/web", {
     cwd: ROOT,
@@ -170,6 +374,12 @@ try {
   fs.cpSync(out, dist, { recursive: true });
   // GitHub Pages Jekyll ko bypass kare
   fs.writeFileSync(path.join(dist, ".nojekyll"), "");
+  /**
+   * R50 diagnostics: build ne settings kis source se li, ye site par hi ek chhoti
+   * JSON file me — live check isi ko padh kar bata deta hai ki number bake hua
+   * tha ya nahi (number khud is file me nahi jaata).
+   */
+  fs.writeFileSync(path.join(dist, "preview-settings.json"), JSON.stringify(settingsProof, null, 2));
 
   /**
    * `/orders/…` deep links chalein: order shell ka HTML `404.html` ke roop me

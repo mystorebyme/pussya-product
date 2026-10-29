@@ -143,6 +143,65 @@ check(
   check("Daily Special ribbon ya maroon announcement strip hai", /data-testid="daily-special"|data-testid="announcement/.test(html) || /Order in the bag/.test(html));
 }
 
+/* ── R50: build ne sheet se settings li ya nahi (site par proof file) ─────── */
+{
+  const proof = await get(`${BASE}preview-settings.json`);
+  if (proof.ok) {
+    try {
+      const data = JSON.parse(proof.body);
+      notes.push(`build settings: ${data.attempt ?? "?"}`);
+      check(
+        "build ne sheet se number liya (bake hua)",
+        data.whatsappSet === true,
+        data.whatsappSet ? `${data.numberDigits} digits` : `nahi — ${data.attempt ?? "unknown"}`,
+      );
+    } catch {
+      check("preview-settings.json parse hui", false, proof.body.slice(0, 80));
+    }
+  }
+}
+
+/* ── R50: sheet ka asli number live hai? (FAB seedha chat kholta hai) ─────── */
+{
+  const numbers = [...html.matchAll(/wa\.me\/(\d{10,15})/g)].map((m) => m[1]).filter(Boolean);
+  const unique = [...new Set(numbers)];
+  check(
+    "WhatsApp number sheet se live aaya (wa.me/<10+ digits>)",
+    unique.length > 0,
+    unique.length ? `${unique.length} link · …${unique[0].slice(-4)}` : "wa.me par number nahi mila (chat picker = sheet se number nahi aaya)",
+  );
+  check(
+    "number ek hi hai (header/footer/FAB me mismatch nahi)",
+    unique.length <= 1,
+    unique.join(" · "),
+  );
+  const clean = (value) => value.replace(/\D/g, "").slice(-10);
+  check(
+    "number 10 digit ka valid Indian mobile hai",
+    unique.length > 0 && /^[6-9]\d{9}$/.test(clean(unique[0])),
+    unique.length ? clean(unique[0]).replace(/\d{6}$/, "XXXXXX") : "—",
+  );
+}
+
+/* ── R50: checkout par WhatsApp hand-off (koi payment step nahi) ──────────── */
+{
+  const checkout = await get(`${BASE}checkout/`);
+  check("checkout page 200", checkout.ok, `HTTP ${checkout.status}`);
+  const checkoutHtml = checkout.body;
+  check(
+    "checkout page par WhatsApp hand-off copy hai",
+    /WhatsApp/.test(checkoutHtml) && !/Pay on UPI/.test(checkoutHtml),
+  );
+  check(
+    "checkout par koi payment step / UPI nahi",
+    !checkoutHtml.includes('data-testid="checkout-payment-step"') && !/Pay on UPI/.test(checkoutHtml),
+  );
+  check(
+    "checkout copy English hai (koi Hinglish marker nahi)",
+    !/\b(kariye|kijiye|daaliye|dijiye|nahi|chahiye|jayega|aapka|aapki)\b/i.test(checkoutHtml),
+  );
+}
+
 /* ── logo markup: base path + srcset ──────────────────────────────────────── */
 const picture = html.match(/<picture[^>]*>[\s\S]{0,1500}?logo-mobile\.png[^>]*>[\s\S]{0,400}?<\/picture>/)?.[0] ?? "";
 const srcs = [...html.matchAll(/(?:src|srcSet)="([^"]*images\/brand\/[^"]+)"/g)].map((m) => m[1]);

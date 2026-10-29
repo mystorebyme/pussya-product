@@ -11,7 +11,9 @@ name: Live site check
 on:
   push:
     branches:
+      - main
       - arena/f2c07741-pussya-product
+      - arena/47281d99-pussya-product
   workflow_dispatch:
     inputs:
       base_url:

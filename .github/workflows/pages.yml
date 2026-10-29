@@ -9,6 +9,7 @@ on:
     branches:
       - main
       - arena/f2c07741-pussya-product
+      - arena/47281d99-pussya-product
     paths-ignore:
       - ".reviews-sync-trigger"
       - "database/seeds/reviews/**"
@@ -42,9 +43,53 @@ jobs:
 
       - run: npm ci
 
+      # R50: sheet ki values build me hi padho (GitHub runner ko internet hai).
+      # Koi bhi source set ho — Apps Script URL, published CSV, ya sirf sheet id.
+      # Empty rehne par build nahi rukta; runtime par browser live store API
+      # se number dobara maangta hai.
+      - name: Resolve sheet settings (owner's Google Sheet)
+        env:
+          GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL || vars.GOOGLE_SHEETS_WEBAPP_URL }}
+          GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN || vars.GOOGLE_SHEETS_TOKEN }}
+          GOOGLE_SHEETS_SETTINGS_CSV_URL: ${{ secrets.GOOGLE_SHEETS_SETTINGS_CSV_URL || vars.GOOGLE_SHEETS_SETTINGS_CSV_URL }}
+          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID || '1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo' }}
+          # Sheet na padh paaye to ye fallback (repo variable — code me kuch hardcode nahi)
+          STORE_WHATSAPP: ${{ vars.STORE_WHATSAPP || secrets.STORE_WHATSAPP }}
+          STORE_API_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
+        run: |
+          echo "apps-script url set: $([ -n "$GOOGLE_SHEETS_WEBAPP_URL" ] && echo yes || echo no)"
+          echo "apps-script token set: $([ -n "$GOOGLE_SHEETS_TOKEN" ] && echo yes || echo no)"
+          echo "published csv set: $([ -n "$GOOGLE_SHEETS_SETTINGS_CSV_URL" ] && echo yes || echo no)"
+          echo "sheet id set: $([ -n "$SHEET_ID" ] && echo yes || echo no)"
+          echo "fallback number var set: $([ -n "$STORE_WHATSAPP" ] && echo yes || echo no)"
+          echo "live store: $STORE_API_URL"
+          # Proof (number khud print nahi hota — sirf set hai ya nahi + last 2 digit)
+          code=$(curl -s -o /tmp/settings.json -w "%{http_code}" --max-time 20 "$STORE_API_URL/api/settings" || echo 000)
+          echo "live store /api/settings → HTTP $code"
+          node -e '
+            const fs = require("node:fs");
+            let data = {};
+            try { const raw = JSON.parse(fs.readFileSync("/tmp/settings.json", "utf8")); data = raw.data ?? raw; } catch {}
+            const wa = String(data.whatsapp ?? "");
+            const ds = String(data.dailySpecial ?? "");
+            const an = String(data.announcement ?? "");
+            const tail = wa.replace(/\D/g, "").slice(-2);
+            console.log(`  whatsapp: ${wa ? `set (…${tail}, ${wa.replace(/\D/g, "").length} digits)` : "EMPTY"}`);
+            console.log(`  dailySpecial: ${ds ? "set" : "empty"}`);
+            console.log(`  announcement: ${an ? "set" : "empty"}`);
+          ' || true
+
       - name: Build static preview
         env:
           PAGES_BASE_PATH: /${{ github.event.repository.name }}
+          # Sheet na padhe to repo variable se fallback number
+          NEXT_PUBLIC_WHATSAPP: ${{ vars.STORE_WHATSAPP || secrets.STORE_WHATSAPP }}
+          NEXT_PUBLIC_DAILY_SPECIAL: ${{ vars.STORE_DAILY_SPECIAL }}
+          # build-preview inhe padhta hai (order: apps-script → csv → gviz → live store)
+          GOOGLE_SHEETS_WEBAPP_URL: ${{ secrets.GOOGLE_SHEETS_WEBAPP_URL || vars.GOOGLE_SHEETS_WEBAPP_URL }}
+          GOOGLE_SHEETS_TOKEN: ${{ secrets.GOOGLE_SHEETS_TOKEN || vars.GOOGLE_SHEETS_TOKEN }}
+          GOOGLE_SHEETS_SETTINGS_CSV_URL: ${{ secrets.GOOGLE_SHEETS_SETTINGS_CSV_URL || vars.GOOGLE_SHEETS_SETTINGS_CSV_URL }}
+          SHEET_ID: ${{ vars.SHEET_ID || vars.SHEET_EXPECTED_ID || '1Rw2XO5F3dJup4FRB59N2ZLIsRW0Xe_RhVdI8OhNlXdo' }}
           # Live store (Vercel ya Netlify) ka URL — iske hone se Pages par
           # checkout/payment/tracking seedha live API par jaate hain.
           # Live store ka URL. Netlify par shift karne ke baad sirf ek repo variable
@@ -54,7 +99,10 @@ jobs:
           NEXT_PUBLIC_LIVE_STORE_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
           # Canonical/OG isi deployment ke hain (preview ko live store ka duplicate na samjha jaye)
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
-        run: node scripts/pages/build-preview.mjs
+        run: |
+          node scripts/pages/build-preview.mjs
+          echo "── settings used by this build ──"
+          cat .pages-preview-settings.json || true
 
       # Pages site pehle se enable hai (Settings → Pages → Source: GitHub Actions).
       # `enablement: true` se agar enable nahi hai to workflow khud try karta hai.

@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T04:59:54.639Z
+Ran: 2026-10-29T05:40:32.752Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 451176 bytes · 212ms |
+| ✅ | home page 200 — HTTP 200 · 447923 bytes · 231ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -16,6 +16,14 @@ Ran: 2026-10-29T04:59:54.639Z
 | ✅ | WhatsApp FAB home par (bottom-right) |
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
+| ✅ | build ne sheet se number liya (bake hua) — 10 digits |
+| ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
+| ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
+| ✅ | number 10 digit ka valid Indian mobile hai — 9785XXXXXX |
+| ✅ | checkout page 200 — HTTP 200 |
+| ✅ | checkout page par WhatsApp hand-off copy hai |
+| ✅ | checkout par koi payment step / UPI nahi |
+| ✅ | checkout copy English hai (koi Hinglish marker nahi) |
 | ✅ | header logo <picture> mila |
 | ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=4 · /pussya-product/images/brand/logo-tablet.png?v=4 · /pussya-product/images/brand/logo-mobile.png?v=4 |
 | ✅ | logo img par alt text hai |
@@ -139,6 +147,7 @@ Ran: 2026-10-29T04:59:54.639Z
 | ✅ | `/pussya-product/images/brand/logo-mark-128.png` | 200 |
 | ✅ | `/pussya-product/images/brand/logo-mark-192.png` | 200 |
 | ✅ | `/pussya-product/images/brand/logo-mark-180.png` | 200 |
+| ✅ | `/pussya-product/collections/sale/` | 200 |
 | ✅ | `/pussya-product/` | 200 |
 | ✅ | `/pussya-product/account/` | 200 |
 | ✅ | `/pussya-product/wishlist/` | 200 |
@@ -148,20 +157,20 @@ Ran: 2026-10-29T04:59:54.639Z
 | ✅ | `/pussya-product/collections/printed-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/best-seller/` | 200 |
 | ✅ | `/pussya-product/collections/new-arrivals/` | 200 |
-| ✅ | `/pussya-product/collections/sale/` | 200 |
 | ✅ | `/pussya-product/pages/contact/` | 200 |
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/aditis-white-coloured-anarkali-suit-set-td04/` | 200 |
-| ✅ | `/pussya-product/products/copy-of-porrot-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1088/` | 200 |
-| ✅ | `/pussya-product/products/pranavi-anarkali-dupatta-set/` | 200 |
-| ✅ | `/pussya-product/products/kali-elegance-green-suit-set-code-td-109/` | 200 |
-| ✅ | `/pussya-product/products/bandhani-mehandi-color-anarkali-suit-set-td-141/` | 200 |
-| ✅ | `/pussya-product/products/prachis-red-havy-vichitra-royal-elegant-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/premium-quality-roman-silk-pista-anarkali-suit-set-copy/` | 200 |
-| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set-10340442833028/` | 200 |
+| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set-10521552060548/` | 200 |
+| ✅ | `/pussya-product/products/myra-cosmo-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/diyas-new-design-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/ranipink-trendy-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/red-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/copy-of-aniska-white-embroidered-georgette-anarkali-fully-stitched-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/ruby-royale-red-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-anarkali-suit-set-copy-3/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-bandhej-green-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/nravya-purple-embroidered-suit-set-8182116483204/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -169,8 +178,9 @@ Ran: 2026-10-29T04:59:54.639Z
 | ✅ | `/pussya-product/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
 
 ## Summary
 
 ✔ Saare live checks pass.
+
+> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · repo-snapshot: ok · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
