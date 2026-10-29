@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BASE_URL: ${{ inputs.base_url || 'https://noorethnicwear.store/' }}
+      BASE_URL: ${{ inputs.base_url || vars.SITE_URL || 'https://noorethnicwear.store/' }}
     steps:
       - uses: actions/checkout@v4
         with:
