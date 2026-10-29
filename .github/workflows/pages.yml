@@ -119,6 +119,8 @@ jobs:
           # Canonical/OG isi deployment ke hain (preview ko live store ka duplicate na samjha jaye)
           NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://noorethnicwear.store' }}
           NEXT_PUBLIC_SITE_HOSTS: ${{ vars.SITE_HOSTS || 'noorethnicwear.store' }}
+          # R50b: browser seedha Apps Script par order bhejta hai (Sheet me row)
+          NEXT_PUBLIC_SHEETS_WEBAPP_URL: ${{ vars.GOOGLE_SHEETS_WEBAPP_URL || secrets.GOOGLE_SHEETS_WEBAPP_URL || 'https://script.google.com/macros/s/AKfycbxAeIVP9gGYeBoVcfXyIv5hwoQ_SK1grihBu3hqSR2nJ-KEzqi_vtLwt_BfhFWjE62CVg/exec' }}
         run: |
           node scripts/pages/build-preview.mjs
           # custom domain: Pages ko CNAME chahiye (domain Settings me bhi set hai)

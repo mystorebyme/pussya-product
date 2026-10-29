@@ -583,8 +583,16 @@ test("timeline action — order + phone se 5 step tracking", () => {
   assert.equal(missing.ok, false);
   assert.equal(missing.code, "order_not_found");
 
+  /**
+   * R50b: tracking bina token ke bhi chalta hai (static site par koi server nahi).
+   * Safety wahi hai — phone match ke bina kuch nahi milta.
+   */
   const noToken = sandbox.doGet({ parameter: { action: "timeline", order: "NE-TRACK01", phone } }).getJson();
-  assert.equal(noToken.ok, false);
+  assert.equal(noToken.ok, true, "tracking bina token bhi khulti hai");
+  assert.equal(noToken.status, "shipped");
+  const noTokenWrongPhone = sandbox.doGet({ parameter: { action: "timeline", order: "NE-TRACK01", phone: "9000000000" } }).getJson();
+  assert.equal(noTokenWrongPhone.ok, false, "phone match ke bina kuch nahi");
+  assert.equal(noTokenWrongPhone.code, "phone_mismatch");
 });
 
 test("row ke saare values asli sheet me land karte hain (order.placed)", () => {
@@ -1053,4 +1061,110 @@ test("R39: browser se plain /exec → HTML control panel (JSON nahi)", () => {
   const settings = sandbox.doGet({ parameter: { action: "settings" } }).getJson();
   assert.equal(settings.ok, true);
   assert.equal(settings.public, true);
+});
+
+/**
+ * R50b — static site (GitHub Pages) ka checkout seedha Sheet me.
+ *
+ * Owner ki shikayat thi: "order karne par Sheet me kuch nahi aata". Pages par
+ * koi Node server nahi hota, isliye `place_order` action token ke bina chalta
+ * hai — par sirf **naya order likhta** hai, aur validation sakht hai.
+ */
+test("place_order bina token ke order Sheet me likhta hai (Orders + Order Items)", () => {
+  const { sandbox, sheets } = loadScript();
+  sandbox.setup();
+
+  const response = sandbox.doPost({
+    postData: {
+      contents: JSON.stringify({
+        action: "place_order",
+        order: {
+          clientId: "abc-123",
+          items: [
+            { handle: "rose-dew", title: "Rose Dew Anarkali", size: "M", quantity: 2, price: 649 },
+            { handle: "diwali-set", title: "Diwali Set", size: "L", quantity: 1, price: 899 },
+          ],
+          customer: {
+            name: "Ankit Gothwal",
+            phone: "9785795831",
+            address: "12, Johari Bazar, Near Gate 3",
+            city: "Jaipur",
+            state: "Rajasthan",
+            pincode: "302003",
+            notes: "Call before delivery",
+          },
+        },
+      }),
+    },
+  });
+
+  const json = response.getJson();
+  assert.equal(json.ok, true, JSON.stringify(json));
+  assert.match(String(json.orderNumber), /^NE-[A-Z0-9]+$/, "order number bana");
+  assert.equal(json.total, 649 * 2 + 899, "total server par jodha gaya");
+
+  const orders = sheets.find((sheet) => sheet.getName() === "Orders");
+  assert.ok(orders, "Orders sheet hai");
+  const orderRow = orders!.rows.at(-1)!;
+  const header = orders!.rows[0];
+  const cell = (name: string) => orderRow[header.indexOf(name)];
+  assert.equal(cell("Order number"), json.orderNumber);
+  assert.equal(cell("Order status"), "placed");
+  assert.equal(cell("Customer"), "Ankit Gothwal");
+  assert.equal(cell("Phone"), "9785795831");
+  assert.equal(cell("Pincode"), "302003");
+  assert.equal(cell("Total"), 2197);
+  assert.equal(String(cell("Source")).startsWith("website:"), true);
+
+  const items = sheets.find((sheet) => sheet.getName() === "OrderItems");
+  assert.ok(items, "OrderItems sheet hai");
+  const itemRows = items!.rows.slice(1).filter((row) => row.includes(json.orderNumber));
+  assert.equal(itemRows.length, 2, "dono items ki row bani");
+});
+
+test("place_order galat data par kuch nahi likhta aur saaf error deta hai", () => {
+  const { sandbox, sheets } = loadScript();
+  sandbox.setup();
+  const send = (order: Record<string, unknown>) =>
+    sandbox.doPost({ postData: { contents: JSON.stringify({ action: "place_order", order }) } }).getJson();
+
+  const noItems = send({ customer: {} });
+  assert.equal(noItems.ok, false);
+  assert.equal(noItems.code, "no_items");
+
+  const badPhone = send({
+    items: [{ title: "X", quantity: 1, price: 500 }],
+    customer: { name: "Ankit", phone: "12345", address: "12 Johari Bazar Jaipur", city: "Jaipur", state: "Rajasthan", pincode: "302003" },
+  });
+  assert.equal(badPhone.ok, false);
+  assert.equal(badPhone.code, "phone");
+
+  const badPin = send({
+    items: [{ title: "X", quantity: 1, price: 500 }],
+    customer: { name: "Ankit", phone: "9785795831", address: "12 Johari Bazar Jaipur", city: "Jaipur", state: "Rajasthan", pincode: "12" },
+  });
+  assert.equal(badPin.ok, false);
+  assert.equal(badPin.code, "pincode");
+
+  const orders = sheets.find((sheet) => sheet.getName() === "Orders");
+  assert.equal(orders?.rows.length ?? 1, 1, "galat request se koi row nahi bani");
+});
+
+test("place_order dobara bheja gaya same clientId duplicate order nahi banata", () => {
+  const { sandbox } = loadScript();
+  sandbox.setup();
+  const body = JSON.stringify({
+    action: "place_order",
+    order: {
+      clientId: "same-click",
+      items: [{ title: "Rose Dew", quantity: 1, price: 649 }],
+      customer: { name: "Ankit", phone: "9785795831", address: "12 Johari Bazar Jaipur", city: "Jaipur", state: "Rajasthan", pincode: "302003" },
+    },
+  });
+  const first = sandbox.doPost({ postData: { contents: body } }).getJson();
+  const second = sandbox.doPost({ postData: { contents: body } }).getJson();
+  assert.equal(first.ok, true);
+  assert.equal(second.ok, true);
+  assert.equal(second.orderNumber, first.orderNumber, "wahi order number wapas mila");
+  assert.equal(second.duplicate, true);
 });

@@ -83,7 +83,7 @@ Warna purana code hi chalta rehta hai — owner ke saath yahi hua tha.
 
 ---
 
-## Poora code (2562 lines)
+## Poora code (2739 lines)
 
 ```javascript
 /**
@@ -2398,7 +2398,16 @@ function doGet(e) {
    * Public actions — website ko settings token set hone se pehle bhi padhni hai,
    * aur owner `?action=health` browser me khol kar khud diagnose kar sakta hai.
    */
-  var isPublic = action === 'settings' || action === 'version' || action === 'ping' || action === 'health';
+  var isPublic =
+    action === 'settings' ||
+    action === 'version' ||
+    action === 'ping' ||
+    action === 'health' ||
+    // Order tracking: `timeline_` 10-digit phone match ke bina kuch nahi deta,
+    // isliye static site (GitHub Pages) se bhi safe hai.
+    action === 'timeline' ||
+    action === 'order_status' ||
+    action === 'tracking';
   if (!isPublic && !authed) {
     return json_({ ok: false, version: CODE_VERSION, error: 'unauthorized — token match nahi hua', fix: tokenFix_() });
   }
@@ -2511,6 +2520,160 @@ function doGet(e) {
  *   { token, action: "message_status", id, status: "replied" | "handled" }
  *   { token, action: "dashboard" }   { token, action: "setup" }   { token, action: "repair" }
  */
+
+/* ═══════════════════ R50b: PUBLIC ORDER (static site → Sheet) ══════════════
+ * GitHub Pages par koi Node server nahi hota, isliye wahan ka checkout seedha
+ * yahin POST karta hai. Is action ke liye token nahi chahiye (browser ke paas
+ * token rakhna safe nahi), par:
+ *   - sirf **naya order likha** jaata hai (padhne/settings ka koi access nahi)
+ *   - naam / 10-digit mobile / poora address / 6-digit pincode — sab validate
+ *   - `clientId` se duplicate order nahi banta (double click / retry safe)
+ *   - total server par hi jodha jaata hai (client ke total par bharosa nahi)
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/** Ek line ka safe number — price/quantity */
+function num_(value) {
+  var n = Number(String(value === null || value === undefined ? '' : value).replace(/[^0-9.\-]/g, ''));
+  return isFinite(n) && n > 0 ? n : 0;
+}
+
+/** Public order — returns {ok, orderNumber, total} ya {ok:false, error, code} */
+function placePublicOrder_(payload) {
+  var order = payload || {};
+  var customer = order.customer || {};
+  var items = Array.isArray(order.items) ? order.items.slice(0, 40) : [];
+  if (!items.length) return { ok: false, code: 'no_items', error: 'Bag is empty — add a suit set first.' };
+
+  var name = text_(customer.name).slice(0, 80);
+  var phone = String(customer.phone === null || customer.phone === undefined ? '' : customer.phone)
+    .replace(/[^0-9]/g, '')
+    .slice(-10);
+  var address = text_(customer.address).slice(0, 400);
+  var pincode = String(customer.pincode === null || customer.pincode === undefined ? '' : customer.pincode)
+    .replace(/[^0-9]/g, '')
+    .slice(0, 6);
+  var city = text_(customer.city).slice(0, 60);
+  var state = text_(customer.state).slice(0, 60);
+
+  if (name.length < 2) return { ok: false, code: 'name', error: 'Please enter your full name.' };
+  if (!/^[6-9][0-9]{9}$/.test(phone)) {
+    return { ok: false, code: 'phone', error: 'Please enter a valid 10-digit mobile number.' };
+  }
+  if (address.length < 8) return { ok: false, code: 'address', error: 'Please enter your full delivery address.' };
+  if (pincode.length !== 6) return { ok: false, code: 'pincode', error: 'Please enter a valid 6-digit pincode.' };
+  if (!city || !state) return { ok: false, code: 'city', error: 'Please enter city and state.' };
+
+  /** Double click / network retry — same clientId ka order dobara nahi banta */
+  var clientId = String(order.clientId === null || order.clientId === undefined ? '' : order.clientId)
+    .replace(/[^A-Za-z0-9\-]/g, '')
+    .slice(0, 64);
+  var source = 'website' + (clientId ? ':' + clientId : '');
+  if (clientId) {
+    var already = findRows_('Orders', 'Source', source, 1);
+    if (already.length) {
+      return {
+        ok: true,
+        duplicate: true,
+        orderNumber: text_(already[0]['Order number']),
+        total: num_(already[0].Total),
+        time: now_(),
+      };
+    }
+  }
+
+  var lines = [];
+  var subtotal = 0;
+  items.forEach(function (raw) {
+    var price = num_(raw && raw.price);
+    var quantity = Math.min(20, Math.max(1, Math.round(num_(raw && raw.quantity) || 1)));
+    var lineTotal = price * quantity;
+    subtotal += lineTotal;
+    lines.push({
+      title: text_(raw && raw.title).slice(0, 160) || 'Item',
+      handle: text_(raw && raw.handle).slice(0, 160),
+      size: text_(raw && raw.size).slice(0, 20),
+      colour: text_(raw && raw.colour).slice(0, 60),
+      quantity: quantity,
+      price: price,
+      lineTotal: lineTotal,
+      category: text_(raw && raw.category).slice(0, 60),
+      image: text_(raw && raw.image).slice(0, 400),
+    });
+  });
+  if (subtotal <= 0) return { ok: false, code: 'total', error: 'Order total is not valid.' };
+
+  var settings = {};
+  try {
+    settings = readSettings_() || {};
+  } catch (ignored) {}
+  var prefix = String(settings.order_prefix || 'NE').toUpperCase().replace(/[^A-Z0-9]/g, '') || 'NE';
+  var stamp = Date.now().toString(36).toUpperCase();
+  var noise = Math.floor(Math.random() * 1296).toString(36).toUpperCase();
+  while (noise.length < 2) noise = '0' + noise;
+  var orderNumber = prefix + '-' + stamp + noise;
+  var iso = now_();
+  var details = lines
+    .map(function (line) {
+      return line.title + (line.size ? ' (' + line.size + ')' : '') + ' x' + line.quantity;
+    })
+    .join(' | ')
+    .slice(0, 900);
+
+  var writes = [
+    {
+      sheet: 'Orders',
+      row: {
+        Timestamp: iso,
+        Event: 'order.placed',
+        'Order number': orderNumber,
+        'Order status': 'placed',
+        'Payment status': 'pending',
+        'Payment method': 'whatsapp',
+        Total: subtotal,
+        Subtotal: subtotal,
+        Discount: 0,
+        Items: lines.length,
+        'Item details': details,
+        Customer: name,
+        Phone: phone,
+        Email: text_(customer.email).slice(0, 120),
+        Address: address,
+        City: city,
+        State: state,
+        Pincode: pincode,
+        Notes: text_(customer.notes).slice(0, 300),
+        'Admin Note': text_(order.adminNote) || 'Waiting for WhatsApp confirmation',
+        Source: source,
+        Device: text_(order.device).slice(0, 60),
+      },
+    },
+  ];
+  lines.forEach(function (line) {
+    writes.push({
+      sheet: 'OrderItems',
+      row: {
+        Timestamp: iso,
+        'Order number': orderNumber,
+        Product: line.title,
+        Handle: line.handle,
+        Size: line.size,
+        Colour: line.colour,
+        Quantity: line.quantity,
+        Price: line.price,
+        'Line total': line.lineTotal,
+        Category: line.category,
+        'Image URL': line.image,
+        Status: 'placed',
+      },
+    });
+  });
+
+  var written = appendRows_(writes);
+  noteSync_('website→sheet', 'Orders,OrderItems', written, 'ok', 'public order ' + orderNumber);
+  noteAudit_('website', 'order.placed', orderNumber, lines.length + ' item(s)');
+  return { ok: true, orderNumber: orderNumber, total: subtotal, written: written, time: iso };
+}
+
 function doPost(e) {
   var body = {};
   try {
@@ -2518,11 +2681,25 @@ function doPost(e) {
   } catch (error) {
     return json_({ ok: false, version: CODE_VERSION, error: 'invalid json' });
   }
+  var action = String(body.action || '');
+
+  /**
+   * Public order — website (static) ka checkout. **Token ke bina**, kyunki
+   * browser me token rakhna safe nahi. Sirf naya order likha jaata hai; padhne
+   * ya settings badalne ka koi raasta nahi. Validation placePublicOrder_ me hai.
+   */
+  if (action === 'place_order' || action === 'placeOrder') {
+    try {
+      return json_(placePublicOrder_(body.order || body));
+    } catch (error) {
+      return json_({ ok: false, code: 'server', error: 'order save nahi hua: ' + String(error) });
+    }
+  }
+
   if (!tokenOk_(body.token)) {
     return json_({ ok: false, version: CODE_VERSION, error: 'unauthorized — token match nahi hua', fix: tokenFix_() });
   }
 
-  var action = String(body.action || '');
   try {
     if (action === 'append' || action === 'appendMany') {
       var rows = Array.isArray(body.rows) ? body.rows : body.row ? [{ sheet: body.sheet, row: body.row }] : [];

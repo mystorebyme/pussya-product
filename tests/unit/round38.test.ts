@@ -122,7 +122,11 @@ test("R38-6: script ka token Script Properties me — paste-proof, placeholder-p
   assert.match(gs, /PUBLIC_SETTING_KEYS/, "settings ka public subset");
   // settings/health/version/ping bina token chalte hain — warna token set hone
   // se pehle website ka UPI read hi nahi hoga
-  assert.match(gs, /var isPublic = action === 'settings' \|\| action === 'version' \|\| action === 'ping' \|\| action === 'health'/, "public GET actions");
+  assert.match(gs, /var isPublic =/, "public GET actions");
+  // settings/health/version/ping hamesha public; R50b me tracking bhi (phone-gated)
+  for (const action of ["settings", "version", "ping", "health"]) {
+    assert.match(gs, new RegExp(`action === '${action}'`), `${action} public hai`);
+  }
   assert.match(gs, /if \(!tokenOk_\(body\.token\)\)/, "doPost token-gated");
   assert.match(gs, /tokenFix_/, "har token error ke saath FIX bataya jaata hai");
 });

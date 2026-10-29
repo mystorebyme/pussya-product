@@ -14,6 +14,7 @@ import { INDIAN_STATES, canonicalStateName, statesMatch } from "@/lib/state-matc
 import { autoFixPhoneInput, normaliseIndianPhone, whatsappNumber } from "@/lib/phone";
 import { savePlacedOrder, type PlacedOrderSnapshot } from "@/lib/checkout-session";
 import { clearCheckoutDetails, readCheckoutDetails, saveCheckoutDetails } from "@/lib/checkout-details";
+import { newClientId, placeOrderInSheet, SHEET_ORDER_ENABLED } from "@/lib/sheet-order";
 
 const indianStates = INDIAN_STATES;
 
@@ -263,7 +264,45 @@ export function CheckoutForm() {
     }));
 
     let orderNumber: string | null = null;
-    if (API_AVAILABLE) {
+
+    /**
+     * R50b: static site (GitHub Pages) par koi Node server nahi hota, isliye order
+     * ka pehla raasta **seedha Apps Script → Google Sheet** hai. Isse owner ko
+     * order row turant Sheet me milti hai. Uske baad WhatsApp hand-off wahi rehta
+     * hai (customer ke liye kuch nahi badalta).
+     */
+    if (SHEET_ORDER_ENABLED) {
+      const placed = await placeOrderInSheet({
+        clientId: newClientId(),
+        items: lines.map((line) => ({
+          handle: line.handle,
+          title: line.title,
+          size: line.size,
+          colour: line.colour,
+          quantity: line.quantity,
+          price: line.price,
+          image: line.image,
+        })),
+        customer: {
+          name: form.customerName,
+          phone: normaliseIndianPhone(form.phone) ?? form.phone,
+          email: form.email,
+          address: form.address,
+          city: form.city,
+          state: form.state,
+          pincode: form.pincode,
+          notes: form.notes,
+        },
+      });
+      if (placed.ok && placed.orderNumber) {
+        orderNumber = placed.orderNumber;
+      } else {
+        console.warn("sheet order failed", placed.error);
+        trackCheckout("order.failed", { reason: placed.error ?? "sheet", code: placed.code ?? "" });
+      }
+    }
+
+    if (!orderNumber && API_AVAILABLE) {
       try {
         const idempotencyKey =
           typeof crypto !== "undefined" && "randomUUID" in crypto

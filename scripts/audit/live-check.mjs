@@ -204,6 +204,16 @@ check(
         data.whatsappSet === true,
         data.whatsappSet ? `${data.numberDigits} digits` : `nahi — ${data.attempt ?? "unknown"}`,
       );
+      /**
+       * R50b: order seedha browser se Apps Script par jaata hai (Sheet me row).
+       * Is URL ke bina order sirf WhatsApp tak jaata hai — owner ko Sheet me
+       * kuch nahi milta. Isliye ise explicitly check karte hain.
+       */
+      check(
+        "checkout order seedha Sheet (Apps Script) me jaata hai",
+        data.sheetOrderUrlSet === true,
+        data.sheetOrderUrlSet ? "web app URL build me hai" : "NEXT_PUBLIC_SHEETS_WEBAPP_URL bake nahi hua",
+      );
     } catch {
       check("preview-settings.json parse hui", false, proof.body.slice(0, 80));
     }

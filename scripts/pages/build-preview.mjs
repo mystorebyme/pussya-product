@@ -365,9 +365,22 @@ try {
   } else {
     console.log("preview settings → koi setting nahi mili (number runtime par API se aayega)");
   }
+  /**
+   * R50b: browser order seedha Apps Script par jaata hai (Sheet me row banti
+   * hai). Is URL ka hona zaroori hai — proof file me flag rakhte hain taaki live
+   * check bata sake.
+   */
+  const sheetOrderUrl = (
+    process.env.NEXT_PUBLIC_SHEETS_WEBAPP_URL ??
+    process.env.GOOGLE_SHEETS_WEBAPP_URL ??
+    ""
+  ).trim();
+  if (sheetOrderUrl) previewEnv.NEXT_PUBLIC_SHEETS_WEBAPP_URL = sheetOrderUrl;
+
   const settingsProof = {
     at: new Date().toISOString(),
     attempt: settingsAttempt,
+    sheetOrderUrlSet: /^https:\/\/script\.google\.com\//.test(sheetOrderUrl),
     whatsappSet: Boolean(resolvedSettings?.whatsapp),
     numberDigits: (resolvedSettings?.whatsapp ?? "").replace(/\D/g, "").length,
     dailySpecialSet: Boolean(resolvedSettings?.dailySpecial),
