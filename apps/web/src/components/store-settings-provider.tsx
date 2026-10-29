@@ -44,7 +44,7 @@ export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
   /* R38: UPI sirf sheet se — koi hardcoded payee default nahi (khaali = payment paused UI). */
   upiId: "",
   upiName: "Noor Ethnic Wear",
-  supportPhone: "",
+  supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE ?? "",
   /** R50: number ka asli source Sheet hai; ye sirf static-build fallback hai */
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "",
   freeShipping: true,
