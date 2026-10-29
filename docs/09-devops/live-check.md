@@ -2,13 +2,13 @@
 
 > URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:24:47.140Z
+Ran: 2026-10-29T06:25:45.164Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 443177 bytes · 11ms |
+| ✅ | home page 200 — HTTP 200 · 443177 bytes · 12ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -191,5 +191,5 @@ Ran: 2026-10-29T06:24:47.140Z
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8003::153,2606:50c0:8002::153 | 301 | http://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.110.153,185.199.109.153,185.199.111.153,185.199.108.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 404 | - |
+| https://noorethnicwear.store/ | 185.199.109.153,185.199.110.153,185.199.108.153,185.199.111.153 | 000 | 000 - |
