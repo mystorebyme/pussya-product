@@ -45,8 +45,30 @@ jobs:
         with:
           node-version: "22"
 
+      - name: URL diagnostics
+        run: |
+          {
+            echo ""
+            echo "## URLs probed (DNS + HTTP)"
+            echo ""
+            echo "| URL | DNS | HTTP | redirect |"
+            echo "| --- | --- | --- | --- |"
+            for u in "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" "https://noorethnicwear.store/"; do
+              host=$(echo "$u" | sed -E 's#https://([^/]+)/.*#\1#')
+              dns=$(getent hosts "$host" | awk '{print $1}' | paste -sd',' - || true)
+              [ -n "$dns" ] || dns="no record"
+              read -r code redir <<<"$(curl -sS -o /dev/null -m 20 -w '%{http_code} %{redirect_url}' "$u" 2>/dev/null || echo '000 -')"
+              echo "| $u | $dns | $code | ${redir:--} |"
+            done
+          } > /tmp/urls.md
+          cat /tmp/urls.md
+
       - name: Live checks
         run: node scripts/audit/live-check.mjs "$BASE_URL" --links=40 --out=docs/09-devops/live-check.md || echo "LIVE_CHECK_FAILED=1" >> "$GITHUB_ENV"
+
+      - name: Append URL diagnostics to report
+        if: always()
+        run: cat /tmp/urls.md >> docs/09-devops/live-check.md || true
 
       - name: Commit report
         run: |

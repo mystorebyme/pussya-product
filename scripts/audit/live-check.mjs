@@ -21,7 +21,32 @@
 import fs from "node:fs";
 
 const args = process.argv.slice(2);
-const BASE = (args.find((a) => !a.startsWith("--")) ?? "https://mystorebyme.github.io/pussya-product/").replace(/\/?$/, "/");
+
+/**
+ * Kaunsa URL check karna hai? Owner ne Pages par custom domain
+ * (`noorethnicwear.store`) lagaya hai — us haalat me GitHub `*.github.io/<repo>/`
+ * par 403 deta hai. Isliye pehle diya gaya URL, phir custom domain, phir
+ * github.io — jo pehla zinda (200 + brand) mile wahi use hota hai.
+ */
+const CANDIDATES = [
+  args.find((a) => !a.startsWith("--")),
+  process.env.LIVE_BASE_URL,
+  "https://noorethnicwear.store/",
+  "https://mystorebyme.github.io/pussya-product/",
+]
+  .filter((value) => typeof value === "string" && value.trim())
+  .map((value) => value.trim().replace(/\/?$/, "/"))
+  .filter((value, index, list) => list.indexOf(value) === index);
+
+const BASE = await pickBase();
+
+async function pickBase() {
+  for (const candidate of CANDIDATES) {
+    const probe = await get(candidate);
+    if (probe.ok && /noor ethnic wear/i.test(probe.body)) return candidate;
+  }
+  return CANDIDATES[0];
+}
 const OUT = args.find((a) => a.startsWith("--out="))?.slice(6) ?? null;
 const LIMIT = Number(args.find((a) => a.startsWith("--links="))?.slice(8) ?? 40) || 40;
 
@@ -69,6 +94,7 @@ async function asset(url) {
 }
 
 say(`# Live site check — ${BASE}`);
+if (CANDIDATES.length > 1) say(`\n> URLs tried (first live one wins): ${CANDIDATES.join(" · ")}`);
 say("");
 say(`Ran: ${new Date().toISOString()}`);
 say("");

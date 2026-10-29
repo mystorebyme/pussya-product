@@ -145,19 +145,28 @@ jobs:
       - name: Live site check
         run: |
           set -uo pipefail
-          URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-          echo "checking $URL"
+          # Pages par custom domain lagne par `*.github.io/<repo>/` 403 deta hai —
+          # isliye dono URL try hote hain, jo zinda mile wahi check hota hai.
+          CANDIDATES=(
+            "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+            "https://noorethnicwear.store/"
+          )
           CODE=000
+          URL="${CANDIDATES[0]}"
           for attempt in $(seq 1 9); do
-            CODE=$(curl -sL -o page.html -w '%{http_code}' "$URL" || echo 000)
-            echo "attempt $attempt → HTTP $CODE"
-            if [ "$CODE" = "200" ] && grep -qi "Noor Ethnic Wear" page.html; then break; fi
+            for candidate in "${CANDIDATES[@]}"; do
+              CODE=$(curl -sL -o page.html -w '%{http_code}' "$candidate" || echo 000)
+              echo "attempt $attempt → $candidate → HTTP $CODE"
+              if [ "$CODE" = "200" ] && grep -qi "Noor Ethnic Wear" page.html; then URL="$candidate"; break 2; fi
+            done
             sleep 10
           done
+          echo "verified URL: $URL"
 
           fail=0
           if ! grep -qi "Noor Ethnic Wear" page.html; then echo "::error::Live page par Noor ka content nahi mila (HTTP $CODE)"; fail=1; fi
           if ! grep -q "banner-desktop.webp" page.html; then echo "::error::Hero banner live page par nahi hai"; fail=1; fi
+          if ! grep -q "wa.me/9" page.html; then echo "::error::WhatsApp link (wa.me) live page par nahi hai"; fail=1; fi
           if grep -qi "liksha" page.html; then echo "::error::Purana brand (Liksha) live page par hai"; fail=1; fi
           if grep -qi "free shipping" page.html; then echo "::error::'Free shipping' copy live page par hai"; fail=1; fi
           if ! grep -q "logo-desktop.png?v=" page.html; then echo "::warning::Naya logo version live page par nahi dikha (cache / purana deploy)"; fi
