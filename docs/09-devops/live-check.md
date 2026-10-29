@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T04:58:26.515Z
+Ran: 2026-10-29T04:59:54.639Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 451176 bytes · 240ms |
+| ✅ | home page 200 — HTTP 200 · 451176 bytes · 212ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -14,7 +14,7 @@ Ran: 2026-10-29T04:58:26.515Z
 | ✅ | no payment UI on the storefront (no 'Pay on UPI', no UPI deep link) |
 | ✅ | home par WhatsApp flow ka zikr hai (koi payment claim nahi) |
 | ✅ | WhatsApp FAB home par (bottom-right) |
-| ❌ | WhatsApp FAB product page par bhi |
+| ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
 | ✅ | header logo <picture> mila |
 | ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=4 · /pussya-product/images/brand/logo-tablet.png?v=4 · /pussya-product/images/brand/logo-mobile.png?v=4 |
@@ -173,6 +173,4 @@ Ran: 2026-10-29T04:58:26.515Z
 
 ## Summary
 
-❌ 1 problem mili:
-
-- WhatsApp FAB product page par bhi
+✔ Saare live checks pass.
