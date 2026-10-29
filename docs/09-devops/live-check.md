@@ -1,14 +1,14 @@
-# Live site check — https://mystorebyme.github.io/pussya-product/
+# Live site check — http://noorethnicwear.store/
 
-> URLs tried (first live one wins): https://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
+> URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T06:20:07.959Z
+Ran: 2026-10-29T06:24:47.140Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 444951 bytes · 15ms |
+| ✅ | home page 200 — HTTP 200 · 443177 bytes · 11ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -17,7 +17,7 @@ Ran: 2026-10-29T06:20:07.959Z
 | ✅ | home par WhatsApp flow ka zikr hai (koi payment claim nahi) |
 | ✅ | WhatsApp FAB home par (bottom-right) |
 | ✅ | WhatsApp FAB product page par bhi |
-| ❌ | Daily Special ribbon ya maroon announcement strip hai |
+| ✅ | Daily Special ribbon ya maroon announcement strip hai |
 | ✅ | build ne sheet se number liya (bake hua) — 12 digits |
 | ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
@@ -27,7 +27,7 @@ Ran: 2026-10-29T06:20:07.959Z
 | ✅ | checkout par koi payment step / UPI nahi |
 | ✅ | checkout copy English hai (koi Hinglish marker nahi) |
 | ✅ | header logo <picture> mila |
-| ❌ | logo srcset base path ke saath hai (/pussya-product/...) — /images/brand/logo-desktop.png?v=4 · /images/brand/logo-tablet.png?v=4 · /images/brand/logo-mobile.png?v=4 |
+| ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /images/brand/logo-desktop.png?v=4 · /images/brand/logo-tablet.png?v=4 · /images/brand/logo-mobile.png?v=4 |
 | ✅ | logo img par alt text hai |
 | ✅ | logo img par `hidden` / `opacity-0` jaisi class nahi |
 
@@ -62,14 +62,14 @@ Ran: 2026-10-29T06:20:07.959Z
 
 | result | viewport | file | display height | file width | required |
 | --- | --- | --- | --- | --- | --- |
-| ❌ | 320px | `logo-mobile.png` | 46px | ?px | ≥ 92px |
-| ❌ | 375px | `logo-mobile.png` | 46px | ?px | ≥ 92px |
-| ❌ | 390px | `logo-mobile.png` | 46px | ?px | ≥ 92px |
-| ❌ | 430px | `logo-mobile.png` | 46px | ?px | ≥ 92px |
-| ❌ | 768px | `logo-tablet.png` | 54px | ?px | ≥ 108px |
-| ❌ | 1024px | `logo-desktop.png` | 60px | ?px | ≥ 120px |
-| ❌ | 1366px | `logo-desktop.png` | 60px | ?px | ≥ 120px |
-| ❌ | 1440px | `logo-desktop.png` | 60px | ?px | ≥ 120px |
+| ✅ | 320px | `logo-mobile.png` | 46px | 374px | ≥ 92px |
+| ✅ | 375px | `logo-mobile.png` | 46px | 374px | ≥ 92px |
+| ✅ | 390px | `logo-mobile.png` | 46px | 374px | ≥ 92px |
+| ✅ | 430px | `logo-mobile.png` | 46px | 374px | ≥ 92px |
+| ✅ | 768px | `logo-tablet.png` | 54px | 444px | ≥ 108px |
+| ✅ | 1024px | `logo-desktop.png` | 60px | 514px | ≥ 120px |
+| ✅ | 1366px | `logo-desktop.png` | 60px | 514px | ≥ 120px |
+| ✅ | 1440px | `logo-desktop.png` | 60px | 514px | ≥ 120px |
 
 ## CSS (logo visibility)
 
@@ -140,21 +140,50 @@ Ran: 2026-10-29T06:20:07.959Z
 
 | result | link | HTTP |
 | --- | --- | --- |
+| ✅ | `/images/brand/logo-fluid.png` | 200 |
+| ✅ | `/_next/static/chunks/08s~r_fpivrn3.css` | 200 |
+| ✅ | `/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
+| ✅ | `/manifest.webmanifest` | 200 |
+| ✅ | `/favicon.ico` | 200 |
+| ✅ | `/images/brand/logo-mark-512.png` | 200 |
+| ✅ | `/images/brand/logo-mark-128.png` | 200 |
+| ✅ | `/images/brand/logo-mark-192.png` | 200 |
+| ✅ | `/images/brand/logo-mark-180.png` | 200 |
+| ✅ | `/collections/sale/` | 200 |
+| ✅ | `/` | 200 |
+| ✅ | `/account/` | 200 |
+| ✅ | `/wishlist/` | 200 |
+| ✅ | `/collections/` | 200 |
+| ✅ | `/collections/party-wear-gown/` | 200 |
+| ✅ | `/collections/lehnga-choli/` | 200 |
+| ✅ | `/collections/printed-suit-set/` | 200 |
+| ✅ | `/collections/best-seller/` | 200 |
+| ✅ | `/collections/new-arrivals/` | 200 |
+| ✅ | `/pages/contact/` | 200 |
+| ✅ | `/pages/about-us/` | 200 |
+| ✅ | `/collections/noors-choice/` | 200 |
+| ✅ | `/collections/wedding-collection/` | 200 |
+| ✅ | `/products/kumkum-elegant-anarkali-suit-set/` | 200 |
+| ✅ | `/products/aaysha-white-floral-farshi-suit-set/` | 200 |
+| ✅ | `/products/vibhutis-wine-coloured-anarkali-suit-set-td08/` | 200 |
+| ✅ | `/products/trendy-off-white-suit-set-with-embroidery-and-sequnce-work-7287143530628/` | 200 |
+| ✅ | `/products/luxury-dark-pink-anarkali-suit-set/` | 200 |
+| ✅ | `/products/premium-and-lightweight-anarkali-suit-set-1/` | 200 |
+| ✅ | `/products/keshvis-orange-coloured-anarkali-suit-set-td05/` | 200 |
+| ✅ | `/products/pink-flared-anarkali-suit-set/` | 200 |
+| ✅ | `/collections/trending/` | 200 |
+| ✅ | `/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
+| ✅ | `/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
+| ✅ | `/products/designer-anarkali-suit-is-luxury-clothing-considered-to-be-high-quality-made-by-thread-sequins-embroidery-this-is-made-for-desirable-womens-who-deserve-it/` | 200 |
+| ✅ | `/products/presenting-new-crunchy-silk-fabric-with-embroidery-sequence-dori-and-jari-work-top-with-dupatta-set-bell-bottom-pent-ready-to-wear/` | 200 |
+| ✅ | `/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
+| ✅ | `/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
+| ✅ | `/products/nehas-premium-anarkali-suit-set/` | 200 |
+| ✅ | `/products/premium-anarkali-suit-set-3-piece/` | 200 |
 
 ## Summary
 
-❌ 10 problem mili:
-
-- Daily Special ribbon ya maroon announcement strip hai
-- logo srcset base path ke saath hai (/pussya-product/...) — /images/brand/logo-desktop.png?v=4 · /images/brand/logo-tablet.png?v=4 · /images/brand/logo-mobile.png?v=4
-- logo @320px → /images/brand/logo-mobile.png (HTTP 404, width 0)
-- logo @375px → /images/brand/logo-mobile.png (HTTP 404, width 0)
-- logo @390px → /images/brand/logo-mobile.png (HTTP 404, width 0)
-- logo @430px → /images/brand/logo-mobile.png (HTTP 404, width 0)
-- logo @768px → /images/brand/logo-tablet.png (HTTP 404, width 0)
-- logo @1024px → /images/brand/logo-desktop.png (HTTP 404, width 0)
-- logo @1366px → /images/brand/logo-desktop.png (HTTP 404, width 0)
-- logo @1440px → /images/brand/logo-desktop.png (HTTP 404, width 0)
+✔ Saare live checks pass.
 
 > build settings: apps-script: ok
 
@@ -162,5 +191,5 @@ Ran: 2026-10-29T06:20:07.959Z
 
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
-| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8001::153,2606:50c0:8003::153,2606:50c0:8002::153,2606:50c0:8000::153 | 200 | - |
-| https://noorethnicwear.store/ | 185.199.110.153,185.199.109.153,185.199.108.153,185.199.111.153 | 000 | 000 - |
+| https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8003::153,2606:50c0:8002::153 | 301 | http://noorethnicwear.store/ |
+| https://noorethnicwear.store/ | 185.199.110.153,185.199.109.153,185.199.111.153,185.199.108.153 | 000 | 000 - |
