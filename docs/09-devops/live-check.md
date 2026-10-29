@@ -2,13 +2,13 @@
 
 > URLs tried (first live one wins): fiet/ · https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T07:30:27.522Z
+Ran: 2026-10-29T07:32:43.426Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 448297 bytes · 14ms |
+| ✅ | home page 200 — HTTP 200 · 453695 bytes · 17ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -19,7 +19,7 @@ Ran: 2026-10-29T07:30:27.522Z
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
 | ✅ | build ne sheet se number liya (bake hua) — 12 digits |
-| ❌ | checkout order seedha Sheet (Apps Script) me jaata hai — NEXT_PUBLIC_SHEETS_WEBAPP_URL bake nahi hua |
+| ✅ | checkout order seedha Sheet (Apps Script) me jaata hai — web app URL build me hai |
 | ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
 | ✅ | number 10 digit ka valid Indian mobile hai — 9785XXXXXX |
@@ -76,7 +76,7 @@ Ran: 2026-10-29T07:30:27.522Z
 
 | result | rule |
 | --- | --- |
-| ✅ | stylesheet load hui — /_next/static/chunks/08s~r_fpivrn3.css |
+| ✅ | stylesheet load hui — /_next/static/chunks/08uwr74rtcd3y.css |
 | ✅ | `.brand-lockup img` heights (46 → 54 → 60) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
@@ -142,7 +142,7 @@ Ran: 2026-10-29T07:30:27.522Z
 | result | link | HTTP |
 | --- | --- | --- |
 | ✅ | `/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/_next/static/chunks/08s~r_fpivrn3.css` | 200 |
+| ✅ | `/_next/static/chunks/08uwr74rtcd3y.css` | 200 |
 | ✅ | `/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
 | ✅ | `/manifest.webmanifest` | 200 |
 | ✅ | `/favicon.ico` | 200 |
@@ -164,14 +164,14 @@ Ran: 2026-10-29T07:30:27.522Z
 | ✅ | `/pages/about-us/` | 200 |
 | ✅ | `/collections/noors-choice/` | 200 |
 | ✅ | `/collections/wedding-collection/` | 200 |
-| ✅ | `/products/orange-shades-premium-quality-koti-anarkali-suit-set/` | 200 |
-| ✅ | `/products/prachis-red-havy-vichitra-royal-elegant-suit-set-copy/` | 200 |
-| ✅ | `/products/noors-premium-anarkali-sut-set-115-mustard/` | 200 |
-| ✅ | `/products/maroon-color-premium-quality-suit-set-dt-273/` | 200 |
-| ✅ | `/products/royal-roman-silk-fully-flared-anarkali-suit-set/` | 200 |
-| ✅ | `/products/saniya-s-wine-gown/` | 200 |
-| ✅ | `/products/ranipink-trendy-anarkali-suit-set/` | 200 |
-| ✅ | `/products/premium-velvet-anarkali-suit-set/` | 200 |
+| ✅ | `/products/aarohis-lavender-diamond-silk-sharara-suit-set/` | 200 |
+| ✅ | `/products/hannah-traditional-white-anarkali-suit/` | 200 |
+| ✅ | `/products/anamika-premium-designer-readymade-gown-with-dupatta-set-kka-1082/` | 200 |
+| ✅ | `/products/copy-of-lakhnawi-embroidered-georgette-anarkali-fully-stitched-suit-set-waite-115/` | 200 |
+| ✅ | `/products/ediya-inspired-heavy-real-mirror-work-palazzo-suit-set/` | 200 |
+| ✅ | `/products/marigold-orange-georgette-suit-set-td-1035/` | 200 |
+| ✅ | `/products/minisa-designer-embroidered-zari-sequins-work-gown/` | 200 |
+| ✅ | `/products/kali-elegance-green-suit-set-code-td-109/` | 200 |
 | ✅ | `/collections/trending/` | 200 |
 | ✅ | `/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -184,9 +184,7 @@ Ran: 2026-10-29T07:30:27.522Z
 
 ## Summary
 
-❌ 1 problem mili:
-
-- checkout order seedha Sheet (Apps Script) me jaata hai — NEXT_PUBLIC_SHEETS_WEBAPP_URL bake nahi hua
+✔ Saare live checks pass.
 
 > build settings: apps-script: ok
 
@@ -195,17 +193,17 @@ Ran: 2026-10-29T07:30:27.522Z
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
 | https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | https://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.111.153,185.199.109.153,185.199.108.153,185.199.110.153 | 200 | - |
+| https://noorethnicwear.store/ | 185.199.111.153,185.199.110.153,185.199.109.153,185.199.108.153 | 200 | - |
 
 ### DNS records (Google DNS se poocha gaya)
 
 | name | type | value |
 | --- | --- | --- |
-| noorethnicwear.store | A | 185.199.110.153 |
 | noorethnicwear.store | A | 185.199.109.153 |
 | noorethnicwear.store | A | 185.199.108.153 |
+| noorethnicwear.store | A | 185.199.110.153 |
 | noorethnicwear.store | A | 185.199.111.153 |
-| www.noorethnicwear.store | A | 104.21.43.105 |
 | www.noorethnicwear.store | A | 172.67.178.35 |
+| www.noorethnicwear.store | A | 104.21.43.105 |
 
 ⚠️ `www.noorethnicwear.store` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)
