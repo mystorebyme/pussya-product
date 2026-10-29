@@ -135,8 +135,10 @@ jobs:
       - name: Build log (failure)
         if: failure()
         run: |
-          echo "::error::build failed — last 25 lines:"
-          tail -25 build.log 2>/dev/null | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
+          echo "::error::build failed — error lines:"
+          grep -n -iE "error|failed|cannot|invalid" build.log 2>/dev/null | tail -12 | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
+          echo "::error::build failed — last 12 lines:"
+          tail -12 build.log 2>/dev/null | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
 
       - uses: actions/upload-artifact@v4
         if: failure()
