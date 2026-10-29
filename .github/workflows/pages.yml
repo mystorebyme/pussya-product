@@ -135,8 +135,9 @@ jobs:
       - name: Build log (failure)
         if: failure()
         run: |
-          echo "::error::LOG HEAD:"
-          head -6 build.log 2>/dev/null | cut -c1-200 | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
+          echo "::error::LOG 5-16:"
+          sed -n '5,16p' build.log 2>/dev/null | cut -c1-150 | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
+          echo "::error::LOG LINES: $(wc -l < build.log 2>/dev/null)"
           echo "::error::build failed — error lines:"
           grep -n -iE "error|failed|cannot|invalid" build.log 2>/dev/null | tail -12 | sed 's/%/%25/g' | while IFS= read -r line; do echo "::error::$line"; done
           echo "::error::build failed — last 12 lines:"
