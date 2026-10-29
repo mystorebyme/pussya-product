@@ -92,9 +92,10 @@ A slim gold ribbon under the header, above the maroon announcement strip:
 
 ## 7. What you do next (2 minutes)
 
-1. Sheet → **Settings** tab → check the `whatsapp` row has your number
-   (`98765 43210` or `+91 98765 43210` — both work).
-2. In the same tab, fill `daily_special` with today's line (or leave it empty).
+1. Sheet → **Settings** tab → the `whatsapp` row is already set to **9785795831**
+   (found straight from your Sheet this round — the site now shows it on every page).
+2. The `daily_special` row was added for you and shows on the site today.
+   Change that one cell and the band changes; no deploy needed.
 3. Apps Script → **Deploy → Manage deployments → ✏️ → New version → Deploy**
    (this brings the new settings row and English messages to the live sheet).
 4. Place one test order from the site: it should open WhatsApp with the full order
@@ -107,3 +108,39 @@ A slim gold ribbon under the header, above the maroon announcement strip:
 - Real order created end to end in the running store:
   `NE-T26FLDSBRK` → order page shows the WhatsApp block, hand-off page opens
   `wa.me` with the full message.
+
+## 9. Round 50 — final result (live)
+
+- **Real number from your Sheet is live**: every page ships
+  `wa.me/919785795831`. Proof file on the site: `preview-settings.json`
+  (`whatsappSet: true`, `numberDigits: 10`).
+- **Daily Special band** is live in the header, driven by the Sheet's
+  `daily_special` row.
+- **No payment option anywhere**: bag → address → the whole order goes to
+  WhatsApp in one tap.
+- **Live check: 129 ✅ / 0 ❌** (the three number checks that used to fail are green).
+
+### One honest note about the Sheet
+
+Your Sheet is private (Google answers `401` to anyone without permission), so the
+build cannot read it directly, and no sheet secret is set in this repository.
+To make sure the site is never left without a number, the Sheet's Settings tab is
+mirrored to `config/store-settings.snapshot.json` and used **only as the last
+fallback** (after Apps Script → published CSV → Sheet CSV → live API).
+
+That means: right now the number is correct and live, but if you change the
+number in the Sheet, refresh the mirror with one command:
+
+```bash
+node scripts/sheets/settings-snapshot.mjs --from "<published Settings CSV URL>"
+```
+
+For true zero-touch updates (edit the Sheet, nothing else), pick either one in
+GitHub → Settings → Secrets and variables → Actions:
+
+- `GOOGLE_SHEETS_SETTINGS_CSV_URL` — File → Share → **Publish to web** → Settings
+  tab → CSV. (Easiest, and the site then reads the Sheet itself at every deploy.)
+- or `GOOGLE_SHEETS_WEBAPP_URL` (+ `GOOGLE_SHEETS_TOKEN` if your Apps Script
+  checks a token) — your Apps Script deployment URL.
+
+Once either is set, the mirror is no longer used at all.
