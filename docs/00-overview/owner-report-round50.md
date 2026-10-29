@@ -206,3 +206,60 @@ workflow me hi safe defaults daal diye hain — abhi kuch set karna zaroori nahi
 
 Baad me badalna ho to bas Settings → Secrets and variables → **Variables** me
 wahi naam use kijiye — code chhune ki zaroorat nahi.
+
+## 12. "Order karne par Sheet me data nahi aata" — asli wajah aur fix
+
+Do alag wajah thi, dono theek ho gayi:
+
+### Wajah 1 — Pages par order likhne ka koi raasta hi nahi tha
+Aapki site GitHub Pages par chalti hai, jahan koi Node server nahi hota. Checkout
+pehle `/api/orders` par bhejta tha — wo Pages par hota hi nahi, isliye order
+kahin save hi nahi hota tha (sirf WhatsApp khulta tha).
+
+**Fix:** ab checkout **seedha aapke Apps Script** par order bhejta hai, jo
+`Orders` + `Order Items` tabs me row likhta hai. Order number bhi wahin banta hai
+(`NE-…`). WhatsApp hand-off pehle jaisa hi hai.
+
+### Wajah 2 — Sheet me purana Apps Script chal raha hai
+Aapne 11:01 par **Version 1** deploy kiya tha. Usme ye naya code nahi hai, isliye
+order wala request `unauthorized` keh kar laut raha hai. Live check yahi pakadta hai:
+
+> ❌ Apps Script par naya order code deploy hua hai (place_order) — nahi — mila: unauthorized
+
+### Aapko sirf ye karna hai (3 minute, ek baar)
+
+1. Sheet kholiye → **Extensions → Apps Script**
+2. Andar jo bhi code hai **poora delete** karein (Ctrl+A → Delete)
+3. `docs/00-overview/apps-script-code.md` kholiye → poora code copy karke paste
+   karein → **Save** (💾)
+4. **Deploy → Manage deployments →** pencil (✏️) **→ Version: New version →
+   Deploy**. (Wahi deployment rakhein — purana `/exec` URL wahi rehta hai.)
+   - "Who has access: **Anyone**" hi rahne dein.
+5. Website par ek test order karein → usi second Sheet ke `Orders` tab me row
+   aa jayegi (order number `NE-…`), items `Order Items` tab me.
+
+Iske baad live check khud green ho jayega (maine probe check laga diya hai — ye
+khaali order bhej kar dekhta hai, aapki Sheet me koi fake row nahi banti).
+
+### Order ke saath Sheet me kya jaata hai
+
+`Orders` tab: Order number · Order status (`placed`) · Payment status (`pending`)
+· Payment method (`whatsapp`) · Total · Subtotal · Items count · Item details ·
+Customer · Phone · Email · Address · City · State · Pincode · Notes · Admin Note ·
+Source (`website:<client id>`) · Device · Timestamp.
+
+`Order Items` tab: har line ka product, handle, size, colour, quantity, price,
+line total, image URL, status.
+
+Raksha (safety): naam / 10-digit mobile / poora address / 6-digit pincode
+validate hote hain; total server par hi jodha jaata hai; ek hi click dobara bheje
+jaane par **duplicate order nahi** banta (client id se pakda jaata hai); is action
+se Sheet padhi ya badli nahi ja sakti — sirf naya order likha jaata hai.
+
+### Ek aur cheez jo aapne galti se kar di thi
+
+GitHub → Settings → Variables me `PAGES_BASE_PATH` ki value `hgvkjhftg` thi. Next
+ne isi wajah se poori build fail kar di thi
+(*"Specified basePath has to start with a /"*). Ab code aisi galat value ko
+**ignore** karta hai (site root par banti hai), par aap us variable ko **delete**
+kar dein to sabse saaf rahega.
