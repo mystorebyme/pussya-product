@@ -395,7 +395,7 @@ try {
       path.join(ordersDir, "index.html"),
       fs.readFileSync(orderShell, "utf8").replace(
         "</head>",
-        '<meta name="robots" content="noindex"><script>location.replace("/" + (location.pathname.split("/")[1] || "") + "/track-order/");</script></head>',
+        '<meta name="robots" content="noindex"><script>location.replace("' + BASE_PATH + '/track-order/");</script></head>',
       ),
     );
     console.log("order shell → dist/404.html (deep links ke liye)");

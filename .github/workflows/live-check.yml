@@ -14,12 +14,13 @@ on:
       - main
       - arena/f2c07741-pussya-product
       - arena/47281d99-pussya-product
+      - arena/260f16c9-pussya-product
   workflow_dispatch:
     inputs:
       base_url:
         description: "Site URL"
         required: false
-        default: "https://mystorebyme.github.io/pussya-product/"
+        default: "https://noorethnicwear.store/"
 
 permissions:
   contents: write
@@ -35,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      BASE_URL: ${{ inputs.base_url || 'https://mystorebyme.github.io/pussya-product/' }}
+      BASE_URL: ${{ inputs.base_url || 'https://noorethnicwear.store/' }}
     steps:
       - uses: actions/checkout@v4
         with:

@@ -394,6 +394,8 @@ function setToken_(next, old) {
 /** Bina token ke dikhne layak settings keys (admin_url/support_email jaisi private cheezein nahi). */
 var PUBLIC_SETTING_KEYS = [
   'store_name', 'announcement', 'support_phone', 'phone', 'whatsapp', 'whatsapp_number',
+  // R50 — Today's Special ribbon (site header band) bina token ke padhna zaroori hai
+  'daily_special', 'special_bar',
   'upi_id', 'upi_name', 'gstin', 'free_shipping', 'order_prefix', 'prepaid_only',
   'support_hours', 'return_window_days', 'instagram',
   // R48 — YouPI ka public hissa (browser youpi.js embed karta hai). Secret
