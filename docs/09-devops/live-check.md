@@ -1,14 +1,14 @@
 # Live site check — https://noorethnicwear.store/
 
-> URLs tried (first live one wins): https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
+> URLs tried (first live one wins): fiet/ · https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T07:02:15.584Z
+Ran: 2026-10-29T07:19:36.346Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 13805 bytes · 24ms |
+| ✅ | home page 200 — HTTP 200 · 448297 bytes · 20ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -19,6 +19,7 @@ Ran: 2026-10-29T07:02:15.584Z
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
 | ✅ | build ne sheet se number liya (bake hua) — 12 digits |
+| ❌ | checkout order seedha Sheet (Apps Script) me jaata hai — NEXT_PUBLIC_SHEETS_WEBAPP_URL bake nahi hua |
 | ✅ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — 1 link · …5831 |
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) — 919785795831 |
 | ✅ | number 10 digit ka valid Indian mobile hai — 9785XXXXXX |
@@ -183,9 +184,10 @@ Ran: 2026-10-29T07:02:15.584Z
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 1 problem mili:
 
-> deploy propagation: 91s wait kiya
+- checkout order seedha Sheet (Apps Script) me jaata hai — NEXT_PUBLIC_SHEETS_WEBAPP_URL bake nahi hua
+
 > build settings: apps-script: ok
 
 ## URLs probed (DNS + HTTP)
@@ -193,17 +195,17 @@ Ran: 2026-10-29T07:02:15.584Z
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
 | https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | https://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.108.153,185.199.109.153,185.199.111.153,185.199.110.153 | 200 | - |
+| https://noorethnicwear.store/ | 185.199.108.153,185.199.109.153,185.199.110.153,185.199.111.153 | 200 | - |
 
 ### DNS records (Google DNS se poocha gaya)
 
 | name | type | value |
 | --- | --- | --- |
-| noorethnicwear.store | A | 185.199.111.153 |
-| noorethnicwear.store | A | 185.199.110.153 |
-| noorethnicwear.store | A | 185.199.109.153 |
 | noorethnicwear.store | A | 185.199.108.153 |
-| www.noorethnicwear.store | A | 172.67.178.35 |
+| noorethnicwear.store | A | 185.199.111.153 |
+| noorethnicwear.store | A | 185.199.109.153 |
+| noorethnicwear.store | A | 185.199.110.153 |
 | www.noorethnicwear.store | A | 104.21.43.105 |
+| www.noorethnicwear.store | A | 172.67.178.35 |
 
 ⚠️ `www.noorethnicwear.store` par CNAME nahi mila — GitHub custom domain verify nahi karega (setup: docs/09-devops/custom-domain-setup.md)
