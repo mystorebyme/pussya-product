@@ -348,11 +348,11 @@ check(
   sizeGuideHtml.includes(">XS<") && sizeGuideHtml.includes(">XXL<") && sizeGuideHtml.includes("Front Length"),
 );
 check(
-  "size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL)",
+  "size guide: unstitched suit note (2.5 m + 2.25 m + XS to 5XL)",
   sizeGuideHtml.includes('data-testid="unstitched-note"') &&
     sizeGuideHtml.includes("2.5 m") &&
     sizeGuideHtml.includes("2.25 m") &&
-    /XS se 5XL/.test(sizeGuideHtml),
+    /XS to 5XL/.test(sizeGuideHtml),
 );
 check(
   "size guide: front length value 46 (inches) chart me",
