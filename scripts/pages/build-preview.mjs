@@ -19,6 +19,32 @@ const APP_DIR = path.join(APP, "src/app");
 const TMP = path.join(ROOT, ".pages-preview-tmp");
 const BASE_PATH = process.env.PAGES_BASE_PATH ?? "";
 
+
+/**
+ * Live store ki `/api/settings` — sirf public keys (number, Daily Special,
+ * announcement). Kuch bhi na mile to `null` (build chalta rahega).
+ */
+async function readLiveSettings(base) {
+  if (!base) return null;
+  try {
+    const response = await fetch(`${base.replace(/\/$/, "")}/api/settings`, {
+      signal: AbortSignal.timeout(8000),
+      headers: { accept: "application/json" },
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const data = payload?.data ?? payload;
+    if (!data || typeof data !== "object") return null;
+    return {
+      whatsapp: typeof data.whatsapp === "string" ? data.whatsapp : "",
+      dailySpecial: typeof data.dailySpecial === "string" ? data.dailySpecial : "",
+      announcement: typeof data.announcement === "string" ? data.announcement : "",
+    };
+  } catch {
+    return null;
+  }
+}
+
 const moved = [];
 function moveAway(relative) {
   const from = path.join(APP_DIR, relative);
@@ -107,11 +133,30 @@ try {
   }));
   fs.writeFileSync(path.join(APP, "public/catalog-lite.json"), JSON.stringify(lite));
 
+  /**
+   * R50: WhatsApp number + Daily Special ko **prerender** me hi daal do.
+   *
+   * Number ka source Google Sheet hi hai, par Pages par server nahi hota — isliye
+   * build ke waqt live store ki `/api/settings` se wahi values padh kar
+   * `NEXT_PUBLIC_*` me daal dete hain. Isse WhatsApp button pehle HTML me hi
+   * maujood hota hai (JS ka intezaar nahi), aur runtime par sheet ki nayi value
+   * phir bhi jeetti hai. Live store na mile to build fail nahi hota.
+   */
+  const liveSettings = await readLiveSettings(process.env.NEXT_PUBLIC_API_BASE_URL ?? "");
+  const previewEnv = {};
+  if (liveSettings?.whatsapp) previewEnv.NEXT_PUBLIC_WHATSAPP = String(liveSettings.whatsapp);
+  if (liveSettings?.dailySpecial) previewEnv.NEXT_PUBLIC_DAILY_SPECIAL = String(liveSettings.dailySpecial);
+  if (liveSettings?.announcement) previewEnv.NEXT_PUBLIC_ANNOUNCEMENT = String(liveSettings.announcement);
+  if (Object.keys(previewEnv).length) {
+    console.log(`preview settings → ${Object.keys(previewEnv).join(", ")}`);
+  }
+
   execSync("npm run build --workspace @noor/web", {
     cwd: ROOT,
     stdio: "inherit",
     env: {
       ...process.env,
+      ...previewEnv,
       PAGES_PREVIEW: "1",
       PAGES_BASE_PATH: BASE_PATH,
       NEXT_PUBLIC_PAGES_BASE_PATH: BASE_PATH,

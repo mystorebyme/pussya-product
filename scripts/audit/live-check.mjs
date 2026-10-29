@@ -120,6 +120,25 @@ check("header render hua hai", /<header[^>]*>/.test(html));
 check("header me brand-lockup hai", /class="brand-lockup/.test(html));
 check("hero banner section hai", /data-testid="hero-banner"/.test(html) || /banner-mobile\.webp/.test(html));
 
+/* ── R50: WhatsApp-first (koi payment option nahi, FAB har page par) ──────── */
+check(
+  "no payment UI on the storefront (no 'Pay on UPI', no UPI deep link)",
+  !/Pay on UPI/.test(html) && !/upi:\/\//.test(html) && !/data-testid="upi-open"/.test(html),
+);
+check(
+  "home par WhatsApp flow ka zikr hai (koi payment claim nahi)",
+  /WhatsApp/.test(html) && !/Secure UPI|Pay online/i.test(html),
+);
+{
+  const productHref = html.match(/href="[^"]*\/products\/[a-z0-9-]+\/?"/)?.[0]?.slice(6, -1) ?? "";
+  const productUrl = productHref ? new URL(productHref.replace(/^\//, ""), BASE).toString() : "";
+  const productPage = productUrl ? await get(productUrl) : { ok: false, body: "" };
+  const fab = (pageHtml) => pageHtml.includes('data-testid="whatsapp-fab"') && /wa\.me\//.test(pageHtml);
+  check("WhatsApp FAB home par (bottom-right)", fab(html));
+  check("WhatsApp FAB product page par bhi", productPage.ok && fab(productPage.body));
+  check("Daily Special ribbon ya maroon announcement strip hai", /data-testid="daily-special"|data-testid="announcement/.test(html) || /Order in the bag/.test(html));
+}
+
 /* ── logo markup: base path + srcset ──────────────────────────────────────── */
 const picture = html.match(/<picture[^>]*>[\s\S]{0,1500}?logo-mobile\.png[^>]*>[\s\S]{0,400}?<\/picture>/)?.[0] ?? "";
 const srcs = [...html.matchAll(/(?:src|srcSet)="([^"]*images\/brand\/[^"]+)"/g)].map((m) => m[1]);

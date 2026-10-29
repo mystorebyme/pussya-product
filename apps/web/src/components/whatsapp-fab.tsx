@@ -14,7 +14,10 @@ import { whatsappNumber } from "@/lib/phone";
  *   • page-specific prefilled message, English me, taaki owner ko context mile
  *
  * Number **sirf** Google Sheet → Settings (`whatsapp` / `support_phone`) se aata
- * hai; khaali ho to button dikhta hi nahi (dead `wa.me/` link kabhi nahi).
+ * hai, isliye button **hamesha** dikhta hai (owner rule: "bottom-right on every
+ * page"). Sheet me number ho to seedha usi chat me le jaata hai; number abhi na
+ * mile (sheet/API down) to WhatsApp ka apna chat chooser khulta hai —
+ * `wa.me/` jaisa dead link kabhi nahi banta.
  */
 const MESSAGES: Record<string, string> = {
   "/cart": "Hi Noor Ethnic Wear, I need help with my cart.",
@@ -49,9 +52,8 @@ export function WhatsappFab() {
     };
   }, []);
 
-  if (!contactNumber) return null;
-
-  const href = `https://wa.me/${contactNumber}?text=${encodeURIComponent(messageFor(pathname))}`;
+  /** number mile to direct chat, warna WhatsApp ka chat picker (kabhi dead link nahi) */
+  const href = `https://wa.me/${contactNumber || ""}?text=${encodeURIComponent(messageFor(pathname))}`;
 
   return (
     <div

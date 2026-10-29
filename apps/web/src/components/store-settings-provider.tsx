@@ -38,13 +38,15 @@ export type PublicSettings = {
 };
 
 export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
-  announcement: "",
+  /** R50: static preview (GitHub Pages) me header/ribbon pehle HTML me hi dikhe */
+  announcement: process.env.NEXT_PUBLIC_ANNOUNCEMENT ?? "",
   dailySpecial: process.env.NEXT_PUBLIC_DAILY_SPECIAL ?? "",
   /* R38: UPI sirf sheet se — koi hardcoded payee default nahi (khaali = payment paused UI). */
   upiId: "",
   upiName: "Noor Ethnic Wear",
   supportPhone: "",
-  whatsapp: "",
+  /** R50: number ka asli source Sheet hai; ye sirf static-build fallback hai */
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "",
   freeShipping: true,
   /**
    * Static preview (GitHub Pages) par `/api/settings` nahi hota, isliye gateway
