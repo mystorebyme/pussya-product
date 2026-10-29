@@ -1,12 +1,14 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T05:50:24.908Z
+> URLs tried (first live one wins): https://mystorebyme.github.io/pussya-product/ · https://noorethnicwear.store/
+
+Ran: 2026-10-29T05:55:36.158Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ❌ | home page 200 — HTTP 403 · 5314 bytes · 198ms |
+| ❌ | home page 200 — HTTP 403 · 5314 bytes · 77ms |
 | ❌ | brand name page par hai |
 | ❌ | header render hua hai |
 | ❌ | header me brand-lockup hai |
@@ -142,7 +144,7 @@ Ran: 2026-10-29T05:50:24.908Z
 
 ❌ 64 problem mili:
 
-- home page 200 — HTTP 403 · 5314 bytes · 198ms
+- home page 200 — HTTP 403 · 5314 bytes · 77ms
 - brand name page par hai
 - header render hua hai
 - header me brand-lockup hai
