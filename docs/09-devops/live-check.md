@@ -2,13 +2,13 @@
 
 > URLs tried (first live one wins): fiet/ · https://noorethnicwear.store/ · http://noorethnicwear.store/ · https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T07:19:36.346Z
+Ran: 2026-10-29T07:23:06.889Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 448297 bytes · 20ms |
+| ✅ | home page 200 — HTTP 200 · 448297 bytes · 11ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -195,16 +195,16 @@ Ran: 2026-10-29T07:19:36.346Z
 | URL | DNS | HTTP | redirect |
 | --- | --- | --- | --- |
 | https://mystorebyme.github.io/pussya-product/ | 2606:50c0:8000::153,2606:50c0:8001::153,2606:50c0:8002::153,2606:50c0:8003::153 | 301 | https://noorethnicwear.store/ |
-| https://noorethnicwear.store/ | 185.199.108.153,185.199.109.153,185.199.110.153,185.199.111.153 | 200 | - |
+| https://noorethnicwear.store/ | 185.199.109.153,185.199.110.153,185.199.108.153,185.199.111.153 | 200 | - |
 
 ### DNS records (Google DNS se poocha gaya)
 
 | name | type | value |
 | --- | --- | --- |
-| noorethnicwear.store | A | 185.199.108.153 |
 | noorethnicwear.store | A | 185.199.111.153 |
 | noorethnicwear.store | A | 185.199.109.153 |
 | noorethnicwear.store | A | 185.199.110.153 |
+| noorethnicwear.store | A | 185.199.108.153 |
 | www.noorethnicwear.store | A | 104.21.43.105 |
 | www.noorethnicwear.store | A | 172.67.178.35 |
 
