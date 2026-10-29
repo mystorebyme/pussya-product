@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T05:18:50.380Z
+Ran: 2026-10-29T05:20:15.852Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 447880 bytes · 206ms |
+| ✅ | home page 200 — HTTP 200 · 447880 bytes · 167ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -16,7 +16,7 @@ Ran: 2026-10-29T05:18:50.380Z
 | ✅ | WhatsApp FAB home par (bottom-right) |
 | ✅ | WhatsApp FAB product page par bhi |
 | ✅ | Daily Special ribbon ya maroon announcement strip hai |
-| ❌ | build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store: HTTP 404 |
+| ❌ | build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404 |
 | ❌ | WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — wa.me par number nahi mila (chat picker = sheet se number nahi aaya) |
 | ✅ | number ek hi hai (header/footer/FAB me mismatch nahi) |
 | ❌ | number 10 digit ka valid Indian mobile hai — — |
@@ -183,10 +183,8 @@ Ran: 2026-10-29T05:18:50.380Z
 
 ❌ 3 problem mili:
 
-- build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store: HTTP 404
+- build ne sheet se number liya (bake hua) — nahi — apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
 - WhatsApp number sheet se live aaya (wa.me/<10+ digits>) — wa.me par number nahi mila (chat picker = sheet se number nahi aaya)
 - number 10 digit ka valid Indian mobile hai — —
 
-> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store: HTTP 404
-
-<!-- verify 1793251202 -->
+> build settings: apps-script: empty · published-csv: empty · sheet-gviz: HTTP 401 · live-store noor-ethnic-wear.vercel.app: HTTP 404 · live-store noorethnicwear.vercel.app: HTTP 404 · live-store noor-ethnic-wear.netlify.app: HTTP 404 · live-store noorethnicwear.netlify.app: HTTP 404
