@@ -1,16 +1,21 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T04:49:43.687Z
+Ran: 2026-10-29T04:57:00.191Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 457119 bytes · 130ms |
+| ✅ | home page 200 — HTTP 200 · 449006 bytes · 357ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
 | ✅ | hero banner section hai |
+| ✅ | no payment UI on the storefront (no 'Pay on UPI', no UPI deep link) |
+| ✅ | home par WhatsApp flow ka zikr hai (koi payment claim nahi) |
+| ❌ | WhatsApp FAB home par (bottom-right) |
+| ❌ | WhatsApp FAB product page par bhi |
+| ✅ | Daily Special ribbon ya maroon announcement strip hai |
 | ✅ | header logo <picture> mila |
 | ✅ | logo srcset base path ke saath hai (/pussya-product/...) — /pussya-product/images/brand/logo-desktop.png?v=4 · /pussya-product/images/brand/logo-tablet.png?v=4 · /pussya-product/images/brand/logo-mobile.png?v=4 |
 | ✅ | logo img par alt text hai |
@@ -148,15 +153,15 @@ Ran: 2026-10-29T04:49:43.687Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/white-colored-embroidered-georgette-anarkali-fully-stitched-suit-set-ay-341/` | 200 |
-| ✅ | `/pussya-product/products/nravya-purple-embroidered-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/rani-color-premium-quality-suit-set-dt-273-copy/` | 200 |
-| ✅ | `/pussya-product/products/vibhutis-wine-coloured-anarkali-suit-set-td06/` | 200 |
-| ✅ | `/pussya-product/products/manyata-maroon-red-embroidered-georgette-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/noor-anarkali-style-plazzo-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/siyas-royal-purple-elegant-golden-border-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/rang-e-royale-blooming-lehenga-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/rang-f-royale-blooming-lehenga-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/aditis-white-coloured-anarkali-suit-set-td04/` | 200 |
+| ✅ | `/pussya-product/products/copy-of-porrot-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1088/` | 200 |
+| ✅ | `/pussya-product/products/pranavi-anarkali-dupatta-set/` | 200 |
+| ✅ | `/pussya-product/products/kali-elegance-green-suit-set-code-td-109/` | 200 |
+| ✅ | `/pussya-product/products/bandhani-mehandi-color-anarkali-suit-set-td-141/` | 200 |
+| ✅ | `/pussya-product/products/prachis-red-havy-vichitra-royal-elegant-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/premium-quality-roman-silk-pista-anarkali-suit-set-copy/` | 200 |
+| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/krishvas-exclusive-blue-floral-organza-anarkali-suit-set-10340442833028/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -168,4 +173,7 @@ Ran: 2026-10-29T04:49:43.687Z
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 2 problem mili:
+
+- WhatsApp FAB home par (bottom-right)
+- WhatsApp FAB product page par bhi
