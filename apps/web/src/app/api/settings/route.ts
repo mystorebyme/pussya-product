@@ -26,6 +26,7 @@ async function handleGet(request: Request) {
     {
       data: {
         announcement: settings.announcement,
+        dailySpecial: settings.dailySpecial,
         freeShipping: settings.freeShipping,
         upiId: settings.upiId,
         upiName: settings.upiName,

@@ -87,13 +87,13 @@ export function TrackOrderForm() {
       {resolved ? (
         <div className="mt-4 border border-[#e6d3a8] bg-[#fdf9ee] p-4" data-testid="track-static-help">
           <p className="text-[12.5px] leading-relaxed text-[#5c534b]">
-            <strong>{resolved}</strong> — live tracking (payment, courier aur AWB) store ke server
-            version par chalti hai. Neeche se kholiye ya WhatsApp par order number bhejiye:
+            <strong>{resolved}</strong> — live tracking (payment, courier and AWB) lives on the store server
+            version. Open it below or send your order number on WhatsApp:
           </p>
           <div className="mt-3 flex flex-wrap gap-2.5">
             {liveStatus === "down" ? (
               <span className="inline-flex h-10 items-center bg-[#f1e6d8] px-4 text-[10.5px] font-semibold tracking-[.12em] text-[#7b5a2a] uppercase">
-                Live store abhi offline hai
+                The live store is offline right now
               </span>
             ) : (
               <a
@@ -115,8 +115,8 @@ export function TrackOrderForm() {
             </a>
           </div>
           <p className="mt-2 text-[11px] text-[#8a8078]">
-            Ya <Link href="/pages/contact" className="underline">contact page</Link> se message bhejiye — team
-            status reply karti hai.
+            Or message us from the <Link href="/pages/contact" className="underline">contact page</Link> — the team
+            replies with the status.
           </p>
         </div>
       ) : null}

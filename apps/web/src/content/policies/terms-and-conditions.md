@@ -24,7 +24,7 @@ Every order is prepaid — we do not offer cash on delivery.
 
 ## 5. Payment
 
-We accept UPI, cards, net banking and wallets through our payment provider. Orders are confirmed once the payment link has been paid; your payment provider's terms also apply to your transaction.
+You place the order on this site and send it to us on WhatsApp in one tap. Our team confirms the order and shares the payment details (UPI ID or QR) in the same chat. The order is confirmed once the payment is received, and your payment provider's terms also apply to the transaction.
 
 ## 6. Delivery
 
@@ -48,4 +48,4 @@ We are responsible for the products we sell and for delivering them safely. We a
 
 ## 11. Complaints and law
 
-WhatsApp  par order number bhejiye; we acknowledge complaints within 48 hours and aim to resolve them within 15 days. These terms are governed by Indian law, and courts at Jaipur, Rajasthan have jurisdiction.
+Send your order number on WhatsApp; we acknowledge complaints within 48 hours and aim to resolve them within 15 days. These terms are governed by Indian law, and courts at Jaipur, Rajasthan have jurisdiction.

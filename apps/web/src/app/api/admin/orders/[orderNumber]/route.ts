@@ -22,7 +22,7 @@ export async function GET(request: Request, context: { params: Promise<{ orderNu
   if (!authorize(request)) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const { orderNumber } = await context.params;
   const order = await getOrder(decodeURIComponent(orderNumber));
-  if (!order) return Response.json({ error: "Order nahi mila" }, { status: 404 });
+  if (!order) return Response.json({ error: "Order not found" }, { status: 404 });
   return Response.json({ order }, { headers: { "cache-control": "no-store" } });
 }
 
@@ -100,7 +100,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ order
         amount: Number(body.amount ?? 0),
         actor,
       });
-      if (!result) return Response.json({ error: "Order nahi mila" }, { status: 404 });
+      if (!result) return Response.json({ error: "Order not found" }, { status: 404 });
       return Response.json({ order: result.order, alreadyPaid: result.alreadyPaid });
     }
 
@@ -109,7 +109,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ order
         actor,
         reason: String(body.reason ?? "payment not received"),
       });
-      if (!order) return Response.json({ error: "Order nahi mila" }, { status: 404 });
+      if (!order) return Response.json({ error: "Order not found" }, { status: 404 });
       return Response.json({ order });
     }
 
@@ -119,7 +119,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ order
         reference: body.reference ? String(body.reference) : null,
         reason: String(body.reason ?? "admin marked failed"),
       });
-      if (!order) return Response.json({ error: "Order nahi mila" }, { status: 404 });
+      if (!order) return Response.json({ error: "Order not found" }, { status: 404 });
       return Response.json({ order });
     }
 
@@ -129,6 +129,6 @@ export async function PATCH(request: Request, context: { params: Promise<{ order
       return Response.json({ error: error.message, code: error.code }, { status: error.status });
     }
     console.error("admin order patch failed", error);
-    return Response.json({ error: "Update nahi hua." }, { status: 500 });
+    return Response.json({ error: "The update did not go through." }, { status: 500 });
   }
 }

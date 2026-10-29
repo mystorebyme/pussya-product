@@ -68,34 +68,29 @@ test("R33: review URL order ke saath banta hai", () => {
   assert.equal(reviewUrl("NE-ABC123"), "/checkout?step=review&order=NE-ABC123");
 });
 
-test("R33: payment page par back-to-review link hai", () => {
+test("R50: the hand-off page links back to the live order page", () => {
   const pay = read("apps/web/src/app/orders/[orderNumber]/pay/page.tsx");
-  assert.match(pay, /data-testid="back-to-review"/);
-  assert.match(pay, /href=\{reviewUrl\(order\.orderNumber\)\}/);
+  assert.match(pay, /\/orders\/\$\{/);
+  assert.match(pay, /data-testid="pay-order-number"/);
 });
 
-test("R33: checkout order place par snapshot save karta hai (back ke liye)", () => {
+test("R50: checkout order place par snapshot save karta hai (back ke liye)", () => {
   const form = read("apps/web/src/components/checkout-form.tsx");
-  assert.match(form, /savePlacedOrder\(\{/);
-  assert.match(form, /readPlacedOrder\(resumeOrderNumber\)/);
-  assert.match(form, /data-testid="review-continue-payment"/);
-  // resume mode me dobara order nahi banta
-  assert.match(form, /if \(resumed\) \{\s*goToPayment\(resumed\.orderNumber\);/);
-  // browser back bhi review par aaye (R36: goToPayment me replaceState + pushState)
-  assert.match(form, /window\.history\.replaceState\(\{\}, "", reviewUrl\(target\)\)/);
-  assert.match(form, /data-testid="review-loading"/);
+  assert.match(form, /savePlacedOrder\(snapshot\)/);
+  // ek purana `?order=` link review step kholta hai aur usi order ka WhatsApp hand-off dikhata hai
+  assert.match(form, /resumeOrderNumber/);
+  assert.match(form, /wantsReview/);
+  assert.match(form, /data-testid="checkout-submit"/);
 });
 
-test("R33: checkout 3 step — delivery → review → payment", () => {
+test("R50: checkout 3 step — delivery → review → WhatsApp", () => {
   const form = read("apps/web/src/components/checkout-form.tsx");
   const delivery = form.indexOf('label: "Delivery"');
   const review = form.indexOf('label: "Review"');
-  const payment = form.indexOf('label: "Payment"');
-  assert.ok(delivery > 0 && review > delivery && payment > review, "step order delivery → review → payment");
-  // R36: payment step 3 checkout ke **andar** hai — alag page par redirect nahi
-  assert.match(form, /paymentUrl\(target\)/);
-  assert.match(form, /data-testid="checkout-payment-step"/);
-  assert.doesNotMatch(form, /\?pay=1/);
+  const whatsapp = form.indexOf('label: "WhatsApp"');
+  assert.ok(delivery > 0 && review > delivery && whatsapp > review, "step order delivery → review → WhatsApp");
+  assert.doesNotMatch(form, /label: "Payment"/);
+  assert.doesNotMatch(form, /checkout-payment-step/);
 });
 
 test("R33: snapshot sessionStorage me chalta hai (permanent nahi)", () => {

@@ -55,49 +55,49 @@ export async function GET() {
   const warnings: string[] = [];
 
   if (!configured) {
-    help.push("Vercel me GOOGLE_SHEETS_WEBAPP_URL set nahi — sheet pipeline band hai (docs/09-devops/google-sheets.md).");
+    help.push("GOOGLE_SHEETS_WEBAPP_URL is not set on Vercel — the sheet pipeline is off (docs/09-devops/google-sheets.md).");
   }
   if (health && !health.ok) {
     const probeTimedOut = /timeout|abort/i.test(String(health.error ?? ""));
     const pipelineAlive = info.source === "apps-script" && (!write || write.ok);
     if (probeTimedOut && pipelineAlive) {
       warnings.push(
-        `Health probe timeout hua (${health.error}) par settings sheet se aa rahi hain aur last write ok hai — Apps Script cold start ki wajah se; dobara refresh kariye.`,
+        `The health probe timed out (${health.error}) but settings are still coming from the sheet and the last write was fine — this is an Apps Script cold start. Please refresh again.`,
       );
     } else {
       help.push(
-        `Apps Script jawab nahi de raha (${health.error ?? "unknown"}) — URL purana/dead ho sakta hai. Deploy → Manage deployments → wala /exec URL Vercel me daaliye.`,
+        `Apps Script is not responding (${health.error ?? "unknown"}) — the URL may be old or dead. Paste the /exec URL from Deploy → Manage deployments into Vercel.`,
       );
     }
   }
   if (health?.ok) {
     const major = Number(/^r(\d+)/.exec(String(health.version ?? ""))?.[1] ?? 0);
     if (major && major < 39) {
-      help.push(`Script ka purana version chal raha hai (${health.version}) — naya code paste karke Deploy → Manage deployments → ✏️ → New version → Deploy kariye.`);
+      help.push(`The script is running an old version (${health.version}) — paste the new code, then Deploy → Manage deployments → ✏️ → New version → Deploy.`);
     }
     if (health.tokenSet === false) {
-      help.push("Script ka TOKEN set nahi — browser me <webapp URL>?action=set_token&token=<Vercel GOOGLE_SHEETS_TOKEN> kholiye.");
+      help.push("The script token is not set — open <webapp URL>?action=set_token&token=<Vercel GOOGLE_SHEETS_TOKEN> in a browser.");
     } else if (health.tokenOk === false) {
-      help.push("Vercel ka GOOGLE_SHEETS_TOKEN aur script ka token match nahi kar rahe — dono same rakhiye (set_token URL se).");
+      help.push("The Vercel GOOGLE_SHEETS_TOKEN and the script token do not match — set them to the same value (use the set_token URL).");
     }
     if (health.sheetFound === false) {
-      help.push("Script ko sheet access nahi mili — script apni sheet se banaiye (Sheet → Extensions → Apps Script) ya Share → Editor dijiye.");
+      help.push("The script cannot access the sheet — create the script from the sheet itself (Sheet → Extensions → Apps Script) or grant access via Share → Editor.");
     }
     if (health.spreadsheetId && health.spreadsheetId !== expectedSheetId()) {
-      help.push(`Script doosri sheet pakde hue hai (${health.spreadsheetId}); expected ${expectedSheetId()} — sahi sheet se <webapp URL>?action=adopt kholiye ya SHEET_EXPECTED_ID env update kariye.`);
+      help.push(`The script is bound to a different sheet (${health.spreadsheetId}); expected ${expectedSheetId()} — open <webapp URL>?action=adopt from the correct sheet or update the SHEET_EXPECTED_ID env value.`);
     }
     if (health.upiSet === false) {
-      help.push("Sheet ke Settings tab me upi_id khaali hai — website par payment tab tak pause rahega. Apna UPI ID bhariye.");
+      help.push("The upi_id cell in the Settings tab is empty — the WhatsApp order hand-off will keep showing no payment details until you fill it in.");
     }
   }
   if (configured && !info.source) {
-    help.push(`Settings sheet se padhi hi nahi ja saki${info.lastError ? ` (${info.lastError})` : ""} — script health upar dekhiye.`);
+    help.push(`Settings could not be read from the sheet${info.lastError ? ` (${info.lastError})` : ""} — see the script health above.`);
   }
   if (write && !write.ok) {
-    help.push(`Sheet par last write (${write.sheets}) fail hua: ${write.error ?? "unknown"} — orders/messages sheet me nahi ja rahe; upar ka fix kariye.`);
+    help.push(`The last sheet write (${write.sheets}) failed: ${write.error ?? "unknown"} — orders and messages are not reaching the sheet. Fix the issue above.`);
   }
   if (!settings?.upiId) {
-    help.push("Website ke paas abhi koi UPI ID nahi hai (sheet + fallback dono khaali) — payment page 'load nahi ho rahi' dikhata rahega.");
+    help.push("The site has no UPI ID yet (both the sheet and the fallback are empty) — the WhatsApp message will go out without payment details.");
   }
 
   return Response.json(
@@ -139,7 +139,7 @@ export async function GET() {
       },
       help,
       warnings,
-      note: "Ye page sirf status batata hai — sheet ka URL/token kabhi expose nahi karta.",
+      note: "This page only reports status — it never exposes the sheet URL or token.",
     },
     { headers: { "cache-control": "no-store" } },
   );

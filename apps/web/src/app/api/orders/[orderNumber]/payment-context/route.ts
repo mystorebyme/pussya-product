@@ -27,7 +27,7 @@ export async function GET(request: Request, context: { params: Promise<{ orderNu
   const [order, settings] = await Promise.all([getOrder(orderNumber), getStoreSettingsFast()]);
   if (!order) {
     return withCors(
-      Response.json({ error: "Order nahi mila" }, { status: 404, headers: { "cache-control": "no-store" } }),
+      Response.json({ error: "Order not found" }, { status: 404, headers: { "cache-control": "no-store" } }),
       request,
     );
   }

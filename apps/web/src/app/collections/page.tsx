@@ -19,7 +19,7 @@ export const revalidate = 600;
 export const metadata: Metadata = {
   title: "Shop all collections — Anarkali, Lehenga, Printed Suit Sets",
   description:
-    "Browse every Noor Ethnic Wear edit: Anarkali suits, lehenga choli, printed suit sets, new arrivals and the Diwali sale — secure prepaid UPI checkout.",
+    "Browse every Noor Ethnic Wear edit: Anarkali suits, lehenga choli, printed suit sets, new arrivals and the Diwali sale — add to bag and confirm your order on WhatsApp in one tap.",
   alternates: { canonical: "/collections" },
 };
 

@@ -63,8 +63,8 @@ export async function GET(request: Request) {
     const scriptHint = !looksHtml
       ? null
       : /accounts\.google\.com|signin|Sign in|You need (access|permission)|permission/i.test(raw)
-        ? "Deployment ka access 'Anyone' nahi hai. Apps Script → Deploy → Manage deployments → ✏️ → Who has access: Anyone → Deploy."
-        : "Purana/archived deployment URL lag raha hai (ya script error). Apps Script → Deploy → Manage deployments → ✏️ → Version: New version → Deploy, aur wahi /exec URL Vercel me GOOGLE_SHEETS_WEBAPP_URL me daalein.";
+        ? "The deployment is not open to 'Anyone'. Apps Script → Deploy → Manage deployments → ✏️ → Who has access: Anyone → Deploy."
+        : "This looks like an old or archived deployment URL (or a script error). Apps Script → Deploy → Manage deployments → ✏️ → Version: New version → Deploy, then paste that /exec URL into GOOGLE_SHEETS_WEBAPP_URL on Vercel.";
     result.read = { status: response.status, ms: Date.now() - startedRead, body: raw.slice(0, 600), scriptHint };
     /**
      * Sabse zaroori check: script **kaun si sheet** pakde hue hai?
@@ -109,7 +109,7 @@ export async function GET(request: Request) {
         email: "selftest@example.com",
         phone: "",
         subject: "Selftest (ignore)",
-        message: "api/sheet-selftest se bheja gaya test message — ignore kariye.",
+        message: "Test message sent from api/sheet-selftest — safe to ignore.",
       });
       let mirrored: boolean | string = false;
       try {
@@ -176,7 +176,7 @@ export async function GET(request: Request) {
         email: "selftest@example.com",
         phone: "",
         subject: "Selftest (ignore)",
-        message: "api/sheet-selftest se bheja gaya test message — ignore kariye.",
+        message: "Test message sent from api/sheet-selftest — safe to ignore.",
       });
       let mirrored: boolean | string = false;
       try {
@@ -222,14 +222,14 @@ export async function GET(request: Request) {
                     "Payment status": "pending",
                     "Payment method": "upi",
                     Customer: "selftest",
-                    Notes: "api/sheet-selftest se likha gaya",
+                    Notes: "written by api/sheet-selftest",
                   }
                 : {
                     Timestamp: new Date().toISOString(),
                     Actor: "selftest",
                     Action: "sheet_write_check",
                     Target: sheet,
-                    Details: "api/sheet-selftest se likha gaya",
+                    Details: "written by api/sheet-selftest",
                   },
           },
         ],

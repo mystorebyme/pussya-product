@@ -37,7 +37,7 @@ async function handlePost(request: Request) {
   const perOrder = hitRateLimit(`order:${orderNumber}`, { name: "claim", limit: 6, windowMs: 10 * 60_000 });
   if (!perOrder.ok) {
     return Response.json(
-      { error: "Is order ke liye bahut attempts ho gaye — WhatsApp par screenshot bhej dijiye." },
+      { error: "Too many attempts for this order — please send us the screenshot on WhatsApp." },
       { status: 429, headers: { "retry-after": String(perOrder.retryAfterSeconds) } },
     );
   }
@@ -61,7 +61,7 @@ async function handlePost(request: Request) {
         paymentStatus: updated.paymentStatus,
         status: "claim_submitted",
         message:
-          "Payment claim mil gaya. Team UPI statement se verify karke order confirm karegi (WhatsApp par update milega).",
+          "Your payment claim is saved. Our team verifies it against the bank statement and confirms the order (you get an update on WhatsApp).",
       },
       { status: 202 },
     );
@@ -70,7 +70,7 @@ async function handlePost(request: Request) {
       return Response.json({ error: error.message, code: error.code }, { status: error.status });
     }
     console.error("payment claim failed", error);
-    return Response.json({ error: "Claim save nahi hua — WhatsApp par screenshot bhej dijiye." }, { status: 500 });
+    return Response.json({ error: "We could not save the claim — please send us the screenshot on WhatsApp." }, { status: 500 });
   }
 }
 

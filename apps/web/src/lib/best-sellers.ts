@@ -29,7 +29,7 @@ export async function soldCounts(): Promise<Map<string, number>> {
     }
   } catch (error) {
     // DB down ho to home page kabhi fail na ho — fallback list dikhegi
-    console.error("[best-sellers] orders padhne me dikkat", (error as Error).message);
+    console.error("[best-sellers] could not read orders", (error as Error).message);
   }
   return counts;
 }

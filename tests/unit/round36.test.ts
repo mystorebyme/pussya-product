@@ -155,100 +155,35 @@ test("R36: checkout form saved details prefill karta hai + batata hai + clear ho
 
 /* ───────────── 2. payment step 3 — isi page par, alag page nahi ───────────── */
 
-test("R36: step 3 payment checkout ke andar render hota hai", () => {
+/**
+ * R50 replaced the in-checkout payment step with a WhatsApp hand-off, so the
+ * R36 payment-step guards are retired. What must still hold: the order URL
+ * (`?order=…&step=review`) reopens the same order, in English, with the
+ * WhatsApp CTA ready.
+ */
+
+test("R50: no in-checkout payment step exists any more", () => {
   const form = read(FORM);
-  assert.match(form, /data-testid="checkout-payment-step"/);
-  assert.match(form, /<CheckoutPaymentStep/);
-  assert.match(form, /const isPayment = step === "payment" && Boolean\(orderNumber\)/);
-  // nested form se bachne ke liye payment step par shell <div> hai
-  assert.match(form, /if \(isPayment\) \{\s*return \(\s*<div className="grid gap-8/);
-  assert.doesNotMatch(form, /router\.push\(`\/orders\//, "payment page par redirect nahi");
-  assert.doesNotMatch(form, /\?pay=1/, "UPI auto-open flag hata");
+  assert.doesNotMatch(form, /CheckoutPaymentStep/);
+  assert.doesNotMatch(form, /data-testid="checkout-payment-step"/);
+  assert.doesNotMatch(form, /payment-context/);
+  assert.match(form, /data-testid="checkout-submit"/);
 });
 
-test("R36: history pushState se URL banta hai — back review par, refresh par step 3", () => {
+test("R50: URL se order dobara khulta hai (review) aur WhatsApp hand-off taiyaar hota hai", () => {
   const form = read(FORM);
-  assert.match(form, /window\.history\.replaceState\(\{\}, "", reviewUrl\(target\)\)/);
-  assert.match(form, /window\.history\.pushState\(\{\}, "", paymentUrl\(target\)\)/);
-  assert.match(form, /window\.addEventListener\("popstate", syncFromUrl\)/, "back/forward par step sync");
-  assert.match(form, /setStep\(wantsReview \? "review" : "payment"\)/, "URL se step");
+  assert.match(form, /const wantsReview = searchParams\.get\("step"\) === "review"/);
+  assert.match(form, /setStep\(wantsReview \? "review" : "sent"\)/);
+  assert.match(form, /setHandoff\(\{/);
+  assert.match(form, /I am following up on order/);
 });
 
-test("R36: wahi order dobara kholne par payment context API se chalta hai", () => {
-  const form = read(FORM);
-  assert.match(form, /\/api\/orders\/\$\{encodeURIComponent\(target\)\}\/payment-context/);
-  assert.match(form, /cache: "no-store"/);
-  const route = read(CONTEXT_ROUTE);
-  assert.match(route, /export const dynamic = "force-dynamic"/);
-  assert.match(route, /"cache-control": "no-store"/);
-  assert.match(route, /getStoreSettingsFast\(\)/, "UPI sheet se live");
-  assert.match(route, /signUpiReturn\(order\.orderNumber\)/, "UPI-return token");
-  assert.match(route, /phoneMasked/, "mobile masked hi jaata hai");
-  // privacy: poora address / email / poora mobile public API me nahi
-  assert.doesNotMatch(route, /order\.email/);
-  assert.doesNotMatch(route, /address: order\.address/);
-  assert.doesNotMatch(route, /phone: order\.phone/);
-});
-
-test("R36: step 3 par live status + order details ka raasta", () => {
-  const step3 = read(STEP3);
-  assert.match(step3, /PaymentStatusWatcher/);
-  assert.match(step3, /onStatusChange/);
-  assert.match(step3, /data-testid="payment-back-review"/);
-  assert.match(step3, /data-testid="order-details-link"/);
-  assert.match(read(WATCHER), /onStatusChange\?: \(status: PaymentState\) => void/);
-  const form = read(FORM);
-  assert.match(form, /data-testid="payment-order-details"/);
-  assert.match(form, /onStatusChange=\{setPaymentStatus\}/);
-});
-
-/* ──────────── 3. UPI app apne aap nahi khulti — sirf "Pay on UPI" par ──────────── */
-
-test("R36: payment khulte hi UPI par redirect nahi (auto-open code hata)", () => {
-  const upi = read(UPI);
-  assert.doesNotMatch(upi, /appOpened/, "auto-open ref hata");
-  assert.doesNotMatch(upi, /window\.location\.href = upiUri/, "bina gesture redirect nahi");
-  assert.doesNotMatch(upi, /get\("pay"\)/, "?pay=1 auto-open hata");
-  assert.match(upi, /Pay on UPI/, "ek button — tap par hi intent");
-  assert.match(upi, /href=\{upiUri\}/, "wahi button upi:// intent hai");
-  assert.doesNotMatch(upi, /Google Pay|PhonePe|Paytm|BHIM/i, "koi app brand nahi (owner rule)");
-
-  /**
-   * CI ka `production-build smoke` job `tests/e2e/responsive.mjs` bhi chalata hai —
-   * wahan purana guard `?pay=1` auto-open ko **zaroori** maanta tha, isliye R36 ke
-   * baad wo job fail hua. Guard ab ulta hai: auto-open code **nahi** hona chahiye.
-   */
-  const responsive = read("tests/e2e/responsive.mjs");
-  assert.doesNotMatch(
-    responsive,
-    /check\([^)]*auto-opens the UPI app/,
-    "responsive.mjs ab auto-open expect nahi karta",
-  );
-  assert.match(
-    responsive,
-    /khud nahi khulti/,
-    "responsive.mjs me R36 ka naya guard hai (page load par UPI khud na khule)",
-  );
-});
-
-test("R36: UPI return callback us page par aata hai jo UpiPayment render karta hai", () => {
-  const upi = read(UPI);
-  assert.match(upi, /returnPath\?: string/);
-  assert.match(upi, /const path = \(returnPath \?\? `\/orders\/\$\{encodeURIComponent\(orderNumber\)\}`\)/);
-  assert.match(upi, /url\.searchParams\.set\("upi", "return"\)/);
-  // checkout step 3 → wapas step 3 par; pay page → wapas pay page par
-  assert.match(read(STEP3), /returnPath=\{paymentUrl\(orderNumber\)\}/);
-  assert.match(read(PAY_PAGE), /returnPath=\{`\/orders\/\$\{encodeURIComponent\(order\.orderNumber\)\}\/pay`\}/);
-  assert.match(upi, /onConfirmed\?\.\(\)/, "confirm hote hi parent ko status");
-});
-
-test("R36: last 4 digit pehle se bhare aate hain (confirm ek tap me)", () => {
-  const upi = read(UPI);
-  assert.match(upi, /defaultLast4\?: string/);
-  assert.match(upi, /setLast4\(\(current\) => \(current \? current : hint\)\)/, "khud likha hua override nahi hota");
-  assert.match(read(STEP3), /last4Hint/);
-  assert.match(read(FORM), /last4Hint=\{phoneLast4\(form\.phone \|\| savedPhone\)\}/);
-  assert.ok(read(PAY_PAGE).includes('defaultLast4={order.phone.replace(/\\D/g, "").slice(-4)}'), "pay page par bhi last-4 prefill");
+test("R50: hand-off page par live order ka raasta hai (payment context nahi)", () => {
+  const pay = read(PAY_PAGE);
+  assert.match(pay, /data-testid="pay-order-number"/);
+  assert.match(pay, /data-testid="pay-amount"/);
+  assert.match(pay, /data-testid="confirm-whatsapp"/);
+  assert.doesNotMatch(pay, /PaymentStatusWatcher|UpiPayment/);
 });
 
 /* ───────────── 4. Vercel par sheet real-time (after() se background) ───────────── */

@@ -37,7 +37,7 @@ export const RAILS: Record<
   },
   explore: {
     title: "More from Noor Ethnic Wear",
-    subtitle: "Naye picks har 10 minute me — sab kuch browse kariye",
+    subtitle: "New picks every 10 minutes — browse the full edit",
     href: "/collections/new-arrivals",
     collections: [],
     count: 8,

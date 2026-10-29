@@ -42,7 +42,7 @@ export function BestSellersRail({ initial }: { initial: Product[] }) {
           Best sellers
         </h2>
         <p className="mt-1 text-[11.5px] tracking-[.14em] text-[#9c8f82] uppercase">
-          Sabse zyada order hone wale pieces — ranking har order ke saath update hoti hai
+          Our most ordered pieces — the ranking updates with every order
         </p>
       </div>
       <div className="mt-7 grid grid-cols-2 gap-x-2.5 gap-y-7 sm:gap-x-5 lg:grid-cols-4">

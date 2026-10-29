@@ -34,7 +34,7 @@ export async function POST(request: Request) {
         .filter((item) => item.title && item.price > 0)
     : [];
 
-  if (!items.length) return Response.json({ error: "Kam se kam ek item chahiye." }, { status: 400 });
+  if (!items.length) return Response.json({ error: "At least one item is required." }, { status: 400 });
 
   const invoice = await createManualInvoice({
     createdBy: String(body.createdBy ?? "admin"),

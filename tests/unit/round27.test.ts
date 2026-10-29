@@ -81,24 +81,22 @@ test("traffic table migration maujood hai (DB par data sambhalne ke liye)", () =
   assert.match(schema, /create table if not exists traffic_visitors/);
 });
 
-test("payment page: UTR nahi maangta — sirf last 4 digit + ek confirm button", () => {
-  const pay = read("apps/web/src/components/upi-payment.tsx");
-  assert.ok(!/data-testid="upi-utr"/.test(pay), "UTR input hata diya hona chahiye");
-  assert.ok(!/UTR nahi mila/.test(pay), "purana UTR wala button text nahi");
-  assert.match(pay, /data-testid="upi-last4"/);
-  assert.match(pay, /data-testid="upi-claim"/);
-  assert.match(pay, /Mobile ke last 4 digit/);
-  // page par lambi text wall na ho (owner ne kam karne ko kaha)
-  // R36: returnPath / defaultLast4 / onConfirmed props — R38: empty-UPI pause
-  // state (sheet se UPI na aaye to honest message) — R48: YouPI gateway block
-  // upar (config na ho to kuch render nahi hota) — budget 620 line
-  assert.ok(pay.split("\n").length < 620, "payment card compact ho gaya");
+test("R50: no payment screen — the order page hands off to WhatsApp", () => {
+  const page = read("apps/web/src/app/orders/[orderNumber]/pay/page.tsx");
+  const order = read("apps/web/src/app/orders/[orderNumber]/page.tsx");
+  // no UTR / last-4 / UPI confirm UI anywhere the customer can reach
+  assert.ok(!/datatestid|data-testid="upi-utr"/.test(page));
+  assert.ok(!/UPI|UTR/.test(page.replace(/\/\*[\s\S]*?\*\//g, "")), "pay page me UPI copy nahi");
+  assert.match(page, /data-testid="confirm-whatsapp"/);
+  assert.match(page, /wa\.me/);
+  assert.match(order, /data-testid="order-whatsapp-block"/);
 });
 
-test("payment page par 'payment ho gaya' confirm ka saaf message", () => {
-  const pay = read("apps/web/src/components/upi-payment.tsx");
-  assert.match(pay, /Payment confirm ho gaya/);
-  assert.match(pay, /Screenshot WhatsApp par bhejein/);
+test("R50: the WhatsApp hand-off copy is short and in English", () => {
+  const page = read("apps/web/src/app/orders/[orderNumber]/pay/page.tsx");
+  assert.match(page, /Send order on WhatsApp/);
+  // page par lambi text wall na ho
+  assert.ok(page.split("\n").length < 260, "hand-off page compact hai");
 });
 
 test("Pages shell: /orders/<number> aur /pay path sahi parse hote hain (base path ke saath)", async () => {

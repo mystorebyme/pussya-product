@@ -30,7 +30,7 @@ export async function POST(request: Request) {
         }))
     : [];
 
-  if (!items.length) return Response.json({ error: "Kam se kam ek item chahiye." }, { status: 400 });
+  if (!items.length) return Response.json({ error: "At least one item is required." }, { status: 400 });
 
   try {
     const order = await createOrder({
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       return Response.json({ error: error.message, code: error.code }, { status: error.status });
     }
     console.error("manual order failed", error);
-    return Response.json({ error: "Order create nahi hua. Details check kariye." }, { status: 500 });
+    return Response.json({ error: "The order could not be created. Please check the details." }, { status: 500 });
   }
 }
 

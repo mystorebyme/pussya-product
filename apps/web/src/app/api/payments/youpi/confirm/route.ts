@@ -40,13 +40,13 @@ async function handlePost(request: Request) {
   const perOrder = hitRateLimit(`youpi:${orderNumber}`, { name: "youpi", limit: 12, windowMs: 10 * 60_000 });
   if (!perOrder.ok) {
     return Response.json(
-      { error: "Is order ke liye bahut attempts ho gaye — WhatsApp par screenshot bhej dijiye." },
+      { error: "Too many attempts for this order — please send us the screenshot on WhatsApp." },
       { status: 429, headers: { "retry-after": String(perOrder.retryAfterSeconds) } },
     );
   }
 
   const config = await youpiConfig();
-  if (!config) return Response.json({ error: "YouPI gateway configured nahi hai." }, { status: 503 });
+  if (!config) return Response.json({ error: "The YouPI gateway is not configured." }, { status: 503 });
 
   const order = await getOrderForPayment(orderNumber);
   if (!order) return Response.json({ error: "Order not found." }, { status: 404 });
@@ -60,7 +60,7 @@ async function handlePost(request: Request) {
 
   // Signature-style guard: yahan payment id gateway par honi chahiye aur orderId match kare
   if (!payment || (payment.orderId && payment.orderId !== order.orderNumber)) {
-    return Response.json({ error: "Payment verify nahi ho paayi." }, { status: 502 });
+    return Response.json({ error: "The payment could not be verified." }, { status: 502 });
   }
 
   if (!youpiAmountMatches(payment.amountPaise, order.total)) {

@@ -12,6 +12,11 @@ import { readSheetSettings, sheetSettingsInfo, writeSheetSettings } from "./goog
  */
 export type StoreSettings = {
   announcement: string;
+  /**
+   * "Today's Special" ribbon under the header (owner, R50). One short English
+   * line; changes in the Sheet show up on the site within seconds.
+   */
+  dailySpecial: string;
   freeShipping: boolean;
   /** payment yahan aata hai — owner Google Sheet se badal sakta hai */
   upiId: string;
@@ -53,6 +58,7 @@ export type StoreSettings = {
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   /** R40: koi seasonal/purani copy default me nahi — owner sheet se set kare (khaali = header apni generic lines dikhata hai) */
   announcement: "",
+  dailySpecial: "",
   freeShipping: true,
   /**
    * R38 (owner): purana hardcoded payee VPA code se **poora hata diya** — jo
@@ -73,7 +79,13 @@ export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   // Owner rule: site/API par support email nahi. Internal record ke liye ab
   // sirf env (SELLER_EMAIL) — default khaali.
   supportEmail: process.env.SELLER_EMAIL ?? "",
-  whatsapp: "",
+  /**
+   * R50: number ka **source sheet hi hai** (`Settings` → `whatsapp`). Env
+   * `NEXT_PUBLIC_WHATSAPP` sirf tab kaam aata hai jab sheet/API bilkul
+   * reachable na ho (jaise GitHub Pages static preview) — sheet ki value
+   * hamesha isse jeetti hai.
+   */
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "",
   adminUrl: process.env.ADMIN_PANEL_URL ?? "",
   /* R48 — gateway default se band nahi, par URL/key khaali hone par apne aap band */
   youpiEnabled: (process.env.YOUPI_ENABLED ?? "true").toLowerCase() !== "false",
@@ -101,6 +113,7 @@ export function normalizeStoreSettings(input: unknown): StoreSettings {
     typeof value === "string" && value.trim() ? value.trim().slice(0, max) : fallback;
   return {
     announcement: typeof raw.announcement === "string" ? raw.announcement.trim().slice(0, 180) : base.announcement,
+    dailySpecial: typeof raw.dailySpecial === "string" ? raw.dailySpecial.trim().slice(0, 120) : base.dailySpecial,
     freeShipping: raw.freeShipping !== false,
     upiId: text(raw.upiId, base.upiId, 80),
     upiName: text(raw.upiName, base.upiName, 80),
@@ -201,6 +214,7 @@ async function merge(options: { fresh?: boolean }): Promise<StoreSettings> {
     ? normalizeStoreSettings({
         ...stored,
         ...(sheet.announcement ? { announcement: sheet.announcement } : {}),
+        ...(sheet.dailySpecial ? { dailySpecial: sheet.dailySpecial } : {}),
         ...(sheet.supportPhone ? { supportPhone: sheet.supportPhone } : {}),
         ...(sheet.supportEmail ? { supportEmail: sheet.supportEmail } : {}),
         ...(sheet.whatsapp ? { whatsapp: sheet.whatsapp } : {}),

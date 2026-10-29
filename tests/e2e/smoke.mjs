@@ -266,14 +266,12 @@ async function main() {
     const payPage = await get(`/orders/${orderBody.orderNumber}/pay`);
     check("payment deep link still works", payPage.status === 200, `status ${payPage.status}`);
     check(
-      "payment card ek 'Pay on UPI' button dikhata hai",
-      payPage.text.includes("Pay on UPI") && payPage.text.includes('data-testid="upi-open"'),
+      "R50: hand-off page ek WhatsApp CTA dikhata hai (koi payment card nahi)",
+      payPage.text.includes('data-testid="confirm-whatsapp"') && /wa\.me\//.test(payPage.text),
     );
-    check("payment page par auto-redirect flag nahi (?pay=1 hata)", !payPage.text.includes("?pay=1"));
     check(
-      "payment deep link par back-to-review + UPI return token hai",
-      // callback URL encoded hota hai: `upi%3Dreturn`
-      payPage.text.includes('data-testid="back-to-review"') && /upi(%3D|=)return/i.test(payPage.text),
+      "R50: hand-off page par koi UPI / payment UI nahi",
+      !payPage.text.includes('data-testid="upi-open"') && !/Pay on UPI/.test(payPage.text),
     );
   }
 

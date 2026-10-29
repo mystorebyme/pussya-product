@@ -97,7 +97,7 @@ test("R48-1b: 3 tabs + unit toggle + Find My Size + unstitched note + pro-tips",
   const note = JSON.stringify(UNSTITCHED_NOTE);
   assert.match(note, /2\.5 m/, "kurti top fabric");
   assert.match(note, /2\.25 m/, "dupatta fabric");
-  assert.match(note, /XS se 5XL/, "tailor XS–5XL tak custom");
+  assert.match(note, /XS to 5XL/, "tailor XS–5XL tak custom");
 
   // 4 steps, har step par pro tip
   assert.equal(MEASURE_STEPS.length, 4);

@@ -83,7 +83,7 @@ const pages: Record<string, PageContent> = {
   "shipping-policy": {
     title: "Shipping Policy",
     eyebrow: "Delivery",
-    intro: "All orders are prepaid and dispatched within 1-2 business days.",
+    intro: "All orders are confirmed on WhatsApp and dispatched within 1-2 business days.",
     sections: [
       {
         heading: "Dispatch timelines",
@@ -95,7 +95,7 @@ const pages: Record<string, PageContent> = {
       {
         heading: "Payment",
         body: [
-          "We accept prepaid orders only — UPI, credit/debit cards and netbanking. A secure payment link is shared on WhatsApp as soon as the order is placed, and dispatch begins the same day.",
+          "Orders are prepaid. You add to bag, give your address at checkout and the full order opens in WhatsApp in one tap. Our team confirms it and shares the UPI ID or QR in the same chat, so dispatch begins the same day.",
         ],
       },
       {
@@ -141,7 +141,7 @@ const pages: Record<string, PageContent> = {
       {
         heading: "Information we collect",
         body: [
-          "Name, email, phone number, shipping address and order history. For prepaid orders, payments are processed on PCI-DSS compliant gateways — we never store card details.",
+          "Name, email, phone number, shipping address and order history. Payment happens directly with our team on WhatsApp — we never store card, UPI PIN or CVV details.",
           "We also use cookies to remember your cart and to understand which products are popular, so we can improve the store.",
         ],
       },
@@ -154,7 +154,7 @@ const pages: Record<string, PageContent> = {
       {
         heading: "Your rights",
         body: [
-          "You may request access, correction or deletion of your personal data by emailing our support address (Contact page par). We respond within 30 days.",
+          "You may request access, correction or deletion of your personal data by emailing our support address (see the Contact page). We respond within 30 days.",
         ],
       },
     ],
@@ -188,7 +188,7 @@ const pages: Record<string, PageContent> = {
     title: "Size Guide",
     eyebrow: "Find your fit",
     intro:
-      "Ready-to-wear anarkalis, lehengas aur suit sets — bust, waist, hips aur front length ka poora chart, inches ya centimetres me. Apna bust daal kar seedha recommended size bhi dekh sakti hain.",
+      "Ready-to-wear anarkalis, lehengas and suit sets — the full bust, waist, hips and front length chart in inches or centimetres. Enter your bust and we show the recommended size instantly.",
     /*
      * R48 (owner): poora tabbed size guide — Measurements Chart / Find My Size
      * / How to Measure, unit toggle, XS–XXL chart aur unstitched fabric note.

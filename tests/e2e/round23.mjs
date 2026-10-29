@@ -130,11 +130,10 @@ await orderTimed.value.text();
 console.log(`       tracking page ${orderTimed.ms}ms`);
 check("order/tracking page 2s ke andar khulta hai", orderTimed.ms < 2000, `${orderTimed.ms}ms`);
 
-// ── 3. step 3 — UTR / last-4 / claim / WhatsApp ─────────────────────────────
-check("pay page par claim button hai", payHtml.includes('data-testid="upi-claim"'));
-check("pay page par WhatsApp screenshot option hamesha hai", payHtml.includes('data-testid="upi-whatsapp-screenshot"'));
-check("pay page par owner ka WhatsApp number hai", /wa\.me\/91\d{10}/.test(payHtml) || /WhatsApp \d{10}/.test(payHtml));
-check("pay page par UTR / last-4 input hai", /data-testid="upi-utr"|data-testid="upi-last4"/.test(payHtml));
+// ── 3. R50 — pay page is a WhatsApp hand-off (no UTR / last-4 / claim UI) ────
+check("pay page par WhatsApp CTA hai", payHtml.includes('data-testid="confirm-whatsapp"'));
+check("pay page par owner ka WhatsApp link hai", /wa\.me\/\d{10,}/.test(payHtml));
+check("pay page par koi UTR / last-4 input nahi", !/data-testid="upi-utr"|data-testid="upi-last4"/.test(payHtml));
 
 const badLast4 = await fetch(`${BASE}/api/payments/claim`, {
   method: "POST",

@@ -839,6 +839,199 @@ footer[class*="bg-[#8a000e]"] a {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
+   R50 — WhatsApp-first ordering: float button, green CTA, Today's Special,
+   step transitions, bag badge. Sab CSS-only (transform/opacity) → no lag.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- floating WhatsApp button ---------- */
+.wa-fab-btn {
+  background-image: linear-gradient(180deg, #2ee06f 0%, #25d366 46%, #128c4b 100%);
+  box-shadow:
+    0 12px 28px -10px rgba(18, 140, 75, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+  transition:
+    transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .wa-fab-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+      0 18px 34px -10px rgba(18, 140, 75, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.45) inset;
+  }
+}
+
+.wa-fab-btn:active {
+  transform: scale(0.95);
+}
+
+/* pehli baar par do pulse rings — phir band (scroll disturb na ho) */
+.wa-fab-pulse::before,
+.wa-fab-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid rgba(37, 211, 102, 0.55);
+  animation: waPulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) 3;
+  pointer-events: none;
+}
+
+.wa-fab-pulse::after {
+  animation-delay: 0.7s;
+}
+
+@keyframes waPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+
+.wa-fab svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wa-fab-btn:hover svg {
+    transform: rotate(-8deg) scale(1.06);
+  }
+}
+
+/* ---------- green WhatsApp CTA (checkout / order pages) ---------- */
+.wa-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(180deg, #1aa159 0%, #128c4b 60%, #0e723d 100%);
+  transition:
+    box-shadow 0.28s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wa-cta:hover {
+    box-shadow: 0 12px 26px -12px rgba(18, 140, 75, 0.65);
+  }
+}
+
+/* ---------- Today's Special ribbon: gold sheen sweeps across, slowly ---------- */
+.daily-special::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 244, 214, 0.85) 50%, transparent 62%);
+  transform: translateX(-110%);
+  animation: specialSheen 7s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+
+@keyframes specialSheen {
+  0%,
+  62% {
+    transform: translateX(-110%);
+  }
+  92%,
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+.daily-special-star {
+  animation: specialStar 3.2s ease-in-out infinite;
+}
+
+@keyframes specialStar {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.22) rotate(18deg);
+    opacity: 1;
+  }
+}
+
+/* ---------- checkout: each step slides in, summary line items settle ---------- */
+.checkout-step-enter {
+  animation: stepIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* order confirmation tick pops once */
+.order-sent-tick {
+  animation: tickPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes tickPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---------- bag: naya line drawer me halka pop karke aata hai ---------- */
+.cart-line-pop {
+  animation: cartLinePop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cartLinePop {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- bag badge bump (jab item add ho) ---------- */
+.cart-badge-bump {
+  animation: badgeBump 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes badgeBump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
    Reduced motion — owner/customer ne system me "motion kam" chuna ho to poori
    animation band (content turant, bina transition ke). Ye block **sabse aakhir**
    me hai taaki upar ki saari animation isse override ho jaye.

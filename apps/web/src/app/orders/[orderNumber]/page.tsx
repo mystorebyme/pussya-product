@@ -9,7 +9,6 @@ import { ORDER_STATUS_COPY, siteConfig } from "@/config/site";
 import { SafeImage } from "@/components/safe-image";
 import { orderWhatsAppLink } from "@/lib/whatsapp";
 import { getStoreSettingsFast } from "@/lib/store-settings";
-import { PaymentStatusWatcher } from "@/components/payment-status-watcher";
 import {
   estimatedDelivery,
   orderTrackingUrl,
@@ -32,16 +31,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { orderNumber } = await params;
   const order = await getOrder(orderNumber);
-  if (!order) return { title: "Order nahi mila", robots: { index: false } };
+  if (!order) return { title: "Order not found", robots: { index: false } };
   const title =
     order.paymentStatus === "paid"
       ? "Order confirmed"
       : order.paymentStatus === "processing"
-        ? "Payment verify ho raha hai"
+        ? "Verifying payment"
         : order.paymentStatus === "failed"
           ? "Payment failed"
           : order.paymentStatus === "refunded"
-            ? "Refund ho gaya"
+            ? "Refunded"
             : "Payment pending";
   return { title, robots: { index: false } };
 }
@@ -98,14 +97,12 @@ export default async function OrderPage({ params }: { params: Promise<{ orderNum
           </h1>
           <p className="mt-1.5 text-[12.5px] text-[#6b6259]">
             {order.paymentMethod === "cod"
-              ? "Your order is confirmed. Please pay the COD amount at delivery."
+              ? "Your order is confirmed. Please pay the amount on delivery."
               : order.paymentStatus === "paid"
                 ? "Payment received — thank you! Your order is confirmed and being prepared for dispatch."
                 : order.paymentStatus === "processing"
-                  ? "Payment reference received — our team is verifying it. Order confirm hote hi aapko update milega."
-                  : order.paymentStatus === "failed"
-                    ? "Payment fail hui thi. Neeche se dobara payment kar sakte hain."
-                    : "Order reserved hai. Payment complete karte hi order confirm ho jayega."}
+                  ? "We have your payment reference and are verifying it. You will get an update as soon as it clears."
+                  : "Your order is saved. Send it once on WhatsApp so our team can confirm it and share the payment details."}
           </p>
           <a
             href={orderWhatsAppLink(order, siteUrl)}
@@ -135,26 +132,21 @@ export default async function OrderPage({ params }: { params: Promise<{ orderNum
           </div>
         </div>
 
-        {/* Payment alag page par hota hai — yahan sirf uska live status */}
-        {order.paymentMethod !== "cod" ? (
-          <div className="mt-4" data-testid="order-payment-block">
-            <PaymentStatusWatcher orderNumber={order.orderNumber} initialStatus={order.paymentStatus} />
-            {order.paymentStatus !== "paid" ? (
-              <div className="mt-3 flex flex-wrap items-center gap-3 border border-[#e9dfd4] bg-white px-4 py-3">
-                <Link
-                  href={`/orders/${order.orderNumber}/pay`}
-                  data-testid="complete-payment"
-                  className="bg-[#862222] px-5 py-2.5 text-[11px] font-semibold tracking-[.14em] text-white uppercase"
-                >
-                  {order.paymentStatus === "failed" ? "Retry payment" : "Complete payment"}
-                </Link>
-                <p className="text-[11.5px] text-[#6b6259]">
-                  {formatPrice(order.total)} · UPI ({settings.upiName}) — paisa milne par order confirm hoga.
-                </p>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
+        {/* R50: no online payment on the site — the order is confirmed in WhatsApp chat */}
+        <div className="mt-4 flex flex-wrap items-center gap-3 border border-[#e6d3a8] bg-[#fdf9ee] px-4 py-3" data-testid="order-whatsapp-block">
+          <a
+            href={orderWhatsAppLink(order, siteUrl)}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="complete-payment"
+            className="wa-cta bg-[#128c4b] px-5 py-2.5 text-[11px] font-semibold tracking-[.14em] text-white uppercase"
+          >
+            {order.paymentStatus === "paid" ? "Message us on WhatsApp" : "Confirm on WhatsApp"}
+          </a>
+          <p className="text-[11.5px] text-[#6b6259]">
+            {formatPrice(order.total)} · We confirm every order in chat and share the payment details there.
+          </p>
+        </div>
 
         <div className="mt-4 border border-[#eee6de] p-5" data-testid="order-tracking">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -170,8 +162,8 @@ export default async function OrderPage({ params }: { params: Promise<{ orderNum
               data-testid="tracking-stopped"
             >
               {stopped === "cancelled"
-                ? "Ye order cancel ho gaya hai. Paise kat gaye hon to refund 5–7 working days me wapas aa jaata hai — koi sawaal ho to WhatsApp par likh dijiye."
-                : "Ye order return ho gaya hai. Replacement ke liye WhatsApp par likh dijiye — team aage badha degi."}
+                ? "This order was cancelled. If money was deducted, the refund reaches you in 5–7 working days — message us on WhatsApp for anything else."
+                : "This order was returned. Message us on WhatsApp for a replacement and our team will take it forward."}
             </p>
           ) : (
             <ol className="mt-4 grid grid-cols-5 gap-1.5 text-center">
@@ -235,7 +227,7 @@ export default async function OrderPage({ params }: { params: Promise<{ orderNum
                 </a>
               ) : (
                 <p className="mt-1.5 text-[11px] text-[#8a8078]">
-                  Is AWB se track karne ke liye courier ki website par number daal dijiye.
+                  Use this AWB number on the courier website to track the parcel.
                 </p>
               )}
               {noteText ? (

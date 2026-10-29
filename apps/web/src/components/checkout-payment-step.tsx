@@ -60,8 +60,8 @@ export function CheckoutPaymentStep({
         Pay {formatPrice(total)}
       </h2>
       <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#6b6259]">
-        Order <strong className="text-[#862222]">{orderNumber}</strong> place ho gaya hai. Neeche UPI se
-        payment kariye — paisa milne par order khud confirm ho jayega.
+        Order <strong className="text-[#862222]">{orderNumber}</strong> has been placed. Pay by UPI below —
+        the order confirms itself once the money arrives.
       </p>
 
       <button
@@ -86,7 +86,7 @@ export function CheckoutPaymentStep({
           className="mt-3 border border-[#eee6de] bg-white px-3 py-2.5 text-[11.5px] text-[#8a8078]"
           data-testid="payment-context-loading"
         >
-          Payment options khul rahe hain…
+          Opening payment options…
         </p>
       ) : null}
 
@@ -110,19 +110,19 @@ export function CheckoutPaymentStep({
         className="mt-5 border border-[#862222]/25 bg-[#fdf6f3] px-5 py-4 text-center"
       >
         <p className="text-[12px] font-semibold text-[#862222]">
-          Payment confirm hone ke baad hi order confirm hota hai.
+          The order is confirmed only after the payment is confirmed.
         </p>
         <Link
           href={`/orders/${encodeURIComponent(orderNumber)}`}
           data-testid="order-details-link"
           className="mt-3 inline-flex items-center gap-2 border border-[#862222] bg-[#862222] px-6 py-3 text-[11px] font-semibold tracking-[.14em] text-white uppercase transition-colors hover:bg-[#6d1b1b]"
         >
-          Order details dekhein
+          View order details
           <span aria-hidden="true">→</span>
         </Link>
         <p className="mt-2.5 text-[11px] leading-relaxed text-[#8a8078]">
-          Payment ke baad tracking, order status aur delivery date{" "}
-          <strong className="text-[#862222]">yahin click karke</strong> dekh sakte hain.
+          After payment you can see tracking, order status and the delivery date{" "}
+          <strong className="text-[#862222]">by tapping here</strong>.
         </p>
       </div>
     </section>

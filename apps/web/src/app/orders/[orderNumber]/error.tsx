@@ -15,9 +15,9 @@ export default function OrderError({ error, reset }: { error: Error & { digest?:
   return (
     <div className="container-noor py-16 lg:py-24">
       <div className="mx-auto max-w-[560px] border border-[#e9dfd4] bg-[#faf8f5] p-6 text-center sm:p-9">
-        <h1 className="font-display text-[24px] font-medium">Order abhi load nahi ho paya</h1>
+        <h1 className="font-display text-[24px] font-medium">We could not load this order yet</h1>
         <p className="mt-2 text-[12.5px] leading-relaxed text-[#6b6259]">
-          Aapka order safe hai — sirf order service se connection nahi ban paya. Thodi der baad dobara try kariye.
+          Your order is safe — we just could not reach the order service. Please try again in a moment.
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
           <button
@@ -28,7 +28,7 @@ export default function OrderError({ error, reset }: { error: Error & { digest?:
             Try again
           </button>
           <a
-            href="https://wa.me/?text=Hi%2C%20mera%20order%20page%20load%20nahi%20ho%20raha."
+            href="https://wa.me/?text=Hi%2C%20my%20order%20page%20is%20not%20loading."
             target="_blank"
             rel="noreferrer"
             className="bg-[#25D366] px-6 py-3 text-[11px] font-semibold tracking-[.14em] text-white uppercase"
@@ -40,11 +40,11 @@ export default function OrderError({ error, reset }: { error: Error & { digest?:
           <Link href="/track-order" className="text-[#862222] underline">
             Track order
           </Link>{" "}
-          ya{" "}
+          or get help from the{" "}
           <Link href="/pages/contact" className="text-[#862222] underline">
             contact page
-          </Link>{" "}
-          se bhi madad le sakte hain.
+          </Link>
+          .
         </p>
       </div>
     </div>

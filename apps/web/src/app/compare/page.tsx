@@ -69,7 +69,7 @@ export default function ComparePage() {
       {items.length === 0 ? (
         <div className="mt-10 border border-[#eee6de] px-6 py-20 text-center">
           <p className="text-sm text-[#6b6259]">
-            {ready ? "Compare list khaali hai — product card par eye icon dabaiye." : "Loading…"}
+            {ready ? "Your compare list is empty — tap the eye icon on any product card." : "Loading…"}
           </p>
           <Link
             href="/collections/noors-choice"

@@ -182,8 +182,8 @@ export function ProductDetail({
       content: (
         <p className="text-[12.5px] leading-relaxed text-[#5c534b]">
           Ready to dispatch in 1-2 days. Prepaid orders only (UPI) —
-          4-7 business days delivery. Cash on Delivery available nahi hai, isliye order place karte hi
-          UPI se payment confirm kar lein.
+          4-7 business days delivery. Cash on delivery is not available, so confirm the order on WhatsApp
+          and pay by UPI there.
         </p>
       ),
     },
@@ -349,10 +349,10 @@ export function ProductDetail({
           </div>
           <p className="mt-2 text-[11px] text-[#8a8078]">
             {bigSizeSurcharge
-              ? `Bade size (${size.split(" ")[0]}) me extra fabric lagta hai — price Rs. ${Math.round(
+              ? `Larger sizes (${size.split(" ")[0]}) use extra fabric, so the price is Rs. ${Math.round(
                   (sizePricing!.price - active.price) / 100,
                 )} zyada.`
-              : "XL aur usse bade sizes par price thoda zyada hota hai."}
+              : "Prices are slightly higher for XL and larger sizes."}
           </p>
           {sizeSoldOut ? (
             <p className="mt-1 text-[11.5px] text-[#b3261e]">

@@ -31,17 +31,17 @@ export async function PATCH(request: Request) {
     return Response.json({ error: "Invalid JSON body." }, { status: 400 });
   }
   const id = String(body.id ?? "").trim();
-  if (!id) return Response.json({ error: "Message id chahiye." }, { status: 400 });
+  if (!id) return Response.json({ error: "Message id is required." }, { status: 400 });
   const action = body.action ?? "handled";
   if (!["handled", "replied", "unreplied"].includes(action)) {
-    return Response.json({ error: "Action handled | replied | unreplied me se hona chahiye." }, { status: 400 });
+    return Response.json({ error: "Action must be one of: handled, replied, unreplied." }, { status: 400 });
   }
   const actor = String(body.actor ?? "admin").slice(0, 120);
   const updated =
     action === "handled"
       ? await markMessageHandled(id, actor)
       : await setMessageReplied(id, action === "replied", actor);
-  if (!updated) return Response.json({ error: "Message nahi mila." }, { status: 404 });
+  if (!updated) return Response.json({ error: "Message not found." }, { status: 404 });
   // sheet me status row (best-effort) — owner ko bhi pata chale
   await mirrorMessageToSheet(updated).catch(() => undefined);
   return Response.json({ message: updated });

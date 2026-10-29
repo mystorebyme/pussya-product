@@ -265,7 +265,7 @@ function updateFromAudit(entry: AuditEntry): TrackingUpdate | null {
       status: "payment",
       label: "Payment claim",
       kind: "payment",
-      text: "Payment confirm request mili — team UPI statement se verify kar rahi hai.",
+      text: "We received your payment confirmation — our team is verifying it with the bank statement.",
     };
   }
   if (entry.action === "payment.verified" || entry.action === "payment.confirmed") {

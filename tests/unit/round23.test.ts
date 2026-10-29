@@ -42,7 +42,7 @@ test("checkout client me mismatch block hota hai + ek tap fix", () => {
   assert.match(form, /stateMismatch/);
   assert.match(form, /data-testid="state-mismatch"/);
   assert.match(form, /data-testid="state-fix"/);
-  assert.match(form, /Ye pincode .* ka hai/);
+  assert.match(form, /This pincode belongs to \$\{pinState\}/);
   assert.match(form, /INDIAN_STATES/);
 });
 

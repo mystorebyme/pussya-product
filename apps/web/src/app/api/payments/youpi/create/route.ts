@@ -46,13 +46,13 @@ async function handlePost(request: Request) {
   });
   if (!perOrder.ok) {
     return Response.json(
-      { error: "Is order ke liye bahut payment attempts ho gaye — WhatsApp par screenshot bhej dijiye." },
+      { error: "Too many payment attempts for this order — please send us the screenshot on WhatsApp." },
       { status: 429, headers: { "retry-after": String(perOrder.retryAfterSeconds) } },
     );
   }
 
   const config = await youpiConfig();
-  if (!config) return Response.json({ error: "YouPI gateway configured nahi hai." }, { status: 503 });
+  if (!config) return Response.json({ error: "The YouPI gateway is not configured." }, { status: 503 });
 
   const order = await getOrderForPayment(orderNumber);
   if (!order) return Response.json({ error: "Order not found." }, { status: 404 });
@@ -60,7 +60,7 @@ async function handlePost(request: Request) {
     return Response.json({ alreadyPaid: true, paymentStatus: "paid" });
   }
   if (order.status === "cancelled") {
-    return Response.json({ error: "Ye order cancel ho chuka hai." }, { status: 409 });
+    return Response.json({ error: "This order has been cancelled." }, { status: 409 });
   }
 
   const returnUrl = `${siteConfig.url.replace(/\/+$/, "")}/checkout?step=payment&order=${encodeURIComponent(orderNumber)}`;
@@ -117,7 +117,7 @@ async function handlePost(request: Request) {
         { status: error.status === 409 ? 409 : 502 },
       );
     }
-    return Response.json({ error: "Payment session nahi ban paaya." }, { status: 502 });
+    return Response.json({ error: "The payment session could not be created." }, { status: 502 });
   }
 }
 

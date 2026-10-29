@@ -21,7 +21,7 @@ export async function GET(request: Request, context: { params: Promise<{ orderNu
   const { orderNumber } = await context.params;
   const dbOrder = await getOrder(orderNumber);
   if (!dbOrder) {
-    return withCors(Response.json({ error: "Order nahi mila" }, { status: 404 }), request);
+    return withCors(Response.json({ error: "Order not found" }, { status: 404 }), request);
   }
   // R37: sheet = order ka DB — status/tracking sheet se (turant), baaki DB se
   const fresh = new URL(request.url).searchParams.get("fresh") === "1";

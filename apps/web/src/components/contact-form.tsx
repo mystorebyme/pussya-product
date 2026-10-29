@@ -142,7 +142,7 @@ export function ContactForm() {
           {/* honest fallback — static preview / server down par message kho na jaye */}
           {HAS_WHATSAPP ? (
             <p className="mt-1 text-[#5c534b]">
-              Aap seedha WhatsApp par bhi bhej sakte hain:{" "}
+              You can also message us directly on WhatsApp:{" "}
               <a
                 href={`https://wa.me/${whatsappNumber(SUPPORT_WHATSAPP)}?text=${encodeURIComponent(
                   `Hi Noor Ethnic Wear! ${form.subject}\nName: ${form.name}\n${form.message}`,
@@ -175,7 +175,7 @@ export function ContactForm() {
             data-testid="contact-whatsapp"
             className="text-[11.5px] text-[#5c534b] underline decoration-[#c9b9a8] underline-offset-4 hover:text-[#862222]"
           >
-            ya WhatsApp {SUPPORT_WHATSAPP} par bhejein
+            or message us on WhatsApp {SUPPORT_WHATSAPP}
           </a>
         ) : null}
       </div>

@@ -59,7 +59,7 @@ async function hydrateOnce() {
   const legacy = readJson();
   if (legacy.length) {
     const imported = await importOrders(legacy);
-    console.info(`[orders] ${imported} purane orders Postgres me import hue`);
+    console.info(`[orders] imported ${imported} existing orders into Postgres`);
   }
 }
 
@@ -121,7 +121,7 @@ export class OrderError extends Error {
 
 /** price server par recompute hota hai — client ke bheje hue amount par bharosa nahi */
 export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
-  if (!payload.items.length) throw new OrderError("Cart khaali hai.", 400, "empty_cart");
+  if (!payload.items.length) throw new OrderError("Your bag is empty.", 400, "empty_cart");
 
   // delivery serviceability — sirf admin-approved states/pincodes par order
   // (India Post data me na ho, blocked ho ya state band ho to yahin ruk jaata hai)
@@ -138,7 +138,7 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
     const pinState = canonicalStateName(serviceability.state) ?? serviceability.state;
     if (pinState && !statesMatch(payload.state, pinState)) {
       throw new OrderError(
-        `Ye pincode ${pinState} ka hai — State me "${pinState}" daaliye (aapne "${payload.state}" bheja hai).`,
+        `This pincode belongs to ${pinState} — please select "${pinState}" as the state (you sent "${payload.state}").`,
         400,
         "state_mismatch",
       );
@@ -147,19 +147,19 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
 
   const items = payload.items.map((line) => {
     const product = products.find((candidate) => candidate.handle === line.handle);
-    if (!product) throw new OrderError(`Product nahi mila: ${line.handle}`, 400, "product_not_found");
+    if (!product) throw new OrderError(`Product not found: ${line.handle}`, 400, "product_not_found");
     // product-level stock — colour group ke sab sizes khatam ho to kuch bhi na bike
     if (product.inStock === false) {
-      throw new OrderError(`${product.title} abhi sold out hai.`, 409, "product_unavailable");
+      throw new OrderError(`${product.title} is sold out right now.`, 409, "product_unavailable");
     }
     const quantity = Number(line.quantity);
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > 10) {
-      throw new OrderError(`Quantity 1 se 10 ke beech honi chahiye (${product.title}).`, 400, "invalid_item");
+      throw new OrderError(`Quantity must be between 1 and 10 (${product.title}).`, 400, "invalid_item");
     }
     // size silently badalna galat order deta hai — customer ko saaf error do
     if (!product.sizes.includes(line.size)) {
       throw new OrderError(
-        `${product.title} me size "${line.size}" available nahi hai. Options: ${product.sizes.join(", ")}`,
+        `${product.title} does not come in size "${line.size}". Available sizes: ${product.sizes.join(", ")}`,
         400,
         "invalid_item",
       );
@@ -168,7 +168,7 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
     // size ke hisaab se price (XL +100 … 5XL +500) — cart me jo dikhta hai wahi charge hota hai
     const sizePricing = product.sizePricing?.[size];
     if (sizePricing && sizePricing.available === false) {
-      throw new OrderError(`${product.title} ka size ${size} abhi sold out hai.`, 400, "size_unavailable");
+      throw new OrderError(`Size ${size} of ${product.title} is sold out right now.`, 400, "size_unavailable");
     }
     // koi bhi size stock me na ho to product hi unavailable hai
     const anySizeAvailable = product.sizes.some((option) => {
@@ -176,7 +176,7 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
       return pricing ? pricing.available !== false : true;
     });
     if (!anySizeAvailable) {
-      throw new OrderError(`${product.title} abhi sold out hai.`, 409, "product_unavailable");
+      throw new OrderError(`${product.title} is sold out right now.`, 409, "product_unavailable");
     }
     return {
       handle: product.handle,
@@ -198,7 +198,7 @@ export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
    */
   if (payload.paymentMethod === "cod") {
     throw new OrderError(
-      "Cash on Delivery available nahi hai — sirf prepaid (UPI) orders accept hote hain.",
+      "Cash on delivery is not available — every order is confirmed on WhatsApp.",
       400,
       "cod_not_allowed",
     );
@@ -304,7 +304,7 @@ export async function updateOrderStatus(
   const all = await readAll();
   const wanted = normalizeOrderNumber(orderNumberValue);
   const index = all.findIndex((order) => order.orderNumber === wanted);
-  if (index === -1) throw new OrderError("Order nahi mila", 404, "order_not_found");
+  if (index === -1) throw new OrderError("Order not found", 404, "order_not_found");
   const order = all[index]!;
   /**
    * Payment pehle, dispatch baad me (owner rule): paisa verify hone se pehle order
@@ -312,14 +312,14 @@ export async function updateOrderStatus(
    */
   if (order.paymentStatus !== "paid" && !["cancelled", "returned", "placed"].includes(status)) {
     throw new OrderError(
-      `Payment abhi ${order.paymentStatus} hai — pehle payment confirm kariye, phir order ${status} hoga.`,
+      `Payment is still ${order.paymentStatus} — confirm the payment first, then the order can be marked ${status}.`,
       409,
       "payment_pending",
     );
   }
   if (!canTransition(order.status, status)) {
     throw new OrderError(
-      `Order ${orderNumberValue} ka status ${order.status} se ${status} nahi ho sakta.`,
+      `Order ${orderNumberValue} cannot move from ${order.status} to ${status}.`,
       409,
       "invalid_transition",
     );
@@ -357,7 +357,7 @@ export async function setStatusNote(
   const all = await readAll();
   const wanted = normalizeOrderNumber(orderNumberValue);
   const index = all.findIndex((order) => order.orderNumber === wanted);
-  if (index === -1) throw new OrderError("Order nahi mila", 404, "order_not_found");
+  if (index === -1) throw new OrderError("Order not found", 404, "order_not_found");
   const order = all[index]!;
   const now = new Date().toISOString();
 
@@ -392,7 +392,7 @@ export async function setTracking(
   const all = await readAll();
   const wanted = normalizeOrderNumber(orderNumberValue);
   const index = all.findIndex((order) => order.orderNumber === wanted);
-  if (index === -1) throw new OrderError("Order nahi mila", 404, "order_not_found");
+  if (index === -1) throw new OrderError("Order not found", 404, "order_not_found");
   const order = all[index]!;
   const now = new Date().toISOString();
   const courier = input.courier?.trim() || null;
@@ -469,7 +469,7 @@ export async function ensureInvoice(orderNumberValue: string): Promise<{ order: 
   const all = await readAll();
   const wanted = normalizeOrderNumber(orderNumberValue);
   const index = all.findIndex((order) => order.orderNumber === wanted);
-  if (index === -1) throw new OrderError("Order nahi mila", 404, "order_not_found");
+  if (index === -1) throw new OrderError("Order not found", 404, "order_not_found");
   const order = all[index]!;
   if (order.invoice) return { order, invoice: order.invoice };
 
@@ -554,7 +554,7 @@ export async function updateOrderContact(
   const all = await readAll();
   const wanted = normalizeOrderNumber(orderNumberValue);
   const index = all.findIndex((order) => order.orderNumber === wanted);
-  if (index === -1) throw new OrderError("Order nahi mila", 404, "order_not_found");
+  if (index === -1) throw new OrderError("Order not found", 404, "order_not_found");
   const order = all[index]!;
 
   const text = (value: string | undefined, current: string, min = 1, max = 240) => {
@@ -669,7 +669,7 @@ export async function submitPaymentReference(
   );
   if (clash) {
     throw new OrderError(
-      "Ye UPI reference pehle se doosre order par use ho chuka hai. Payment app se sahi UTR daaliye, ya WhatsApp par sampark kariye.",
+      "This UPI reference is already used on another order. Enter the correct UTR from your payment app, or contact us on WhatsApp.",
       409,
       "reference_in_use",
     );

@@ -121,12 +121,13 @@ export default function CartPage() {
             </div>
 
             <p className="mt-4 border border-[#eadfce] bg-[#fdf8f0] px-3 py-2.5 text-[11px] leading-relaxed text-[#8a7a5f]">
-              Festive sale price already applied — <strong>no coupon needed</strong>. <ShippingNote withDelivery={false} /> on every prepaid order.
+              Festive sale price already applied — <strong>no coupon needed</strong>. <ShippingNote withDelivery={false} /> on every
+              order.
             </p>
 
             <Link
               href="/checkout"
-              className="mt-5 block bg-[#862222] py-3 text-center text-[11.5px] font-semibold tracking-[.16em] text-white uppercase"
+              className="cta-sheen mt-5 block bg-[#862222] py-3 text-center text-[11.5px] font-semibold tracking-[.16em] text-white uppercase"
             >
               Proceed to checkout
             </Link>
@@ -142,8 +143,9 @@ export default function CartPage() {
               </svg>
               Order on WhatsApp
             </a>
-            <p className="mt-2.5 text-center text-[10.5px] text-[#8a8078]">
-              100% secure prepaid payment · UPI, cards & netbanking
+            <p className="mt-2.5 text-center text-[10.5px] leading-relaxed text-[#8a8078]">
+              No online payment here — you review your bag and send the order on WhatsApp. Our team confirms it and shares the
+              payment details in chat.
             </p>
           </aside>
         </div>

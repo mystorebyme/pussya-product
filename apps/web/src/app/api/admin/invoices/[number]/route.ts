@@ -11,6 +11,6 @@ export async function GET(request: Request, context: { params: Promise<{ number:
   if (!authorize(request)) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const { number } = await context.params;
   const invoice = await getManualInvoice(decodeURIComponent(number));
-  if (!invoice) return Response.json({ error: "Invoice nahi mila" }, { status: 404 });
+  if (!invoice) return Response.json({ error: "Invoice not found" }, { status: 404 });
   return Response.json({ invoice }, { headers: { "cache-control": "no-store" } });
 }

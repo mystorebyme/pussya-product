@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
   const phone = (body.phone ?? "").replace(/\D/g, "").slice(-10);
   if (!/^[6-9]\d{9}$/.test(phone)) {
-    return Response.json({ error: "Valid 10-digit mobile number daaliye." }, { status: 400 });
+    return Response.json({ error: "Please enter a valid 10-digit mobile number." }, { status: 400 });
   }
 
   const mode = otpMode();

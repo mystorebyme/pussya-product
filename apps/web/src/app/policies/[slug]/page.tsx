@@ -71,7 +71,7 @@ export default async function PolicyPage({ params }: { params: Promise<{ slug: s
         <article className="border border-[#eee6de] p-6 sm:p-9">{renderMarkdown(content)}</article>
         {/* number/email sheet se live — yahan hardcode nahi */}
         <div className="mt-6 flex flex-col items-center gap-2">
-          <p className="text-[11.5px] text-[#8a8078]">Questions? WhatsApp ya email kariye —</p>
+          <p className="text-[11.5px] text-[#8a8078]">Questions? Message us on WhatsApp or email —</p>
           <SupportChannels />
         </div>
       </div>

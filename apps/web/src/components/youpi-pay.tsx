@@ -63,7 +63,7 @@ function loadSdk(payUrl: string, merchantId: string): Promise<void> {
   if (existing) {
     return new Promise((resolve, reject) => {
       existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("gateway script load nahi hua")), { once: true });
+      existing.addEventListener("error", () => reject(new Error("the gateway script did not load")), { once: true });
       // already loaded (race) — thoda wait karke check
       window.setTimeout(() => (window.Youpi ? resolve() : undefined), 400);
     });
@@ -82,7 +82,7 @@ function loadSdk(payUrl: string, merchantId: string): Promise<void> {
     script.dataset.themeColor = "#862222";
     script.dataset.name = "Noor Ethnic Wear";
     script.addEventListener("load", () => resolve(), { once: true });
-    script.addEventListener("error", () => reject(new Error("gateway script load nahi hua")), { once: true });
+    script.addEventListener("error", () => reject(new Error("the gateway script did not load")), { once: true });
     document.head.appendChild(script);
   });
 }
@@ -118,7 +118,7 @@ export function YoupiPayButton({
   const confirmOnServer = useCallback(
     async (paymentId: string) => {
       if (!paymentId) {
-        setNote("Payment mil gaya — order confirm hone me thoda waqt lagega. Team WhatsApp par update degi.");
+        setNote("Payment received — confirming the order takes a moment. Our team will update you on WhatsApp.");
         return false;
       }
       const result = await postJson<{ ok?: boolean; paid?: boolean; alreadyPaid?: boolean; error?: string }>(
@@ -127,13 +127,13 @@ export function YoupiPayButton({
         { timeoutMs: 25_000 },
       );
       if (result.data?.ok) {
-        setNote("Payment verified — aapka order confirm ho gaya.");
+        setNote("Payment verified — your order is confirmed.");
         onConfirmed?.();
         return true;
       }
       setNote(
         result.data?.error ??
-          "Gateway se confirmation abhi nahi aayi — thodi der me apne aap confirm ho jayega. Page refresh kar sakti hain.",
+          "The gateway has not confirmed yet — it will confirm by itself in a moment. You can refresh the page.",
       );
       return false;
     },
@@ -158,23 +158,23 @@ export function YoupiPayButton({
       }
       if (status === "MANUAL_REVIEW" || status === "SUSPICIOUS") {
         setNote(
-          "Payment security review me gaya hai. Paisa kat gaya ho to WhatsApp par screenshot bhej dein — team verify karke order confirm karegi.",
+          "The payment went for a security review. If money was deducted, send us the screenshot on WhatsApp — our team verifies it and confirms the order.",
         );
         return;
       }
       if (status === "EXPIRED") {
-        setNote("Payment session expire ho gaya — dobara “Pay securely” dabaiye.");
+        setNote("The payment session expired — tap “Pay securely” again.");
         return;
       }
       if (status === "CANCELLED") {
-        setNote("Payment cancel ho gaya. Dobara try kar sakti hain ya neeche UPI QR se pay kar sakti hain.");
+        setNote("The payment was cancelled. You can try again or pay with the UPI QR below.");
         return;
       }
       if (status === "FAILED") {
         setNote(
           result?.reason
-            ? `Payment fail hui (${result.reason}) — dobara try kariye ya neeche UPI QR se pay kariye.`
-            : "Payment fail hui — dobara try kariye ya neeche UPI QR se pay kariye.",
+            ? `The payment failed (${result.reason}) — try again or pay with the UPI QR below.`
+            : "The payment failed — try again or pay with the UPI QR below.",
         );
       }
     },
@@ -204,7 +204,7 @@ export function YoupiPayButton({
           { timeoutMs: 20_000 },
         );
         if (created.data?.alreadyPaid) {
-          setNote("Is order ka payment pehle hi confirm ho chuka hai.");
+          setNote("This order is already paid.");
           onConfirmed?.();
           setBusy(false);
           return;
@@ -239,8 +239,8 @@ export function YoupiPayButton({
       setFailed(true);
       setNote(
         /load nahi hua|sdk-missing/i.test(message)
-          ? "Payment gateway abhi khul nahi paaya — neeche UPI QR se pay kar sakti hain."
-          : "Payment gateway abhi available nahi hai — neeche UPI QR se pay kar sakti hain.",
+          ? "The payment gateway could not open — you can pay with the UPI QR below."
+          : "The payment gateway is not available right now — you can pay with the UPI QR below.",
       );
       setBusy(false);
     }
@@ -254,8 +254,7 @@ export function YoupiPayButton({
         Secure UPI checkout
       </p>
       <p className="mt-1 text-[11.5px] leading-relaxed text-[#6b6259]">
-        Gateway se pay kariye — UPI app, card ya net banking. Payment verify hote hi order apne aap confirm ho
-        jaata hai.
+        Pay through the gateway — UPI app, card or net banking. The order confirms itself as soon as the payment is verified.
       </p>
       <button
         type="button"
@@ -268,7 +267,7 @@ export function YoupiPayButton({
           <rect x="4" y="10" width="16" height="10" rx="2" />
           <path d="M8 10V7a4 4 0 0 1 8 0v3" />
         </svg>
-        {busy ? "Gateway khul raha hai…" : `Pay ${formatPrice(amount)} securely`}
+        {busy ? "Opening the gateway…" : `Pay ${formatPrice(amount)} securely`}
       </button>
       {note ? (
         <p
@@ -280,7 +279,7 @@ export function YoupiPayButton({
         </p>
       ) : null}
       <p className="mt-3 border-t border-dashed border-[#e2cf9f] pt-2 text-[10.5px] tracking-[.1em] text-[#8a7a5f] uppercase">
-        Ya neeche diye QR / UPI ID se seedha pay kariye
+        Or pay directly with the QR / UPI ID below
       </p>
     </div>
   );

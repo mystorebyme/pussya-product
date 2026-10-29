@@ -28,7 +28,7 @@ export default async function AccountPage() {
             Track your order
           </h1>
           <p className="mt-1 text-[11px] tracking-[.14em] text-[#9c8f82] uppercase">
-            Order number WhatsApp par milta hai
+            Your order number is sent on WhatsApp
           </p>
         </div>
 
@@ -38,11 +38,11 @@ export default async function AccountPage() {
               Order status
             </h2>
             <p className="mt-2 text-[12.5px] leading-relaxed text-[#6b6259]">
-              Apna order number daal kar live status, items aur delivery address dekh lein.
+              Enter your order number to see the live status, items and delivery address.
             </p>
             <TrackOrderForm />
             <p className="mt-3 text-[11px] text-[#8a8078]">
-              Order number nahi mila?{" "}
+              Lost your order number?{" "}
               {settings.whatsapp ? (
                 <>
                   WhatsApp{" "}
@@ -75,7 +75,7 @@ export default async function AccountPage() {
               {settings.supportEmail ? <p>Email: {settings.supportEmail}</p> : null}
               {settings.supportPhone ? <p className="mt-1">Phone: {settings.supportPhone}</p> : null}
               <p className="mt-1 text-[11px] text-[#8a8078]">
-                Account login (saved addresses, wishlist) Phase 2 me aa raha hai.
+                Account login with saved addresses and wishlist is coming in Phase 2.
               </p>
             </div>
           </div>

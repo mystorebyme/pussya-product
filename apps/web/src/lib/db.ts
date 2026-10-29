@@ -67,7 +67,7 @@ export function pooledConnectionString(raw: string = DATABASE_URL): string {
 }
 
 export function getPool(): Pool {
-  if (!DATABASE_URL) throw new Error("DATABASE_URL set nahi hai — Postgres mode available nahi.");
+  if (!DATABASE_URL) throw new Error("DATABASE_URL is not set — Postgres mode is unavailable.");
   if (!pool) {
     const connectionString = pooledConnectionString();
     pool = new Pool({
@@ -135,7 +135,7 @@ async function applySchema(): Promise<void> {
       "select to_regclass('public.orders') is not null as has_orders",
     );
     if (!rows[0]?.has_orders) {
-      console.info("[db] schema.sql apply ho raha hai (pehli baar)…");
+      console.info("[db] applying schema.sql (first run)…");
       await client.query("begin");
       try {
         await client.query(SCHEMA_SQL);

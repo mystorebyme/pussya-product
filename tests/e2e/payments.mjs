@@ -87,45 +87,22 @@ check("new order is not confirmed before payment", order.status === "placed", or
 
 const number = order.orderNumber;
 
-// ── 3. payment page (alag route) ─────────────────────────────────────────────
+// ── 3. R50: the /pay route is a WhatsApp hand-off, not a payment page ────────
 const payPage = await fetch(`${BASE}/orders/${number}/pay`);
 const payHtml = await payPage.text();
-check("payment page renders separately", payPage.status === 200, String(payPage.status));
-check("payment page shows the order number", payHtml.includes(number));
-check("payment page shows the live payment state", payHtml.includes('data-testid="payment-state"'));
-check("payment page keeps the UPI block here (not checkout)", payHtml.includes('data-testid="upi-payment"'));
-check("payment page has a single 'Open UPI app' button", payHtml.includes('data-testid="upi-open"'));
-check("payment page has a UPI deep link (mobile app chooser)", /upi:\/\/pay/.test(payHtml));
-check("payment page names no UPI app brand", !/Google Pay|PhonePe|Paytm|BHIM/i.test(payHtml));
-/* R38 (owner): purana payee VPA page par kahin nahi — UPI sirf sheet/env se aati hai. */
-check("payment page par purana hardcoded payee nahi", !/dhakadgourav/i.test(payHtml));
-check("payment page ka UPI env/sheet se aaya", payHtml.includes("noorstore@upi"));
+check("hand-off page renders separately", payPage.status === 200, String(payPage.status));
+check("hand-off page shows the order number", payHtml.includes(number));
+check("hand-off page has the WhatsApp CTA", payHtml.includes('data-testid="confirm-whatsapp"'));
+check("hand-off page has a wa.me link", /wa\.me\//.test(payHtml));
+check("no UPI screen anywhere on the hand-off page", !payHtml.includes('data-testid="upi-payment"'));
+check("no UPI deep link on the hand-off page", !/upi:\/\/pay/.test(payHtml));
+check("no hardcoded payee", !/dhakadgourav/i.test(payHtml));
+check("hand-off page has no invoice download", !/Download invoice/i.test(payHtml));
 
-// 3a. owner (R32): "payment ke baad aage badhne ke liye yahan click kariye" —
-// order details ka link highlight hai, aur invoice download abhi band hai.
-const callout = /<div[^>]*data-testid="order-details-callout"[^>]*>/.exec(payHtml)?.[0] ?? "";
-check("payment page highlights the order-details callout", callout.length > 0, callout.slice(0, 80));
-check(
-  "callout says payment ke baad aage badhne ke liye yahan click karein",
-  /yahin click kariye/i.test(payHtml) && /Payment confirm hone ke baad hi order confirm hota hai/i.test(payHtml),
-);
-const detailsLink = /<a[^>]*data-testid="order-details-link"[^>]*>/.exec(payHtml)?.[0] ?? "";
-check(
-  "callout link opens the order details page",
-  detailsLink.includes(`/orders/${number}`),
-  detailsLink.slice(0, 120),
-);
-check("payment page has no invoice download (R32)", !/Download invoice/i.test(payHtml));
-
-// 3b. R33: payment se back → review (step 2), address form dobara nahi
-const backLink = /<a[^>]*data-testid="back-to-review"[^>]*>/.exec(payHtml)?.[0] ?? "";
-check(
-  "payment page has a back-to-review link",
-  // HTML me `&` → `&amp;` ho jaata hai
-  backLink.includes(`/checkout?step=review`) && backLink.includes(`order=${number}`),
-  backLink.slice(0, 140),
-);
-check("payment page back link says Review order", /Review order/.test(payHtml));
+// ── 3a. the live order page shows the same WhatsApp block ────────────────────
+const orderPageHtml = await (await fetch(`${BASE}/orders/${number}`)).text();
+check("order page has the WhatsApp block", orderPageHtml.includes('data-testid="order-whatsapp-block"'));
+check("order page CTA opens WhatsApp", /wa\.me\//.test(orderPageHtml));
 
 // ── 3b. tracking — order number se page khulta hai (lowercase bhi) ───────────
 const lower = await fetch(`${BASE}/orders/${number.toLowerCase()}`);
@@ -308,8 +285,8 @@ const orderHtml = await orderPage.text();
 check("order page opens (tracking works)", orderPage.status === 200, String(orderPage.status));
 check("order page shows the order number", orderHtml.includes(number));
 check(
-  paidOk ? "order page shows payment confirmed" : "order page shows the live payment state",
-  paidOk ? /Payment confirmed/.test(orderHtml) : orderHtml.includes('data-testid="payment-state"'),
+  "order page shows the WhatsApp block (R50)",
+  orderHtml.includes('data-testid="order-whatsapp-block"'),
 );
 check("order page has the tracking timeline", orderHtml.includes('data-testid="order-tracking"'));
 

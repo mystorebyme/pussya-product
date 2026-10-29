@@ -7,6 +7,8 @@ import type { Order } from "@noor/types";
 
 export type SheetSettings = {
   announcement?: string;
+  /** Today's Special ribbon (owner, R50) — one short English line, sheet-driven */
+  dailySpecial?: string;
   supportPhone?: string;
   supportEmail?: string;
   whatsapp?: string;
@@ -51,6 +53,7 @@ export function normaliseSheetSettings(payload: unknown): SheetSettings | null {
 
   const settings: SheetSettings = {
     announcement: text(source.announcement ?? source.Announcement, 180),
+    dailySpecial: text(source.dailySpecial ?? source.daily_special ?? source.special_bar, 120),
     supportPhone: text(source.supportPhone ?? source.support_phone ?? source.phone, 16),
     supportEmail: text(source.supportEmail ?? source.support_email ?? source.email, 120),
     whatsapp: text(source.whatsapp ?? source.whatsapp_number, 16),

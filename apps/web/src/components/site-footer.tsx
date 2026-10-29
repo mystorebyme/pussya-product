@@ -203,7 +203,7 @@ export function SiteFooter() {
               ) : null}
               {status === "error" ? (
                 <p className="mt-1.5 text-[11.5px] text-[#ffd6cf]">
-                  Signup abhi save nahi hua.{" "}
+                  Your signup could not be saved.{" "}
                   <a
                     href={`https://wa.me/${whatsappNumber(contactNumber)}?text=${encodeURIComponent(
                       `Hi Noor Ethnic Wear! Please add me to the sale list: ${email}`,

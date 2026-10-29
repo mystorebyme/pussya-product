@@ -203,18 +203,20 @@ check(
   "checkout names no UPI app brand",
   !/GPay|PhonePe|Paytm|BHIM|Amazon Pay/.test(checkoutSource),
 );
-check("checkout shows a short prepaid note", checkoutSource.includes('data-testid="prepaid-note"'));
 /**
- * Payment page (step 3) par **saare phone UPI apps** dikhne chahiye (owner
- * request: "phone ke saare app aa jayein") — GPay/PhonePe/Paytm/any UPI.
- * Checkout par ab bhi kuch nahi.
+ * R50 (owner): the site has **no payment option at all** — the bag + address go
+ * straight to WhatsApp. Checkout and the hand-off page must therefore carry no
+ * UPI / QR / card UI.
  */
-check("payment page has one 'Open UPI app' button", paymentSource.includes('data-testid="upi-open"'));
+check("checkout has no payment UI", !/UpiPayment|UpiQr|buildUpiUri/.test(checkoutSource));
 check(
-  "payment page names no UPI app brand",
-  !/Google Pay|PhonePe|Paytm|BHIM/i.test(paymentSource) && !/GPay|PhonePe|Paytm/.test(checkoutSource),
+  "checkout names no UPI app brand",
+  !/GPay|PhonePe|Paytm|BHIM|Amazon Pay/.test(checkoutSource),
 );
-check("payment page keeps the QR + UPI ID", paymentSource.includes("UpiQr") && paymentSource.includes("upi-id"));
+check(
+  "hand-off page has the WhatsApp CTA",
+  paymentSource.includes('data-testid="confirm-whatsapp"'),
+);
 /**
  * R36 (owner): "payment page par jaate hi UPI par redirect na kare, Pay on UPI
  * kare tab jaakar UPI detect ho". Isliye purana `?pay=1` auto-open effect (jo
@@ -222,15 +224,8 @@ check("payment page keeps the QR + UPI ID", paymentSource.includes("UpiQr") && p
  * intent sirf `upi-open` button ke asli click/tap se chalta hai.
  */
 check(
-  "UPI app page load par khud nahi khulti (auto-open effect gaya)",
-  !/get\("pay"\) !== "1"/.test(paymentSource) &&
-    !/window\.location\.href\s*=\s*upiUri/.test(paymentSource) &&
-    !/appOpened/.test(paymentSource) &&
-    !/\?pay=1/.test(checkoutSource),
-);
-check(
-  "UPI intent sirf button ke href se (asli user gesture)",
-  /href=\{upiUri\}/.test(paymentSource) && /data-testid="upi-open"/.test(paymentSource),
+  "hand-off page par koi UPI auto-open nahi",
+  !/upi:\/\//.test(paymentSource) && !/\?pay=1/.test(checkoutSource),
 );
 
 /* 8. responsive CSS rules exist in the built stylesheet -------------------- */

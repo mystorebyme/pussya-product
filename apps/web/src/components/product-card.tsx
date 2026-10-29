@@ -147,7 +147,7 @@ export function ProductCard({
           disabled={soldOut}
           aria-disabled={soldOut}
           data-testid={soldOut ? "sold-out-button" : "quick-add"}
-          title={soldOut ? "Sold out — next drop ke liye WhatsApp kariye" : undefined}
+          title={soldOut ? "Sold out — message us on WhatsApp for the next drop" : undefined}
           onClick={() =>
             soldOut
               ? undefined

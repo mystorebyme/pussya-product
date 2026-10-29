@@ -77,42 +77,42 @@ export const toCm = (inches: number) => Math.round(inches * 2.54 * 10) / 10;
 export const MEASURE_STEPS = [
   {
     title: "Bust",
-    body: "Sabse chaude hisse (bust) par naapein — tape ko peeth aur kandhon ke aar-paar seedha rakhein.",
-    proTip: "Tape tight na kheenchein; ek ungli ki jagah chhodiye taaki aaram bana rahe.",
+    body: "Measure across the fullest part of your bust — keep the tape straight across your back and shoulders.",
+    proTip: "Do not pull the tape tight; leave space for one finger so the fit stays comfortable.",
   },
   {
     title: "Waist",
-    body: "Natural waist (naaf se thoda upar, sabse patla hissa) par naapein, saans normal rakhein.",
-    proTip: "Pet andar kheenche bina naapein — ready-to-wear suit isi comfort par cut hota hai.",
+    body: "Measure at your natural waist (just above the navel, the narrowest part) and breathe normally.",
+    proTip: "Do not hold your stomach in — ready-to-wear suits are cut for this natural comfort.",
   },
   {
     title: "Hips",
-    body: "Hip ke sabse chaude hisse par naapein, waise hi jaise aap khadi hain — paer thode paas-paas.",
-    proTip: "Hips 44″ se zyada ho to bust ke hisaab se size lein — flare side seam se adjust ho jaata hai.",
+    body: "Measure around the fullest part of your hips standing naturally, with your feet close together.",
+    proTip: "If your hips measure more than 44″, choose your size by bust — the flare adjusts at the side seam.",
   },
   {
     title: "Front Length",
-    body: "Kandhe se shuru karke neeche tak naapein — jahan aap kurti/top ka hem chahti hain.",
-    proTip: "Heels pehen kar naapein agar aap function me heels ke saath pehnti hain.",
+    body: "Start at the shoulder and measure down to where you want the kurta or top to end.",
+    proTip: "Measure in heels if you will wear this outfit with heels.",
   },
 ] as const;
 
 /** Unstitched / semi-stitched sets — owner ka fabric note */
 export const UNSTITCHED_NOTE = {
-  title: "Unstitched suit me kya milta hai",
+  title: "What is included in an unstitched suit",
   lines: [
-    "Kurti top ke liye ~2.5 m fabric",
-    "Bottom (salwar/palazzo) ke liye ~2.5 m fabric",
-    "Dupatta ke liye ~2.25 m fabric",
+    "Approx. 2.5 m fabric for the kurta top",
+    "Approx. 2.5 m fabric for the bottom (salwar or palazzo)",
+    "Approx. 2.25 m fabric for the dupatta",
   ],
-  sizes: "Tailor apne naap par sil sakta hai — unstitched sets XS se 5XL tak customisable hain.",
+  sizes: "Your tailor can stitch it to your measurements — unstitched sets are customisable from XS to 5XL.",
 } as const;
 
 export const FIT_TIPS = [
-  "Do sizes ke beech me hain to bada size lein — chhota karwana aasan hota hai.",
-  "Bust size decide karta hai; waist aur hips ka 1–2 inch ka farq aaram se adjust ho jaata hai.",
-  "Har product page par size options usi piece ke liye hain — order se pehle wahi confirm karein.",
-  "Confusion ho to WhatsApp par bust, waist aur height bhejein, hum size bata denge.",
+  "Between two sizes? Take the larger one — it is easier to take a garment in than to let it out.",
+  "Bust decides the size; a 1–2 inch difference at the waist or hips adjusts comfortably.",
+  "Size options on each product page belong to that piece — check them once before ordering.",
+  "Still unsure? Send us your bust, waist and height on WhatsApp and we will suggest the size.",
 ] as const;
 
 export type SizeRecommendation = {
@@ -152,7 +152,7 @@ export function findSizeForBust(value: number, unit: "in" | "cm" = "in"): SizeRe
       bust: smallest.bust,
       bustIn,
       bustCm: smallest.cm.bust,
-      message: `Aapka naap chart ke sabse chhote size (XS · ${smallest.bust}″) se bhi chhota hai — XS sabse theek baithega, ya unstitched set tailor se custom silwaiye.`,
+      message: `Your measurement is below the smallest size on the chart (XS · ${smallest.bust}″) — XS will fit best, or have an unstitched set stitched to your measurements.`,
       outsideChart: "small",
     };
   }
@@ -163,7 +163,7 @@ export function findSizeForBust(value: number, unit: "in" | "cm" = "in"): SizeRe
       bust: largest.bust,
       bustIn,
       bustCm: largest.cm.bust,
-      message: `XXL (${largest.bust}″ bust) tak ready-to-wear hai — aapke naap ke liye unstitched set best rahega, tailor XS se 5XL tak sil deta hai.`,
+      message: `Ready-to-wear goes up to XXL (${largest.bust}″ bust) — an unstitched set works best for your measurement; the tailor can stitch from XS to 5XL.`,
       outsideChart: "large",
     };
   }

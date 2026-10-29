@@ -79,8 +79,8 @@ export function SizeChartTable({
         </table>
       </div>
       <p className={`mt-2 leading-relaxed text-[#9c8f82] ${compact ? "text-[10.5px]" : "text-[11.5px]"}`}>
-        Front length kandhe se hem tak hai (kurti/top). Anarkali, lehenga aur dupatta ki length product page par
-        di hoti hai. Hand-finished pieces me 0.5–1 inch ka farq normal hai.
+        Front length runs from the shoulder to the hem (kurti/top). Anarkali, lehenga and dupatta lengths are
+        listed on the product page. A 0.5–1 inch difference is normal on hand-finished pieces.
       </p>
     </div>
   );

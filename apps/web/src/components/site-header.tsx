@@ -48,8 +48,8 @@ const DESKTOP_SKIP = new Set(["HOME"]); // logo hi home ka link hai
 // pehle yahan Hinglish ("UPI se secure checkout") ghus gayi thi. Koi date/purana
 // offer bhi nahi (Diwali copy sheet se aati hai) — sirf hamesha sach rehne wali baatein.
 const defaultAnnouncements = [
-  "Secure prepaid checkout — pay by UPI",
-  "Same-day dispatch on prepaid orders",
+  "Order in the bag, confirm on WhatsApp in one tap",
+  "Same-day dispatch on confirmed orders",
   "Designer anarkali, lehenga choli & printed suit sets",
   "Easy returns within 7 days",
 ];
@@ -57,7 +57,7 @@ const defaultAnnouncements = [
 export function SiteHeader() {
   const { count, openCart, lines, removeLine, setQuantity, subtotal } = useCart();
   const { wishlist } = useWishlist();
-  const { whatsapp, supportPhone, announcement } = useStoreSettings();
+  const { whatsapp, supportPhone, announcement, dailySpecial } = useStoreSettings();
   /**
    * R42: ek hi contact number — sheet me `whatsapp` bhara ho to wahi, warna
    * `support_phone`. Pehle sirf `support_phone` dekha jaata tha, isliye owner ne
@@ -199,6 +199,23 @@ export function SiteHeader() {
 
   return (
     <>
+      {/* R50: Today's Special ribbon — sheet ke `daily_special` se, khaali ho to nahi */}
+      {dailySpecial ? (
+        <div className="daily-special relative overflow-hidden border-b border-[#e6d3a8] bg-[#fdf9ee]" data-testid="daily-special">
+          <div className="mx-auto flex h-8 max-w-[1400px] items-center justify-center gap-2 px-8">
+            <span className="daily-special-star text-[11px] text-[#a67c2e]" aria-hidden>
+              ✦
+            </span>
+            <Link
+              href="/collections/sale"
+              className="truncate text-center text-[10.5px] font-medium tracking-[.14em] text-[#7a5b1d] uppercase hover:text-[#862222]"
+            >
+              {dailySpecial}
+            </Link>
+          </div>
+        </div>
+      ) : null}
+
       <div className="bg-[#7d1a1a] text-white">
         <div className="mx-auto flex min-h-9 max-w-[1400px] items-center justify-between gap-3 px-4 py-1.5">
           {/* WhatsApp hi contact option hai — call nahi (owner request).
@@ -331,10 +348,17 @@ export function SiteHeader() {
               </svg>
               {/* count har size par (sm+), price sirf xl+ — 1024px par nav ke saath overlap na ho */}
               <span data-testid="cart-count" className="hidden text-[11px] font-medium tabular-nums sm:inline">
-                {count}
+                <span key={count} className={count ? "cart-badge-bump inline-block" : "inline-block"}>
+                  {count}
+                </span>
                 <span className="hidden xl:inline"> / {formatPrice(subtotal)}</span>
               </span>
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#862222] px-1 text-[9px] font-semibold text-white sm:hidden">
+              <span
+                key={`badge-${count}`}
+                className={`absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#862222] px-1 text-[9px] font-semibold text-white sm:hidden ${
+                  count ? "cart-badge-bump" : ""
+                }`}
+              >
                 {count}
               </span>
             </button>
@@ -492,7 +516,7 @@ export function SiteHeader() {
 
               {query.trim().length >= 2 && results.length === 0 ? (
                 <p className="mt-3 text-[11.5px] text-[#8a8078]">
-                  &ldquo;{query.trim()}&rdquo; ke liye kuch nahi mila — inhe try kariye:
+                  Nothing matched &ldquo;{query.trim()}&rdquo; — try these:
                 </p>
               ) : null}
 
@@ -698,7 +722,7 @@ function CartDrawer({
                   key={line.key}
                   data-testid={line.key === lastAdded?.key ? "cart-just-added" : undefined}
                   className={`flex gap-3 border-b border-[#f1ebe5] py-4 ${
-                    line.key === lastAdded?.key ? "bg-[#fdf7f5]" : ""
+                    line.key === lastAdded?.key ? "cart-line-pop bg-[#fdf7f5]" : ""
                   }`}
                 >
                   <Link href={`/products/${line.handle}`} onClick={closeCart} className="shrink-0">

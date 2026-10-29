@@ -60,7 +60,7 @@ export async function POST(request: Request, context: { params: Promise<{ gatewa
 
   // signature ke baad bhi gateway se server-to-server confirmation
   const verified = await fetchGatewayPayment(account.id, paymentId);
-  if (!verified) return Response.json({ error: "Gateway se verify nahi hua." }, { status: 502 });
+  if (!verified) return Response.json({ error: "The gateway could not verify this payment." }, { status: 502 });
 
   const orderNumber = String(entity?.notes?.orderNumber ?? "");
   const order = orderNumber ? await getOrderForPayment(orderNumber) : null;
@@ -106,9 +106,9 @@ export async function POST(request: Request, context: { params: Promise<{ gatewa
  */
 async function handleYoupi(request: Request, rawBody: string): Promise<Response> {
   const config = await youpiConfig();
-  if (!config) return Response.json({ error: "YouPI gateway configured nahi hai." }, { status: 503 });
+  if (!config) return Response.json({ error: "The YouPI gateway is not configured." }, { status: 503 });
   if (!config.webhookSecret) {
-    return Response.json({ error: "Webhook secret set nahi hai." }, { status: 503 });
+    return Response.json({ error: "The webhook secret is not set." }, { status: 503 });
   }
 
   const signatureOk = verifyYoupiWebhook(
@@ -158,7 +158,7 @@ async function handleYoupi(request: Request, rawBody: string): Promise<Response>
 
   // signature ke baad bhi server-to-server verify — replayed body se bachaav
   const payment = await fetchYoupiPayment(paymentId, config);
-  if (!payment) return Response.json({ error: "Gateway se verify nahi hua." }, { status: 502 });
+  if (!payment) return Response.json({ error: "The gateway could not verify this payment." }, { status: 502 });
 
   if (payment.orderId && payment.orderId !== order.orderNumber) {
     return Response.json({ received: true, ignored: "order mismatch" }, { status: 409 });

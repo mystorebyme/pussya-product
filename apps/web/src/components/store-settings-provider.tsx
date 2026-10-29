@@ -18,6 +18,7 @@ import { API_AVAILABLE, apiUrl } from "@/lib/api-base";
  */
 export type PublicSettings = {
   announcement: string;
+  dailySpecial: string;
   upiId: string;
   upiName: string;
   supportPhone: string;
@@ -38,6 +39,7 @@ export type PublicSettings = {
 
 export const DEFAULT_PUBLIC_SETTINGS: PublicSettings = {
   announcement: "",
+  dailySpecial: process.env.NEXT_PUBLIC_DAILY_SPECIAL ?? "",
   /* R38: UPI sirf sheet se — koi hardcoded payee default nahi (khaali = payment paused UI). */
   upiId: "",
   upiName: "Noor Ethnic Wear",

@@ -73,24 +73,19 @@ test("R38-2: UPI ka ek hi source — sheet; code defaults khaali", () => {
   assert.match(gs, /\['upi_id', ''\]/, "script Settings seed me bhi UPI khaali");
 });
 
-test("R38-3: payment UI khaali UPI par honestly pause karta hai (galat payee nahi)", () => {
-  // comment hata kar sirf customer-facing text dekho (R40: technical line nahi)
-  const upi = read("apps/web/src/components/upi-payment.tsx")
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/^\s*\/\/.*$/gm, "");
-  assert.match(upi, /if \(!paid && !payeeVpa\)/, "empty-VPA branch maujood hai");
-  assert.match(upi, /data-testid="upi-unavailable"/, "paused state ka testid");
-  // R40 (owner): "payment settings load nahi ho rahi — refresh kariye" jaisi
-  // technical lines customer ko kabhi nahi dikhni chahiye.
-  assert.doesNotMatch(upi, /refresh kariye/i, "customer ko refresh karne ko nahi kehte");
-  assert.doesNotMatch(upi, /load nahi ho rahi/i, "technical load-error copy nahi");
-  assert.doesNotMatch(upi, /sheet se aati hai/i, "customer ko sheet ka pata nahi chalna chahiye");
-  assert.match(upi, /slowToLoad/, "pehle shaant skeleton, phir seedhi baat");
-  assert.match(upi, /Payment options khul rahe hain/, "loading copy customer-friendly");
-  // QR/deep-link isi branch ke baad hi bante hain — khaali VPA par upi:// nahi
-  const branchIndex = upi.indexOf("!payeeVpa");
-  const openIndex = upi.indexOf('data-testid="upi-open"');
-  assert.ok(branchIndex > 0 && openIndex > branchIndex, "empty-state branch pay-button render se pehle return karta hai");
+test("R50-3: site par payment UI nahi — sab kuch WhatsApp hand-off se", () => {
+  // customer-facing code me UPI/payment screen ka koi zikr nahi
+  const strip = (source: string) =>
+    source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+  const pay = strip(read("apps/web/src/app/orders/[orderNumber]/pay/page.tsx"));
+  const order = strip(read("apps/web/src/app/orders/[orderNumber]/page.tsx"));
+  assert.doesNotMatch(pay, /UpiPayment|UpiQr|payment-status-watcher/);
+  assert.doesNotMatch(pay, /upi:\/\//);
+  assert.match(pay, /confirm-whatsapp/);
+  assert.match(order, /order-whatsapp-block/);
+  // technical load-error copy customer ko kabhi nahi dikhti
+  assert.doesNotMatch(pay, /refresh kariye/i);
+  assert.doesNotMatch(pay, /load nahi ho rahi/i);
 });
 
 test("R38-4: sheet write retry + last-write diagnostics (orders gayab nahi honge chup-chaap)", () => {
@@ -146,12 +141,11 @@ test("R38-7: script anaath sheet chup-chaap nahi banati (orders gayab hone ki ja
   assert.match(gs, /spreadsheetId: ''/, "health me sheet id (site ka selftest isi ko padhta hai)");
 });
 
-test("R38-8: CI/preview me payment tests neutral test-VPA env se chalte hain", () => {
-  const ci = read(".github/workflows/ci.yml");
-  assert.match(ci, /STORE_UPI_ID: noorstore@upi/, "CI storefront env me test VPA");
+test("R50-8: CI/preview me koi payment env nahi — tests WhatsApp hand-off dekhte hain", () => {
   const payments = read("tests/e2e/payments.mjs");
-  assert.match(payments, /purana hardcoded payee nahi/, "pay page par purana VPA nahi");
-  assert.match(payments, /noorstore@upi/, "pay page ka UPI env se aaya");
+  assert.match(payments, /no hardcoded payee/, "pay page par purana VPA nahi");
+  assert.match(payments, /no UPI screen anywhere/, "koi UPI screen nahi");
+  assert.match(payments, /data-testid="confirm-whatsapp"/, "WhatsApp CTA checked");
   const smoke = read("tests/e2e/smoke.mjs");
   assert.match(smoke, /\/api\/sheet-health/, "smoke sheet-health check karta hai");
 });

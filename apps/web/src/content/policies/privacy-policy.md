@@ -37,7 +37,7 @@ Order and tax records are kept for 8 years as required by GST law. Support conve
 
 ## 6. Your rights
 
-You can ask us to access, correct, or erase your personal data, or to withdraw consent. WhatsApp  par likhiye (order number ke saath); hum 30 din me jawab dete hain. You can also nominate someone to exercise these rights on your behalf. If you are unhappy with our response, you may complain to the Data Protection Board of India.
+You can ask us to access, correct, or erase your personal data, or to withdraw consent. Message us on WhatsApp with your order number; we reply within 30 days. You can also nominate someone to exercise these rights on your behalf. If you are unhappy with our response, you may complain to the Data Protection Board of India.
 
 ## 7. Security
 

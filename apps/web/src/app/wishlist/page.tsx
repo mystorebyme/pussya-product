@@ -60,7 +60,7 @@ export default function WishlistPage() {
       {items.length === 0 ? (
         <div className="mt-10 border border-[#eee6de] px-6 py-20 text-center">
           <p className="text-sm text-[#6b6259]">
-            {ready && !loading ? "Aapki wishlist khaali hai — product card par heart icon dabaiye." : "Loading…"}
+            {ready && !loading ? "Your wishlist is empty — tap the heart icon on any product card." : "Loading…"}
           </p>
           <Link
             href="/collections/party-wear-gown"

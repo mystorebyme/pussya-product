@@ -4,7 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/components/cart-provider";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { FloatingHelp } from "@/components/floating-help";
+import { WhatsappFab } from "@/components/whatsapp-fab";
 import { WishlistProvider } from "@/components/wishlist-provider";
 import { StoreSettingsProvider } from "@/components/store-settings-provider";
 import { StoreStructuredData } from "@/components/store-structured-data";
@@ -131,7 +131,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <PageTransition>{children}</PageTransition>
             </main>
             <SiteFooter />
-            <FloatingHelp />
+            <WhatsappFab />
             {/* header / product page se khulne wala size-guide panel (ek hi instance) */}
             <SizeGuideDialog />
         {/* traffic tracking — Vercel Analytics + optional GA4 */}

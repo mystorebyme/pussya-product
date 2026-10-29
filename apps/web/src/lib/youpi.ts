@@ -223,7 +223,7 @@ export async function createYoupiPayment(
 
   if (!response.ok || !payload.paymentId) {
     throw new YoupiError(
-      payload.error ?? payload.message ?? `Gateway ne session nahi banaya (HTTP ${response.status})`,
+      payload.error ?? payload.message ?? `The gateway did not create a session (HTTP ${response.status})`,
       response.status === 409 ? 409 : 502,
       payload.code,
       payload.session_id,

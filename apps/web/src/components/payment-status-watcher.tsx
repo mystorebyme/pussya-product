@@ -10,22 +10,22 @@ export type PaymentState = "pending" | "processing" | "paid" | "failed" | string
 const COPY: Record<string, { label: string; note: string; tone: string }> = {
   pending: {
     label: "Payment pending",
-    note: "Payment abhi baaki hai — UPI se pay kariye, phir mobile ke last 4 digit se confirm kar dijiye.",
+    note: "Payment is still pending — pay by UPI, then confirm with the last 4 digits of your mobile number.",
     tone: "border-[#e6d3a8] bg-[#fdf9ee] text-[#8a6a1f]",
   },
   processing: {
     label: "Payment submitted",
-    note: "Aapki payment confirm request mil gayi hai. Team UPI statement se verify karke order confirm karegi (usually 10–30 min).",
+    note: "We have your payment confirmation request. Our team verifies it against the UPI statement and confirms the order (usually 10–30 minutes).",
     tone: "border-[#c9d9ea] bg-[#f4f8fd] text-[#2f5d8a]",
   },
   paid: {
     label: "Payment confirmed",
-    note: "Paisa mil gaya — order confirm hai aur dispatch ke liye taiyaar hai.",
+    note: "Payment received — the order is confirmed and ready to dispatch.",
     tone: "border-[#cfe6d4] bg-[#f3faf4] text-[#2f7a3f]",
   },
   failed: {
     label: "Payment failed",
-    note: "Paisa cut nahi hua ya payment fail hui — dobara try kariye ya WhatsApp par batayein.",
+    note: "No money was deducted or the payment failed — try again or let us know on WhatsApp.",
     tone: "border-[#f0c9c5] bg-[#fdf5f4] text-[#a3312a]",
   },
 };

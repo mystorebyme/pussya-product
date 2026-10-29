@@ -26,17 +26,18 @@ test("R32: order page invoice block flag ke peeche hai (aadha text nahi bachta)"
   assert.equal((orderPage.match(/data-testid="download-invoice"/g) ?? []).length, 1);
 });
 
-test("R32: payment page par order-details callout highlight hai", () => {
-  assert.match(payPage, /data-testid="order-details-callout"/);
-  assert.match(payPage, /data-testid="order-details-link"/);
-  // highlight = maroon fill, sirf underline text nahi
-  assert.match(payPage, /bg-\[#862222\]/);
+test("R50: order page par WhatsApp hand-off block highlight hai", () => {
+  assert.match(orderPage, /data-testid="order-whatsapp-block"/);
+  assert.match(orderPage, /data-testid="complete-payment"/);
+  // highlight = gold callout + animated WhatsApp CTA, sirf underline text nahi
+  assert.match(orderPage, /bg-\[#fdf9ee\]/);
+  assert.match(orderPage, /wa-cta/);
 });
 
-test("R32: callout me saaf line hai - payment ke baad yahan click karein", () => {
-  assert.match(payPage, /Payment confirm hone ke baad hi order confirm hota hai\./);
-  assert.match(payPage, /yahin click kariye/);
-  assert.match(payPage, /Order details dekhein/);
+test("R50: the block says plainly that the order is completed on WhatsApp", () => {
+  assert.match(orderPage, /Confirm on WhatsApp/);
+  assert.match(orderPage, /orderWhatsAppLink\(order, siteUrl\)/);
+  assert.match(orderPage, /share the payment details there/);
 });
 
 test("R32: callout ka link order page hi kholta hai (bahar nahi)", () => {

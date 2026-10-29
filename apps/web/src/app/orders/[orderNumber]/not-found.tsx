@@ -10,8 +10,8 @@ import { whatsappNumber } from "@/lib/phone";
  * Har jagah se reachable: galat number, purana deleted number, ya (Render par)
  * database reset ke baad ka number.
  */
-/** Browser tab / share preview me bhi "Order nahi mila" — default site title nahi. */
-export const metadata: Metadata = { title: "Order nahi mila", robots: { index: false, follow: false } };
+/** Browser tab / share preview me bhi "Order not found" — default site title nahi. */
+export const metadata: Metadata = { title: "Order not found", robots: { index: false, follow: false } };
 
 export default async function OrderNotFound() {
   /** number sirf owner settings / Google Sheet se aata hai */
@@ -29,11 +29,10 @@ export default async function OrderNotFound() {
             <path d="M12 17h.01" />
           </svg>
         </span>
-        <h1 className="mt-4 font-display text-[26px] font-medium sm:text-[32px]">Order nahi mila</h1>
+        <h1 className="mt-4 font-display text-[26px] font-medium sm:text-[32px]">Order not found</h1>
         <p className="mx-auto mt-2 max-w-[460px] text-[13px] leading-relaxed text-[#6b6259]">
-          Is number se koi order humare system me nahi hai. Ho sakta hai number galat type ho gaya ho,
-          ya order abhi sync na hua ho. Number <strong>NE-</strong> se shuru hota hai — dobara check kar
-          ke try kariye.
+          We could not find an order with this number. It may have been typed incorrectly, or the order
+          has not synced yet. Order numbers start with <strong>NE-</strong> — please check and try again.
         </p>
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -56,8 +55,8 @@ export default async function OrderNotFound() {
         </div>
 
         <p className="mt-4 text-[11.5px] leading-relaxed text-[#8a8078]">
-          Order kiya tha aur number bilkul sahi hai? WhatsApp par order number bhejiye — team 24 ghante
-          me status bata degi.
+          Ordered something and the number looks right? Send it to us on WhatsApp — our team replies with
+          the status within 24 hours.
           {settings.supportPhone ? (
             <>
               {" "}Support: <strong>{settings.supportPhone}</strong>

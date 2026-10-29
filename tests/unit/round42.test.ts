@@ -61,7 +61,7 @@ test("R42-3: khaali cell purani/default value ko overwrite nahi karta", () => {
 const COMPONENTS = [
   "apps/web/src/components/site-header.tsx",
   "apps/web/src/components/site-footer.tsx",
-  "apps/web/src/components/floating-help.tsx",
+  "apps/web/src/components/whatsapp-fab.tsx",
 ];
 
 test("R42-4: WhatsApp link raw `whatsapp` setting se nahi banta (dead wa.me/ se bachne ke liye)", () => {

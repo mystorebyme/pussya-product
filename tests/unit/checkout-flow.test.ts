@@ -4,80 +4,88 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * Checkout = **3 steps** (owner requirement, R36 me update):
- *   1. delivery details → 2. review → 3. payment — **isi page par** (alag page nahi).
+ * R50 checkout = **no online payment at all** (owner requirement).
  *
- * Address aur payment ek saath dikhte nahi: step 1/2 par UPI ka koi zikr nahi,
- * payment sirf step 3 par (`CheckoutPaymentStep`). `/orders/<number>/pay` deep
- * links (WhatsApp/email/QR) ke liye bacha hai aur wahi `UpiPayment` render karta hai.
+ *   1. Delivery details → 2. Review → **Send order on WhatsApp**
+ *
+ * The order is saved first (so it has an order number), then the full summary
+ * opens in WhatsApp in the same click, so the customer only has to press send.
+ * `/orders/<number>/pay` is now a WhatsApp hand-off page, not a UPI page.
  */
 
 const root = process.cwd();
-const checkout = fs.readFileSync(
-  path.join(root, "apps/web/src/components/checkout-form.tsx"),
-  "utf8",
-);
-const payPage = fs.readFileSync(
-  path.join(root, "apps/web/src/app/orders/[orderNumber]/pay/page.tsx"),
-  "utf8",
-);
-const upiPayment = fs.readFileSync(
-  path.join(root, "apps/web/src/components/upi-payment.tsx"),
-  "utf8",
-);
-const upiLib = fs.readFileSync(path.join(root, "apps/web/src/lib/upi.ts"), "utf8");
-/** comments hata kar check karo — UI copy + code me UPI ka zikr na ho */
+const read = (rel: string) => fs.readFileSync(path.join(root, rel), "utf8");
+const checkout = read("apps/web/src/components/checkout-form.tsx");
+const payPage = read("apps/web/src/app/orders/[orderNumber]/pay/page.tsx");
+const orderPage = read("apps/web/src/app/orders/[orderNumber]/page.tsx");
+const cartPage = read("apps/web/src/app/cart/page.tsx");
+const fab = read("apps/web/src/components/whatsapp-fab.tsx");
+
+/** comments hata kar check karo — UI copy + code me payment ka zikr na ho */
 const stripComments = (source: string) =>
   source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/[^\n]*$/gm, "");
 const checkoutCode = stripComments(checkout);
+const payCode = stripComments(payPage);
 
-test("checkout has a 3-step indicator", () => {
+test("checkout has a 3-step indicator that ends on WhatsApp", () => {
   assert.match(checkout, /data-testid="checkout-steps"/);
-  assert.match(checkout, /Delivery/);
-  assert.match(checkout, /Review/);
-  assert.match(checkout, /Payment/);
+  assert.match(checkout, /label: "Delivery"/);
+  assert.match(checkout, /label: "Review"/);
+  assert.match(checkout, /label: "WhatsApp"/);
+  assert.doesNotMatch(checkoutCode, /label: "Payment"/);
 });
 
-test("checkout step 1 continues to review, order is placed only from review", () => {
+test("checkout step 1 continues to review, the order is sent only from review", () => {
   assert.match(checkout, /data-testid="checkout-continue"/);
   assert.match(checkout, /data-testid="checkout-review"/);
+  assert.match(checkout, /data-testid="checkout-submit"/);
   assert.match(checkout, /setStep\("review"\)/);
-  // submit button sirf review step me dikhta hai (R36: payment step alag shell me hai)
-  assert.match(checkout, /const showDetails = !isPayment && !resumed && step === "details"/);
-  assert.match(checkout, /\)\s*:\s*showDetails \? \(\s*<button\s+type="button"/);
+  assert.match(checkout, /Send order on WhatsApp/);
 });
 
-test("step 1/2 me UPI ID / QR / 'pay here' nahi — payment sirf step 3 par", () => {
-  // checkout form khud UPI render nahi karta — step 3 ka component karta hai
-  assert.ok(!checkout.includes('data-testid="upi-payment"'), "checkout form me UPI block nahi");
-  assert.ok(!/UpiApps|upi-apps/.test(checkout), "koi UPI app chip nahi");
-  assert.ok(!/UpiQr/.test(checkout), "checkout form me UPI QR nahi");
-  assert.ok(!/buildUpiUri/.test(checkout), "checkout form me upi:// link nahi");
-  assert.ok(!/upi:\/\//.test(checkout), "checkout form me UPI scheme nahi");
-  assert.ok(!/UPI ID/i.test(checkoutCode), "step 1/2 par 'UPI ID' text nahi");
-  assert.ok(!/dhakadgourav/.test(checkout), "UPI ID hard-code nahi");
-  // step 3 wahin khulta hai, sirf isPayment par
-  assert.match(checkout, /<CheckoutPaymentStep/);
-  assert.match(checkout, /\{isPayment \? \(/);
-  assert.match(payPage, /UpiPayment/);
+test("no payment UI anywhere in the checkout: no UPI, QR, card or gateway", () => {
+  assert.ok(!/UpiPayment|UpiQr|CheckoutPaymentStep|buildUpiUri/.test(checkout), "no payment component");
+  assert.ok(!/upi:\/\//.test(checkout), "no UPI scheme link");
+  assert.ok(!/\bUPI ID\b/i.test(checkoutCode), "no 'UPI ID' text");
+  assert.ok(!/data-testid="upi-payment"/.test(checkout));
+  assert.ok(!/payOnline|paymentMethod|\bcod\b/i.test(checkoutCode), "no payment method choice");
 });
 
-test("payment par ek hi 'Pay on UPI' button + auto status detection (koi app brand nahi)", () => {
-  assert.match(upiLib, /export function buildUpiUri/);
-  assert.match(upiPayment, /data-testid="upi-open"/);
-  assert.match(upiPayment, /data-testid="upi-recheck"/);
-  assert.match(upiPayment, /Pay on UPI/);
-  // owner rule: GPay/PhonePe/Paytm ke naam kahin nahi
-  assert.ok(!/Google Pay|PhonePe|Paytm|BHIM/i.test(upiPayment), "payment page par app brand nahi");
-  assert.ok(!/tez:\/\/|phonepe:\/\/|paytmmp:\/\//.test(upiPayment), "app-specific schemes nahi");
-  assert.match(payPage, /PaymentStatusWatcher/);
+test("order is saved, then WhatsApp opens in the same gesture (one tap)", () => {
+  assert.match(checkout, /window\.open\(href, "_blank", "noopener,noreferrer"\)/);
+  assert.match(checkout, /window\.location\.href = href/);
+  assert.match(checkout, /clear\(\)/);
+  assert.match(checkout, /data-testid="order-sent"/);
+  assert.match(checkout, /data-testid="checkout-form"/);
 });
 
-test("order place hote hi payment step 3 checkout ke andar khulta hai (alag page nahi)", () => {
-  assert.match(checkout, /goToPayment\(result\.data\.orderNumber\)/);
-  assert.match(checkout, /window\.history\.pushState\(\{\}, "", paymentUrl\(target\)\)/);
-  assert.doesNotMatch(checkout, /router\.push\(`\/orders\//, "payment page par redirect nahi");
-  assert.doesNotMatch(checkout, /\?pay=1/, "UPI auto-open wala flag hata diya gaya");
+test("WhatsApp message carries items, total, address and the order number", () => {
+  assert.match(checkout, /wa\.me/);
+  assert.match(checkout, /Please confirm my order and share the payment details/);
+  assert.match(checkout, /orderNumber/);
+  assert.match(checkout, /× \$\{item\.quantity\}/);
+  assert.match(checkout, /Total: \$\{formatPrice\(totals\)\}/);
+});
+
+test("the pay page is a WhatsApp hand-off, not a UPI page", () => {
+  assert.doesNotMatch(payCode, /UpiPayment|PaymentStatusWatcher|upi:\/\//);
+  assert.match(payPage, /data-testid="pay-order-number"/);
+  assert.match(payPage, /data-testid="confirm-whatsapp"/);
+  assert.match(payPage, /wa\.me/);
+});
+
+test("the order page and cart advertise WhatsApp, not payment", () => {
+  assert.match(orderPage, /data-testid="order-whatsapp-block"/);
+  assert.match(orderPage, /data-testid="complete-payment"/);
+  assert.match(cartPage, /WhatsApp/);
+  assert.doesNotMatch(stripComments(cartPage), /Secure UPI|Pay online|pay now/i);
+});
+
+test("every page has the WhatsApp button (layout mounts the FAB)", () => {
+  const layout = read("apps/web/src/app/layout.tsx");
+  assert.match(layout, /WhatsappFab/);
+  assert.match(fab, /data-testid="whatsapp-fab"/);
+  assert.match(fab, /wa\.me/);
 });
 
 test("checkout funnel events DB + sheet me jaate hain", () => {

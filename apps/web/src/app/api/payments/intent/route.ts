@@ -22,18 +22,18 @@ export async function POST(request: Request) {
   }
 
   const orderNumber = String(body.orderNumber ?? "").trim();
-  if (!orderNumber) return Response.json({ error: "orderNumber chahiye." }, { status: 400 });
+  if (!orderNumber) return Response.json({ error: "orderNumber is required." }, { status: 400 });
 
   const order = await getOrderForPayment(orderNumber);
-  if (!order) return Response.json({ error: "Order nahi mila." }, { status: 404 });
+  if (!order) return Response.json({ error: "Order not found." }, { status: 404 });
 
   // order ka phone verify karke hi payment banega — koi bhi order number se QR na bana le
   const token = readPhoneToken(body.phoneToken);
   if (!token || token.phone !== order.phone) {
-    return Response.json({ error: "Order verify nahi hua. OTP dobara kariye." }, { status: 401 });
+    return Response.json({ error: "The order could not be verified. Please request a new OTP." }, { status: 401 });
   }
   if (order.paymentStatus === "paid") {
-    return Response.json({ error: "Ye order already paid hai.", status: await paymentStatusFor(orderNumber) }, { status: 409 });
+    return Response.json({ error: "This order is already paid.", status: await paymentStatusFor(orderNumber) }, { status: 409 });
   }
 
   ensurePaymentsDir();

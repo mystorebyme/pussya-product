@@ -66,8 +66,8 @@ export function SizeGuideContent({
   return (
     <div data-testid="size-guide-content" data-variant={variant}>
       <p className={`text-[#5c534b] leading-relaxed ${compact ? "text-[12px]" : "text-[13px]"}`}>
-        Most of our suits are ready-to-wear. Apne body measurements chart se compare karein — confusion ho to
-        size up karein ya WhatsApp par bust, waist aur height bhej dein.
+        Most of our suits are ready-to-wear. Compare your body measurements with the chart — if you are unsure,
+        size up or send us your bust, waist and height on WhatsApp.
       </p>
       <p className="mt-2 text-[10.5px] font-semibold tracking-[.16em] text-[#a67c2e] uppercase" data-testid="size-fit-label">
         {FIT_LABEL}
@@ -176,7 +176,7 @@ export function SizeGuideContent({
               htmlFor={`${tabId}-bust`}
               className="text-[11px] font-semibold tracking-[.12em] text-[#2f2a25] uppercase"
             >
-              Apna bust ({unit === "in" ? "inches" : "cm"}) daaliye
+              Enter your bust ({unit === "in" ? "inches" : "cm"})
             </label>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <input
@@ -197,7 +197,7 @@ export function SizeGuideContent({
               </button>
             </div>
 
-            <p className="mt-3 text-[10.5px] tracking-[.12em] text-[#9c8f82] uppercase">Ya quick select</p>
+            <p className="mt-3 text-[10.5px] tracking-[.12em] text-[#9c8f82] uppercase">Or quick select</p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {quickPicks.map((pick) => {
                 const label = unit === "in" ? `${pick.inch}″` : `${pick.cm} cm`;
@@ -238,15 +238,15 @@ export function SizeGuideContent({
               </p>
               <p className="mt-1.5 text-[12px] leading-relaxed text-[#5c534b]">{recommendation.message}</p>
               <p className="mt-1 text-[11px] text-[#8a7a5f]">
-                Chart par: bust {sizeCell(recommendation.size, "bust", unit)} · waist{" "}
+                On the chart: bust {sizeCell(recommendation.size, "bust", unit)} · waist{" "}
                 {sizeCell(recommendation.size, "waist", unit)} · hips {sizeCell(recommendation.size, "hip", unit)} · front
                 length {sizeCell(recommendation.size, "frontLength", unit)}
               </p>
             </div>
           ) : (
             <p className="mt-3 text-[12px] leading-relaxed text-[#8a7f75]" data-testid="find-size-hint">
-              Bust daal kar &ldquo;Find my size&rdquo; dabaiye — hum ready-to-wear chart se sabse comfortable size bata
-              denge. Do sizes ke beech me hain to bada size chuniye.
+              Enter your bust and tap &ldquo;Find my size&rdquo; — we read the ready-to-wear chart and show your most
+              comfortable size. If you are between two sizes, choose the larger one.
             </p>
           )}
 
@@ -295,7 +295,7 @@ export function SizeGuideContent({
       {/* ── help ── */}
       <div className="mt-5 rounded-lg border border-[#eadfce] bg-[#faf6f1] p-4" data-testid="size-guide-help">
         <p className="text-[12px] leading-relaxed text-[#5c534b]">
-          Still unsure? Apna bust, waist aur height bhej dein — hum sahi size bata denge.
+          Still unsure? Send us your bust, waist and height — we will tell you the right size.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {contactNumber ? (

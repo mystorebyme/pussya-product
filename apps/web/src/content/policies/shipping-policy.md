@@ -8,8 +8,8 @@ We ship across India. If your pincode is not serviceable by our courier partners
 
 ## 2. Charges
 
-- **All orders:** prepaid only — UPI se payment (QR + UPI ID checkout par dikhta hai).
-- **No hidden charges:** jo price checkout par dikhta hai, wahi pay karna hai.
+- **All orders:** you place the order on this site and confirm it on WhatsApp. Our team replies with the payment details (UPI ID or QR). The order is prepaid only.
+- **No hidden charges:** the price you see in your bag is the price you pay. Courier charges, if any, are shown before you confirm.
 
 ## 3. Dispatch time
 

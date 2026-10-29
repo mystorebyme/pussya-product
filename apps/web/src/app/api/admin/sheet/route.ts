@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       liveRead: storeSettingsInfo(),
       sheet: null,
       recent: { orders: [], payments: [], messages: [] },
-      hint: "GOOGLE_SHEETS_WEBAPP_URL + GOOGLE_SHEETS_TOKEN set kariye (docs/09-devops/google-sheets.md).",
+      hint: "Set GOOGLE_SHEETS_WEBAPP_URL and GOOGLE_SHEETS_TOKEN (docs/09-devops/google-sheets.md).",
     });
   }
 

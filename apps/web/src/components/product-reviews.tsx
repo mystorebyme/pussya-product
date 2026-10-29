@@ -58,9 +58,9 @@ export function ProductReviews({
 
       {showForm ? (
         <p className="mt-3 border border-[#eee6de] bg-[#faf8f5] p-4 text-[12.5px] leading-relaxed text-[#5c534b]">
-          Apna review WhatsApp par bhejiye — team 24 ghante me publish kar deti hai.{" "}
+          Send your review on WhatsApp — our team publishes it within 24 hours.{" "}
           <a href={whatsappReview} target="_blank" rel="noopener noreferrer" className="font-medium text-[#862222] underline">
-            WhatsApp par review likhein
+            Write a review on WhatsApp
           </a>
         </p>
       ) : null}
@@ -69,7 +69,7 @@ export function ProductReviews({
         <div className="mt-5 border border-[#eee6de] px-5 py-10 text-center">
           <Stars value={0} size={18} />
           <p className="mt-2 text-[12.5px] text-[#6b6259]">
-            Is piece par abhi koi review nahi hai. Pehla review aapka ho sakta hai.
+            There are no reviews on this piece yet. Yours can be the first.
           </p>
         </div>
       ) : (
@@ -89,8 +89,8 @@ export function ProductReviews({
             <div className="space-y-1.5">
               {block.reviews.length === 0 ? (
                 <p className="text-[12px] leading-relaxed text-[#6b6259]">
-                  Is piece par {block.count} ratings hain. Customer-written reviews aate hi yahan dikhte hain —
-                  koi sample review publish nahi hota.
+                  This piece has {block.count} ratings. Customer-written reviews appear here as they come in —
+                  we never publish sample reviews.
                 </p>
               ) : null}
               {block.reviews.length === 0 ? null : breakdown.map((row) => (

@@ -18,7 +18,7 @@ export async function POST(request: Request) {
 
   const phone = (body.phone ?? "").replace(/\D/g, "").slice(-10);
   if (!/^[6-9]\d{9}$/.test(phone)) {
-    return Response.json({ error: "Valid 10-digit mobile number daaliye." }, { status: 400 });
+    return Response.json({ error: "Please enter a valid 10-digit mobile number." }, { status: 400 });
   }
 
   const mode = otpMode();
@@ -26,20 +26,20 @@ export async function POST(request: Request) {
   if (body.idToken) {
     const verifiedPhone = await verifyFirebaseIdToken(body.idToken);
     if (!verifiedPhone) {
-      return Response.json({ error: "OTP verify nahi ho paya. Dobara try kariye." }, { status: 401 });
+      return Response.json({ error: "We could not verify the OTP. Please try again." }, { status: 401 });
     }
     if (verifiedPhone !== phone) {
-      return Response.json({ error: "Verified number requested number se match nahi karta." }, { status: 400 });
+      return Response.json({ error: "The verified number does not match the requested number." }, { status: 400 });
     }
     return Response.json({ phoneToken: issuePhoneToken(phone), phone, mode: "firebase" });
   }
 
   if (mode === "dev" && body.code) {
     if (!checkDevCode(phone, body.code)) {
-      return Response.json({ error: "OTP galat ya expire ho gaya." }, { status: 401 });
+      return Response.json({ error: "The OTP is incorrect or has expired." }, { status: 401 });
     }
     return Response.json({ phoneToken: issuePhoneToken(phone), phone, mode: "dev" });
   }
 
-  return Response.json({ error: "OTP verify karne ke liye idToken ya code bhejiye." }, { status: 400 });
+  return Response.json({ error: "Send an idToken or code to verify the OTP." }, { status: 400 });
 }

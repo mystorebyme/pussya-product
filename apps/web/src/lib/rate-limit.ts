@@ -89,7 +89,7 @@ export function enforceRateLimit(request: Request, rule: RateLimitRule, now = Da
   if (result.ok) return null;
   return Response.json(
     {
-      error: "Bahut zyada requests aa rahi hain — thodi der baad koshish kariye.",
+      error: "Too many requests right now — please try again shortly.",
       retryAfterSeconds: result.retryAfterSeconds,
     },
     {

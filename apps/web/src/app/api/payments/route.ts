@@ -28,6 +28,6 @@ export async function POST(request: Request) {
     return Response.json(initiation);
   } catch (error) {
     console.error("payment initiation failed", error);
-    return Response.json({ error: "Payment link generate nahi hua." }, { status: 502 });
+    return Response.json({ error: "The payment link could not be generated." }, { status: 502 });
   }
 }

@@ -87,7 +87,7 @@ export async function notifyContactMessage(input: {
   // Owner rule: support email site par nahi. Agar env me koi owner address nahi
   // diya gaya to email layer chup-chaap skip ho jaata hai (message DB + Sheet me
   // to jaata hi hai) — khaali address par request bhej kar error nahi banate.
-  if (!to) return [{ channel: "sheet", ok: true, detail: "message DB + Google Sheet me save" }];
+  if (!to) return [{ channel: "sheet", ok: true, detail: "message saved to the DB + Google Sheet" }];
   const subject = `New website message — ${input.subject ?? "General"} (${input.name})`;
 
   const resendKey = process.env.RESEND_API_KEY;

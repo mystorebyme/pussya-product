@@ -13,14 +13,14 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const orderNumber = (url.searchParams.get("order") ?? "").trim();
-  if (!orderNumber) return Response.json({ error: "order chahiye." }, { status: 400 });
+  if (!orderNumber) return Response.json({ error: "order is required." }, { status: 400 });
 
   const order = await getOrderForPayment(orderNumber);
-  if (!order) return Response.json({ error: "Order nahi mila." }, { status: 404 });
+  if (!order) return Response.json({ error: "Order not found." }, { status: 404 });
 
   const token = readPhoneToken(url.searchParams.get("phoneToken") ?? undefined);
   if (!token || token.phone !== order.phone) {
-    return Response.json({ error: "Order verify nahi hua." }, { status: 401 });
+    return Response.json({ error: "The order could not be verified." }, { status: 401 });
   }
 
   return Response.json(await paymentStatusFor(orderNumber), { headers: { "cache-control": "no-store" } });

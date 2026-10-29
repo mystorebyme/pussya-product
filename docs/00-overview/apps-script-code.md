@@ -83,7 +83,7 @@ Warna purana code hi chalta rehta hai — owner ke saath yahi hua tha.
 
 ---
 
-## Poora code (2543 lines)
+## Poora code (2560 lines)
 
 ```javascript
 /**
@@ -288,7 +288,10 @@ var DEFAULT_SETTINGS = [
   // payment rok deti hai aur /api/sheet-health par "upiSet:false" dikhta hai.
   ['upi_id', ''],
   ['upi_name', 'Noor Ethnic Wear'],
-  ['announcement', 'Diwali Sale — Flat 70% OFF · Final price ₹499 onwards'],
+  ['announcement', 'Order in the bag, confirm on WhatsApp in one tap'],
+  // R50 — Daily Special ribbon under the header. Empty = the ribbon is hidden.
+  // Example: 'Daily Special · Rose Dew Daily Wear ₹599 · Free delivery today only'
+  ['daily_special', ''],
   ['gstin', ''],
   ['free_shipping', 'true'],
   ['admin_url', 'https://admin.noorethnicwear.in'],
@@ -513,7 +516,7 @@ function book_() {
       return SpreadsheetApp.openById(id);
     } catch (error) {
       // is account ko configured sheet par access nahi — neeche bound sheet try hoti hai
-      Logger.log('book_: "' + id + '" khul nahi rahi (' + error.message + ')');
+      Logger.log('book_: could not open "' + id + '" (' + error.message + ')');
     }
   }
 
@@ -554,9 +557,9 @@ function createOwnSheet() {
     var created = SpreadsheetApp.create('Noor Ethnic Wear — Store (website data)');
     PropertiesService.getScriptProperties().setProperty('SHEET_ID', created.getId());
     var created2 = setup_();
-    Logger.log('✅ Nayi sheet: ' + created.getUrl());
-    Logger.log('   (id: ' + created.getId() + ') — ab yahi sheet website ke liye use hogi.');
-    Logger.log('   Tabs bane: ' + (created2.join(', ') || 'sab pehle se the'));
+    Logger.log('✅ New sheet created: ' + created.getUrl());
+    Logger.log('   (id: ' + created.getId() + ') — this is now the sheet the website uses.');
+    Logger.log('   Tabs: ' + (created2.join(', ') || 'all already existed'));
     try {
       created.toast('Sheet ready ✔ URL: ' + created.getUrl(), 'createOwnSheet', 20);
     } catch (ignored) {}
@@ -673,7 +676,7 @@ function guard_(name, fn) {
       ? 'FIX: Sheet kholein → Share → ' + (executingEmail_() || 'jo account script chala raha hai') +
         ' → Editor → Send. (Script isi account se chal rahi hai, sheet doosre account ki hai.)'
       : 'Detail ke liye function `doctor` chalaiye (log me poora report aayega).';
-    Logger.log('❌ ' + name + ' fail hua: ' + message);
+    Logger.log('❌ ' + name + ' failed: ' + message);
     Logger.log('👉 ' + fix);
     try {
       book_().toast(name + ' fail: ' + fix, name, 10);
@@ -855,7 +858,7 @@ function formatAll() {
       if (name === 'Settings') return;
       applyFormatting_(sheet_(name), name);
     });
-    book_().toast('Columns ki width/format set ho gayi ✔', 'formatAll', 6);
+    book_().toast('Column width and formats are set ✔', 'formatAll', 6);
     return true;
   });
 }
@@ -938,33 +941,15 @@ function setup_() {
     if (!before) created.push(name);
   });
 
-  // Settings tab (key/value)
-  var settings = sheet_('Settings');
-  if (settings.getLastRow() === 0) {
-    settings.appendRow(['key', 'value']);
-    settings.setFrozenRows(1);
-    settings.getRange(1, 1, 1, 2).setFontWeight('bold');
-  }
-  var existing = {};
-  if (settings.getLastRow() > 1) {
-    settings
-      .getRange(2, 1, settings.getLastRow() - 1, 2)
-      .getValues()
-      .forEach(function (row) {
-        existing[String(row[0]).trim().toLowerCase()] = true;
-      });
-  }
-  DEFAULT_SETTINGS.forEach(function (entry) {
-    if (!existing[entry[0]]) settings.appendRow(entry);
-  });
+  seedSettings_();
 
   refreshDashboard_();
   noteSync_('script', 'setup', created.length, 'ok', 'tabs: ' + created.join(', '));
   try {
     book_().toast('Noor sheets ready ✔ (' + Object.keys(HEADERS).length + ' tabs)', 'setup', 6);
   } catch (ignored) {}
-  Logger.log('setup done. naye tabs: ' + (created.join(', ') || 'koi nahi'));
-  Logger.log('ab: Deploy → Manage deployments → ✏️ → New version → Deploy');
+  Logger.log('setup done. new tabs: ' + (created.join(', ') || 'none'));
+  Logger.log('next: Deploy → Manage deployments → ✏️ → New version → Deploy');
   return created;
 }
 
@@ -981,18 +966,50 @@ function repairHeaders_() {
     ensureHeaders_(sheet, name);
     if (headersOf_(sheet).join('|') !== before) fixed.push(name);
   });
-  book_().toast('Headers check ho gaye ✔ (' + (fixed.length ? fixed.join(', ') : 'sab sahi') + ')', 'repair', 6);
+  book_().toast('Headers checked ✔ (' + (fixed.length ? fixed.join(', ') : 'all correct') + ')', 'repair', 6);
   return fixed;
 }
 
 /**
+ * Settings tab: header row + har missing default key (values kabhi overwrite
+ * nahi hote). `setup()` aur `migrate()` dono isi ko call karte hain, isliye
+ * naya key (jaise `daily_special`) purani sheet me bhi apne aap aa jaata hai.
+ */
+function seedSettings_() {
+  var settings = sheet_('Settings');
+  if (settings.getLastRow() === 0) {
+    settings.appendRow(['key', 'value']);
+    settings.setFrozenRows(1);
+    settings.getRange(1, 1, 1, 2).setFontWeight('bold');
+  }
+  var existing = {};
+  if (settings.getLastRow() > 1) {
+    settings
+      .getRange(2, 1, settings.getLastRow() - 1, 2)
+      .getValues()
+      .forEach(function (row) {
+        existing[String(row[0]).trim().toLowerCase()] = true;
+      });
+  }
+  var added = [];
+  DEFAULT_SETTINGS.forEach(function (entry) {
+    if (!existing[entry[0]]) {
+      settings.appendRow(entry);
+      added.push(entry[0]);
+    }
+  });
+  return added;
+}
+
+/**
  * Migrate — purane/naye sab tabs ka header sahi karta hai, Settings ki missing
+
  * keys add karta hai, aur Dashboard bhar deta hai. `setup()` ise khud call karta
  * hai, isliye alag chalane ki zaroorat nahi.
  */
 function migrate() {
   return guard_('migrate', function () {
-    return { headers: repairHeaders_(), dashboard: refreshDashboard_() };
+    return { settings: seedSettings_(), headers: repairHeaders_(), dashboard: refreshDashboard_() };
   });
 }
 
@@ -1424,7 +1441,7 @@ function appendRows_(rows) {
   } finally {
     lock.releaseLock();
   }
-  if (skipped) Logger.log('appendRows_: ' + skipped + ' rows ka sheet naam anjaan tha');
+  if (skipped) Logger.log('appendRows_: unknown tab name on ' + skipped + ' rows');
   return written;
 }
 
@@ -1923,10 +1940,10 @@ function seedDemoData_() {
   var written = appendRows_(rows);
   refreshDashboard_();
   noteSync_('demo→sheet', 'all', written, 'ok', 'seedDemoData');
-  Logger.log('✅ seedDemoData: ' + written + ' demo rows likhi gayi.');
-  Logger.log('   Hataana ho to function `clearDemoData` chalaiye.');
+  Logger.log('✅ seedDemoData: wrote ' + written + ' demo rows.');
+  Logger.log('   To remove them, run the `clearDemoData` function.');
   try {
-    book_().toast('Demo data bhar gaya ✔ (' + written + ' rows)', 'seedDemoData', 8);
+    book_().toast('Demo data written ✔ (' + written + ' rows)', 'seedDemoData', 8);
   } catch (ignored) {}
   return { written: written, time: stamp };
 }
@@ -1956,9 +1973,9 @@ function clearDemoData_() {
     }
   });
   refreshDashboard_();
-  Logger.log('🧹 clearDemoData: ' + removed + ' demo rows hata di gayi.');
+  Logger.log('🧹 clearDemoData: removed ' + removed + ' demo rows.');
   try {
-    book_().toast(removed + ' demo rows hata di gayi ✔', 'clearDemoData', 8);
+    book_().toast('Removed ' + removed + ' demo rows ✔', 'clearDemoData', 8);
   } catch (ignored) {}
   return removed;
 }
@@ -2004,7 +2021,7 @@ function testAppend_() {
     },
   ]);
   Logger.log('rows written: ' + written);
-  book_().toast('Test rows likh diye (' + written + ') ✔', 'testAppend', 6);
+  book_().toast('Test rows written (' + written + ') ✔', 'testAppend', 6);
   return written;
 }
 
@@ -2064,7 +2081,7 @@ function backupNow_() {
     var name = 'Noor backup ' + Utilities.formatDate(new Date(), TIMEZONE, 'yyyy-MM-dd HHmm');
     var file = DriveApp.getFileById(book.getId());
     var copy = file.makeCopy(name);
-    Logger.log('backup ban gaya: ' + copy.getUrl());
+    Logger.log('backup created: ' + copy.getUrl());
     noteSync_('script', 'backup', 1, 'ok', name);
     return copy.getUrl();
   } catch (error) {
@@ -2168,7 +2185,7 @@ function installTriggers_() {
   });
   ScriptApp.newTrigger('dailyRefresh').timeBased().atHour(21).everyDays(1).create();
   ScriptApp.newTrigger('weeklyBackup').timeBased().onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(2).create();
-  book_().toast('Daily 9 PM dashboard + Sunday 2 AM backup triggers lag gaye ✔', 'installTriggers', 6);
+  book_().toast('Triggers installed: daily 9 PM dashboard + Sunday 2 AM backup ✔', 'installTriggers', 6);
   return true;
 }
 

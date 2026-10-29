@@ -356,7 +356,7 @@ async function fetchSheetSettings(): Promise<SheetSettings | null> {
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const value = normaliseSheetSettings(await response.json());
-      if (!value) throw new Error("response me koi setting value nahi");
+      if (!value) throw new Error("the response contained no setting values");
       return commit(value, "apps-script", startedAt);
     } catch (error) {
       const message = (error as Error).message;
@@ -374,7 +374,7 @@ async function fetchSheetSettings(): Promise<SheetSettings | null> {
   try {
     const csv = await readSettingsFromCsv();
     if (csv) return commit(csv, "csv", startedAt);
-    return failRead("CSV me koi setting nahi mili", startedAt);
+    return failRead("no settings found in the CSV", startedAt);
   } catch (error) {
     return failRead((error as Error).message, startedAt);
   }
@@ -396,13 +396,14 @@ async function readSettingsFromCsv(): Promise<SheetSettings | null> {
   });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const value = parseSettingsCsv(await response.text());
-  if (!value) throw new Error("CSV me koi setting nahi mili");
+  if (!value) throw new Error("no settings found in the CSV");
   return value;
 }
 
 /** Admin settings → Google Sheet (owner ki sheet hamesha latest rahe). */
 export async function writeSheetSettings(settings: {
   announcement?: string;
+  dailySpecial?: string;
   supportPhone?: string;
   supportEmail?: string;
   whatsapp?: string;
@@ -429,6 +430,7 @@ export async function writeSheetSettings(settings: {
         action: "settings_save",
         settings: {
           announcement: settings.announcement ?? "",
+          daily_special: settings.dailySpecial ?? "",
           support_phone: settings.supportPhone ?? "",
           support_email: settings.supportEmail ?? "",
           whatsapp: settings.whatsapp ?? "",
@@ -542,7 +544,7 @@ async function appendSheetRowsOnce(
        */
       return {
         ok: false,
-        error: "non-JSON reply — script ka sahi version deploy hua? URL /exec par khatam hota hai?",
+        error: "non-JSON reply — is the correct script version deployed? Does the URL end with /exec?",
       };
     }
     if (payload.ok === false) {
