@@ -1,12 +1,12 @@
 # Live site check — https://mystorebyme.github.io/pussya-product/
 
-Ran: 2026-10-29T04:46:12.540Z
+Ran: 2026-10-29T04:48:37.185Z
 
 ## Page
 
 | result | check |
 | --- | --- |
-| ✅ | home page 200 — HTTP 200 · 445157 bytes · 217ms |
+| ✅ | home page 200 — HTTP 200 · 457119 bytes · 125ms |
 | ✅ | brand name page par hai |
 | ✅ | header render hua hai |
 | ✅ | header me brand-lockup hai |
@@ -60,7 +60,7 @@ Ran: 2026-10-29T04:46:12.540Z
 
 | result | rule |
 | --- | --- |
-| ✅ | stylesheet load hui — /_next/static/chunks/0of4bw2cq1og-.css |
+| ✅ | stylesheet load hui — /_next/static/chunks/08s~r_fpivrn3.css |
 | ✅ | `.brand-lockup img` heights (46 → 54 → 60) |
 | ✅ | `.brand-lockup img` object-fit: contain |
 | ✅ | logo par koi display:none / visibility:hidden nahi |
@@ -103,7 +103,7 @@ Ran: 2026-10-29T04:46:12.540Z
 | ✅ | size guide: 3 tabs (Measurements Chart / Find My Size / How to Measure) |
 | ✅ | size guide: inches/centimeters toggle |
 | ✅ | size guide: chart XS se XXL (front length column ke saath) |
-| ✅ | size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL) |
+| ❌ | size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL) |
 | ✅ | size guide: front length value 46 (inches) chart me |
 
 ## Key pages
@@ -126,7 +126,7 @@ Ran: 2026-10-29T04:46:12.540Z
 | result | link | HTTP |
 | --- | --- | --- |
 | ✅ | `/pussya-product/images/brand/logo-fluid.png` | 200 |
-| ✅ | `/pussya-product/_next/static/chunks/0of4bw2cq1og-.css` | 200 |
+| ✅ | `/pussya-product/_next/static/chunks/08s~r_fpivrn3.css` | 200 |
 | ✅ | `/pussya-product/_next/static/chunks/14-dwd6q-0nhb.js` | 200 |
 | ✅ | `/pussya-product/manifest.webmanifest` | 200 |
 | ✅ | `/pussya-product/favicon.ico` | 200 |
@@ -148,14 +148,15 @@ Ran: 2026-10-29T04:46:12.540Z
 | ✅ | `/pussya-product/pages/about-us/` | 200 |
 | ✅ | `/pussya-product/collections/noors-choice/` | 200 |
 | ✅ | `/pussya-product/collections/wedding-collection/` | 200 |
-| ✅ | `/pussya-product/products/niyara-sky-color-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/purple-embroidered-anarkali-gown-set/` | 200 |
-| ✅ | `/pussya-product/products/prachi-green-havy-vichitra-royal-elegant-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/vlveera-white-heavy-silk-anarkali-gown-set-with-zari-sequins-work/` | 200 |
-| ✅ | `/pussya-product/products/ruhvanya-heavy-wedding-wear-maxi-set/` | 200 |
-| ✅ | `/pussya-product/products/saniya-s-wine-gown/` | 200 |
-| ✅ | `/pussya-product/products/millow-floral-anarkali-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/mastani-floral-anarkali-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/white-colored-embroidered-georgette-anarkali-fully-stitched-suit-set-ay-341/` | 200 |
+| ✅ | `/pussya-product/products/nravya-purple-embroidered-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/rani-color-premium-quality-suit-set-dt-273-copy/` | 200 |
+| ✅ | `/pussya-product/products/vibhutis-wine-coloured-anarkali-suit-set-td06/` | 200 |
+| ✅ | `/pussya-product/products/manyata-maroon-red-embroidered-georgette-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/noor-anarkali-style-plazzo-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/siyas-royal-purple-elegant-golden-border-anarkali-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/rang-e-royale-blooming-lehenga-suit-set/` | 200 |
+| ✅ | `/pussya-product/products/rang-f-royale-blooming-lehenga-suit-set/` | 200 |
 | ✅ | `/pussya-product/collections/trending/` | 200 |
 | ✅ | `/pussya-product/products/classic-red-karva-chauth-special-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/red-chilli-slit-anarkali-premium-suit-set/` | 200 |
@@ -164,12 +165,9 @@ Ran: 2026-10-29T04:46:12.540Z
 | ✅ | `/pussya-product/products/kaumya-neon-elegant-sharara-suit-set-6061-sky/` | 200 |
 | ✅ | `/pussya-product/products/neha-heavy-pure-vichitra-anarkali-suit-set/` | 200 |
 | ✅ | `/pussya-product/products/nehas-premium-anarkali-suit-set/` | 200 |
-| ✅ | `/pussya-product/products/premium-anarkali-suit-set-3-piece/` | 200 |
 
 ## Summary
 
-✔ Saare live checks pass.
+❌ 1 problem mili:
 
-<!-- re-run trigger: 1793249255 -->
-
-<!-- manual trigger 1793249308 -->
+- size guide: unstitched suit note (2.5 m + 2.25 m + XS se 5XL)
