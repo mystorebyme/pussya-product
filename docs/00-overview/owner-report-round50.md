@@ -144,3 +144,19 @@ GitHub → Settings → Secrets and variables → Actions:
   checks a token) — your Apps Script deployment URL.
 
 Once either is set, the mirror is no longer used at all.
+
+## 10. Custom domain
+
+Pages par aapne custom domain `noorethnicwear.store` laga diya hai — DNS sahi
+GitHub Pages ke IPs par ja raha hai, aur `mystorebyme.github.io/pussya-product/`
+301 karke wahan bhej deta hai. Sab checks dono URL try karte hain, isliye link
+kaun sa bhi share karein, site khulti hai.
+
+Do cheezein aapke haath me hain (Actions token ke paas Pages settings ka
+permission nahi hai, isliye main ye switch nahi kar sakta):
+
+1. **Settings → Pages → Enforce HTTPS** ✅ — abhi off hai, aur isi wajah se
+   `https://noorethnicwear.store/` seedha https par har baar jawab nahi deta
+   (check redirect ke saath pass hota hai).
+2. Agar aap kabhi `*.github.io` link bhi chalu rakhna chahein, to domain hataana
+   padega — GitHub ek hi waqt me dono nahi deta.
