@@ -1,0 +1,63 @@
+{
+  "name": "noor-ethnic-wear",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Noor Clothing - production-grade ecommerce monorepo (storefront + admin + api)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "build": "npm run build --workspace @noor/web",
+    "build:all": "npm run build --workspace @noor/web && npm run build --workspace @noor/admin && npm run build --workspace @noor/api",
+    "build:web": "npm run build --workspace @noor/web",
+    "catalog:build": "node scripts/build-catalog.mjs",
+    "catalog:sync": "node scripts/catalog-sync/fetch-live.mjs && npm run catalog:build",
+    "catalog:sync-live": "npm run catalog:sync",
+    "catalog:verify": "node scripts/verify-catalog.mjs",
+    "policies:build": "node scripts/build-policies.mjs",
+    "pricing:sale": "node scripts/pricing/apply-sale-prices.mjs",
+    "db:migrate": "node scripts/db/migrate.mjs",
+    "db:migrate:require": "node scripts/db/migrate.mjs --require",
+    "deploy:worker": "bash scripts/deploy-cloudflare.sh",
+    "deploy:worker:only": "npm run deploy:vinext --workspace @noor/web",
+    "dev": "npm run dev --workspace @noor/web",
+    "dev:admin": "npm run dev --workspace @noor/admin",
+    "dev:api": "npm run dev --workspace @noor/api",
+    "dev:web": "npm run dev --workspace @noor/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "setup": "bash scripts/setup.sh",
+    "start": "npm run start --workspace @noor/web",
+    "test": "tsx --test tests/unit/*.test.ts",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:sheets && npm run test:db",
+    "test:db": "TSX_TSCONFIG_PATH=apps/web/tsconfig.json tsx --conditions=react-server --test tests/db/*.test.ts",
+    "test:sheets": "TSX_TSCONFIG_PATH=apps/web/tsconfig.json tsx --conditions=react-server --test tests/sheets/*.test.ts",
+    "test:e2e": "playwright test",
+    "test:integration": "tsx --test tests/integration/*.test.ts",
+    "test:smoke": "node tests/e2e/smoke.mjs",
+    "test:responsive": "node tests/e2e/responsive.mjs && node tests/e2e/breakpoints.mjs",
+    "assets:brand": "node scripts/brand/build-responsive-assets.mjs",
+    "assets:proof": "node scripts/brand/render-proof.mjs",
+    "assets:invoice-logo": "node scripts/build-invoice-logo.mjs",
+    "test:unit": "tsx --test tests/unit/*.test.ts",
+    "apps-script:export": "node scripts/export-apps-script.mjs",
+    "sheets:check": "node scripts/sheets-selfcheck.mjs",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test:audit": "node tests/e2e/round16.mjs && node tests/e2e/payments.mjs && node tests/e2e/links.mjs",
+    "test:links": "node tests/e2e/links.mjs",
+    "test:payments": "node tests/e2e/payments.mjs",
+    "schema:embed": "node scripts/db/embed-schema.mjs",
+    "audit": "node scripts/repo-audit.mjs",
+    "audit:check": "node scripts/repo-audit.mjs --check"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
+    "@electric-sql/pglite-socket": "^0.2.14",
+    "@types/pg": "^8.23.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,339 @@
+// Noor Clothing — production schema (Phase 2)
+// Phase 1 me catalogue `database/seeds/catalog.json` se build hota hai aur orders
+// `.data/orders.json` me. Schema yahan pehle se ready hai taaki migration clean rahe.
+//
+// RULE: paisa hamesha Int (paise). Float kabhi nahi.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  CATALOG
+  DISPATCH
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  PACKED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum PaymentMethod {
+  PREPAID
+  COD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  COD
+}
+
+enum PaymentAttemptStatus {
+  CREATED
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  phone        String?
+  name         String
+  passwordHash String?
+  role         Role      @default(CUSTOMER)
+  emailVerifiedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  addresses    Address[]
+  orders       Order[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+  consents     Consent[]
+  deletedAt    DateTime?
+
+  @@index([role])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName  String
+  phone     String
+  line1     String
+  line2     String?
+  city      String
+  state     String
+  pincode   String   @db.VarChar(6)
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Collection {
+  id        String    @id @default(cuid())
+  handle    String    @unique
+  title     String
+  subtitle  String
+  imageUrl  String
+  sortOrder Int       @default(0)
+  products  Product[]
+}
+
+model Product {
+  id             String          @id @default(cuid())
+  handle         String          @unique
+  title          String
+  description    String
+  category       String
+  fabric         String
+  color          String
+  price          Int             // paise
+  compareAtPrice Int?
+  rating         Decimal         @default(0) @db.Decimal(2, 1)
+  reviewCount    Int             @default(0)
+  inStock        Boolean         @default(true)
+  featured       Boolean         @default(false)
+  hsnCode        String?
+  gstPercent     Int             @default(5)
+  collections    Collection[]
+  variants       ProductVariant[]
+  images         ProductImage[]
+  orderItems     OrderItem[]
+  reviews        Review[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([category])
+  @@index([featured])
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku       String  @unique
+  size      String
+  colour    String?
+  price     Int
+  // stock integer — decrement sirf conditional UPDATE se (stock >= qty)
+  stock     Int     @default(0)
+  reserved  Int     @default(0)
+
+  @@unique([productId, size, colour])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  position  Int     @default(0)
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?
+  token     String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+}
+
+model CartItem {
+  id          String  @id @default(cuid())
+  cartId      String
+  cart        Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  variantId   String
+  quantity    Int
+  priceSnap   Int
+
+  @@unique([cartId, variantId])
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique
+  userId        String?
+  user          User?         @relation(fields: [userId], references: [id])
+  status        OrderStatus   @default(PLACED)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+  customerName  String
+  email         String
+  phone         String
+  line1         String
+  city          String
+  state         String
+  pincode       String
+  notes         String?
+  subtotal      Int
+  discount      Int           @default(0)
+  shipping      Int           @default(0)
+  total         Int
+  couponCode    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  items         OrderItem[]
+  payments      PaymentAttempt[]
+  invoice       Invoice?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  title     String
+  imageUrl  String
+  size      String
+  quantity  Int
+  price     Int
+  hsnCode   String?
+}
+
+model PaymentAttempt {
+  id              String               @id @default(cuid())
+  orderId         String
+  order           Order                @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider        String               @default("razorpay")
+  providerOrderId String?
+  providerPaymentId String?
+  amount          Int
+  status          PaymentAttemptStatus @default(CREATED)
+  idempotencyKey  String?              @unique
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  @@index([orderId])
+}
+
+model WebhookEvent {
+  id          String   @id @default(cuid())
+  provider    String
+  eventId     String
+  eventType   String
+  payload     Json
+  createdAt   DateTime @default(now())
+
+  // ek provider ka ek event sirf ek baar process ho
+  @@unique([provider, eventId])
+}
+
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  percent    Int?
+  amountOff  Int?
+  minSubtotal Int      @default(0)
+  maxUses    Int?
+  usedCount  Int       @default(0)
+  startsAt   DateTime?
+  endsAt     DateTime?
+  active     Boolean   @default(true)
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int
+  title     String?
+  body      String?
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([productId, userId])
+}
+
+model Wishlist {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  invoiceNumber String   @unique
+  gstin         String?
+  hsnSummary    Json
+  taxableValue  Int
+  cgst          Int
+  sgst          Int
+  igst          Int
+  total         Int
+  pdfUrl        String?
+  issuedAt      DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actorEmail String
+  action    String
+  target    String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([target])
+}
+
+model Consent {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  purpose   String
+  granted   Boolean
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

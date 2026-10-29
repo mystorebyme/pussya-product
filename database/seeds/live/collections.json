@@ -1,0 +1,121 @@
+{
+ "fetchedAt": "2026-10-24T06:51:35.576Z",
+ "origin": "https://noorethnicwear.in",
+ "collections": [
+  {
+   "id": 442268582192,
+   "title": "Anarkali suit",
+   "handle": "party-wear-gown",
+   "description": "",
+   "published_at": "2023-03-21T01:06:40-04:00",
+   "updated_at": "2026-10-23T11:38:06-04:00",
+   "image": {
+    "id": 1758649745712,
+    "created_at": "2025-07-30T14:43:34-04:00",
+    "src": "https://cdn.shopify.com/s/files/1/0738/8345/1696/collections/rn-image_picker_lib_temp_e4e09e2a-2d6c-4c1f-bf1e-f45e561f0dba.jpg?v=1753901014",
+    "alt": null
+   },
+   "products_count": 351
+  },
+  {
+   "id": 442267566384,
+   "title": "Home page",
+   "handle": "frontpage",
+   "description": null,
+   "published_at": "2023-03-21T00:45:07-04:00",
+   "updated_at": "2026-10-23T11:38:06-04:00",
+   "image": null,
+   "products_count": 276
+  },
+  {
+   "id": 476115501360,
+   "title": "Noor's Choice",
+   "handle": "noors-choice",
+   "description": "",
+   "published_at": "2024-06-25T01:30:54-04:00",
+   "updated_at": "2026-10-23T11:38:06-04:00",
+   "image": null,
+   "products_count": 201
+  },
+  {
+   "id": 486946472240,
+   "title": "New Arrivals",
+   "handle": "new-arrivals",
+   "description": "",
+   "published_at": "2025-04-01T09:09:11-04:00",
+   "updated_at": "2026-10-23T11:38:06-04:00",
+   "image": {
+    "id": 1762760294704,
+    "created_at": "2025-12-02T13:46:19-05:00",
+    "src": "https://cdn.shopify.com/s/files/1/0738/8345/1696/collections/Picsart_25-12-01_14-20-40-573.jpg?v=1764701179",
+    "alt": null
+   },
+   "products_count": 423
+  },
+  {
+   "id": 477452534064,
+   "title": "party wear Lengha choli",
+   "handle": "lehnga-choli",
+   "description": "<!---->",
+   "published_at": "2024-07-27T05:50:53-04:00",
+   "updated_at": "2026-10-23T07:09:40-04:00",
+   "image": {
+    "id": 1746192433456,
+    "created_at": "2024-07-27T05:53:36-04:00",
+    "src": "https://cdn.shopify.com/s/files/1/0738/8345/1696/collections/170.webp?v=1764700749",
+    "alt": null
+   },
+   "products_count": 38
+  },
+  {
+   "id": 479454560560,
+   "title": "Printed suit set",
+   "handle": "printed-suit-set",
+   "description": "",
+   "published_at": "2024-09-14T07:25:13-04:00",
+   "updated_at": "2026-10-23T07:09:39-04:00",
+   "image": null,
+   "products_count": 59
+  },
+  {
+   "id": 483218096432,
+   "title": "SALE",
+   "handle": "sale",
+   "description": "",
+   "published_at": "2024-12-18T01:38:16-05:00",
+   "updated_at": "2026-10-23T07:09:40-04:00",
+   "image": null,
+   "products_count": 45
+  },
+  {
+   "id": 472279646512,
+   "title": "Saree",
+   "handle": "saree",
+   "description": "",
+   "published_at": "2024-03-26T02:11:35-04:00",
+   "updated_at": "2026-02-03T02:26:30-05:00",
+   "image": null,
+   "products_count": 1
+  },
+  {
+   "id": 482383626544,
+   "title": "Trending",
+   "handle": "trending",
+   "description": "",
+   "published_at": "2024-11-23T08:27:51-05:00",
+   "updated_at": "2026-10-22T07:11:41-04:00",
+   "image": null,
+   "products_count": 4
+  },
+  {
+   "id": 482383462704,
+   "title": "Wedding Collection",
+   "handle": "weddin-collection",
+   "description": "",
+   "published_at": "2024-11-23T08:27:00-05:00",
+   "updated_at": "2026-10-23T07:09:40-04:00",
+   "image": null,
+   "products_count": 39
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+# Netlify config — storefront (apps/web)
+#
+# Netlify UI me sirf ek cheez set karni hai (guide: docs/00-overview/netlify-shift-guide.md):
+#   Project configuration → Build & deploy → Build settings
+#     Base directory    : (khaali chhod dein → repo root)
+#     Package directory : apps/web
+#   Build command aur Publish directory isi file se aate hain.
+#
+# `publish` repo root ke hisaab se likha hai (base directory = repo root).
+
+[build]
+  command = "npm run build --workspace @noor/web"
+  publish = "apps/web/.next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+  # pnpm-lock nahi hai — npm workspaces hi install karta hai
+  NPM_FLAGS = "--no-audit --no-fund"
+
+# Next.js (App Router + API routes) ko Netlify Functions me chalata hai.
+# Version pin jaan-boojh kar nahi kiya — Netlify khud latest rakhta hai.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Health check — deploy ke baad `curl https://<site>/api/health` turant jawab de
+[[headers]]
+  for = "/api/health"
+  [headers.values]
+    Cache-Control = "no-store"
+
+# Sitemap/robots hamesha fresh
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

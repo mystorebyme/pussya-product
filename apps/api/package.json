@@ -1,0 +1,30 @@
+{
+  "name": "@noor/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "esbuild src/server.ts src/worker.ts --bundle --platform=node --target=node22 --format=cjs --outdir=dist --out-extension:.js=.cjs --sourcemap --log-level=warning",
+    "start": "node dist/server.cjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test src/**/*.test.ts",
+    "start:worker": "node dist/worker.cjs"
+  },
+  "dependencies": {
+    "@noor/types": "*",
+    "@noor/validation": "*",
+    "cors": "2.8.5",
+    "dotenv": "17.3.1",
+    "express": "5.3.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/node": "22.19.15",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "esbuild": "0.27.7"
+  }
+}

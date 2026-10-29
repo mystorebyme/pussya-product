@@ -1,0 +1,1067 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #862222;
+  --color-maroon-dark: #6d1a1a;
+  --color-cream: #faf6f1;
+  --color-sand: #e9dfd4;
+  --font-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-body: "Jost", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --maroon: #862222;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: #2f2a25;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 18s linear infinite;
+}
+
+.reveal {
+  animation: slideUp 0.6s ease both;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-native-scrollbar::-webkit-scrollbar {
+  height: 0;
+}
+
+.container-noor {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .container-noor {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* ---------- motion (live store jaisa feel: reveal, fade, ken-burns) ---------- */
+
+@keyframes kenburns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.07) translate3d(0, -1.2%, 0);
+  }
+}
+
+@keyframes softFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 14s ease-out forwards;
+}
+
+.animate-soft-fade {
+  animation: softFade 0.7s ease both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.45s ease both;
+}
+
+/* scroll-reveal: <Reveal> component class toggle karta hai */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kenburns,
+  .animate-marquee,
+  .animate-soft-fade,
+  .animate-slide-in-right {
+    animation: none !important;
+  }
+  .reveal-init {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-in {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* product card hover: second image cross-fade + slow zoom */
+.card-media img {
+  transition:
+    opacity 0.55s ease,
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* hover: pehli image poori hat jaati hai */
+.group:hover .card-media .card-media-primary {
+  opacity: 0;
+}
+
+/* doosri image background me cursor ke saath move karti hai (parallax follow).
+   Thoda bada scale hai taaki move karne par kinare khali na dikhein. */
+.card-media .card-media-alt {
+  opacity: 0;
+  transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0) scale(1.06);
+  transition:
+    opacity 0.35s ease,
+    transform 0.18s ease-out;
+  will-change: transform, opacity;
+}
+
+.group:hover .card-media .card-media-alt {
+  opacity: 1;
+}
+
+.group:hover .card-media .card-media-primary {
+  transform: none;
+}
+
+/* gallery cross-fade */
+.gallery-slide {
+  transition: opacity 0.45s ease;
+}
+
+/* ---------- responsive polish: mobile / tablet / laptop ---------- */
+
+/* page kabhi side me scroll na kare (sticky header bhi kaam karta rahe) */
+body {
+  overflow-x: clip;
+}
+
+/* iOS: chhote inputs par tap karte hi page zoom ho jata hai — 16px se rukta hai */
+@media (max-width: 640px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* touch devices par hover-only affordances kaam nahi karte */
+@media (hover: none) {
+  .group:hover .card-media .card-media-primary {
+    opacity: 1;
+  }
+  .group:hover .card-media .card-media-alt {
+    opacity: 0;
+  }
+  .card-media .card-media-alt {
+    transform: none;
+  }
+}
+
+/* tablet range: PDP ka gallery text thoda bada, buttons full-width friendly */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container-noor {
+    padding-inline: 1.25rem;
+  }
+}
+
+/* ---------- mobile safety: page kabhi viewport se chaudi na ho ----------
+   Live store ki descriptions me size-chart tables hain; bina wrapper table
+   mobile par page ko desktop width tak kheench deti thi. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+svg,
+table {
+  max-width: 100%;
+}
+
+.product-rich {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* rich text ke andar ki tables apne box me scroll karein, page ko na chauda karein */
+.product-rich table,
+.prose-noor table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.product-rich td,
+.product-rich th,
+.prose-noor td,
+.prose-noor th {
+  padding: 4px 8px 4px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* ---------- brand lockup (responsive logo) ----------
+   Ek hi `<picture>`, teen assets — browser sirf ek download karta hai.
+   Height breakpoints yahin hain: mobile 40 → tablet 50 → desktop 46 (horizontal
+   lockup lamba hai, isliye height kam par width zyada — header me overlap nahi). */
+/*
+  R40 (owner: "logo fix kro"): logo ke teen alag files hain (mobile/tablet/desktop),
+  isliye height bhi per-breakpoint rakhni padti hai — warna ek hi height par
+  mobile file ka wordmark chhota aur desktop file ka mark bada dikhta hai.
+  Width `auto` + `object-contain` = kabhi stretch/crop nahi hota.
+*/
+.brand-lockup img {
+  display: block;
+  /* R45: naya gold-emblem lockup (2172×724 → 2.70:1) — poora frame, koi crop
+     nahi. Height 46/54/60 par width ~124/146/162px, header bar (66/74/70) me
+     aaram se fit, aur naya lockup patla hone ke baad bhi bada dikhta hai. */
+  height: 46px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup img {
+    height: 54px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-lockup img {
+    height: 60px;
+  }
+}
+
+.brand-lockup[data-size="compact"] img {
+  height: 42px;
+}
+
+/* R44: agar logo file load hi na ho to text lockup (BrandMark) — usse bhi header
+   me jagah milni chahiye, warna fallback 0-height ho kar invisible ho jaata. */
+.brand-lockup .brand-fallback {
+  min-height: 42px;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup .brand-fallback {
+    min-height: 50px;
+  }
+}
+
+/* footer / drawer — stacked fluid logo */
+.brand-lockup[data-variant="stacked"] img {
+  height: 104px;
+}
+
+@media (min-width: 768px) {
+  .brand-lockup[data-variant="stacked"] img {
+    height: 128px;
+  }
+}
+
+/* ---------- home hero (owner ka ek hi offer poster) ----------
+   R41 rule: "koi crop nahi, koi stretch nahi". R46 (owner): "ye offer image
+   har device aur har window size ke liye" — isliye **ek hi** poster sab
+   breakpoints par jaata hai aur wrapper ka aspect-ratio usi file ka ratio
+   (1672:941) hai. Mobile par file sirf chhoti (1080px) hoti hai, art wahi.
+   `contain` = poora poster, kabhi kata hua nahi. */
+.hero-media {
+  display: block;
+  width: 100%;
+  background: #fbf1e2;
+  aspect-ratio: 1672 / 941;
+}
+
+.hero-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* R46: 768px aur 1024px par koi alag ratio nahi — wahi 1672:941 (ek poster).
+   `object-fit: contain` ki wajah se kisi bhi window size par kuch nahi katta. */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R47 — "smooth website" + unique animated category icons
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* sticky header ke neeche anchor/scroll target na chhupe */
+html {
+  scroll-padding-top: 118px;
+}
+@media (max-width: 1023px) {
+  html {
+    scroll-padding-top: 84px;
+  }
+}
+
+/* mobile par tap par neela flash na aaye (native app jaisa feel) */
+a,
+button,
+[role="button"],
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* focus ring sirf keyboard par (mouse click par box na aaye) */
+:focus-visible {
+  outline: 2px solid #862222;
+  outline-offset: 2px;
+}
+
+/* ---------- page change: halka fade + slide (route transition) ---------- */
+@keyframes noorPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: noorPageIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---------- drawers / panels: slide + backdrop fade ---------- */
+@keyframes noorSlideFromLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes noorSlideFromRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes noorBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.motion-drawer-left {
+  animation: noorSlideFromLeft 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+.motion-panel-right {
+  animation: noorSlideFromRight 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform;
+}
+
+.motion-backdrop {
+  animation: noorBackdrop 0.25s ease both;
+}
+
+/* ---------- category icons: khud ko draw karte hain ---------- */
+@keyframes catDraw {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0.15;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes catPop {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes catFloat {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1.4px);
+  }
+}
+
+@keyframes catShimmer {
+  0% {
+    transform: translateX(-140%) rotate(12deg);
+  }
+  100% {
+    transform: translateX(240%) rotate(12deg);
+  }
+}
+
+.cat-icon {
+  overflow: visible;
+  stroke: currentColor;
+}
+
+.cat-icon .cat-icon-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: catDraw 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cat-icon .cat-icon-dot {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: catPop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cat-icon .cat-icon-float {
+  animation: catFloat 3.6s ease-in-out 1.2s infinite alternate;
+}
+
+/* badge: hover par halki gold shimmer (sirf pointer devices par) */
+.cat-badge {
+  position: absolute;
+  overflow: hidden;
+}
+
+.cat-badge::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20%;
+  background: linear-gradient(90deg, transparent 0%, rgba(214, 178, 106, 0.55) 50%, transparent 100%);
+  transform: translateX(-140%) rotate(12deg);
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .group:hover .cat-badge::after {
+    opacity: 1;
+    animation: catShimmer 0.85s ease-out;
+  }
+}
+
+/* ---------- smooth hover feel (pointer devices only) ---------- */
+@media (hover: hover) {
+  .smooth-lift {
+    transition:
+      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease;
+  }
+
+  .smooth-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(90, 50, 20, 0.1);
+  }
+}
+
+/* ---------- motion kam chahiye to sab band ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .motion-drawer-left,
+  .motion-panel-right,
+  .motion-backdrop,
+  .cat-icon .cat-icon-line,
+  .cat-icon .cat-icon-dot,
+  .cat-icon .cat-icon-float {
+    animation: none !important;
+  }
+  .cat-icon .cat-icon-line {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .cat-icon .cat-icon-dot {
+    opacity: 1;
+  }
+  .cat-badge::after {
+    display: none;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R48 — palette polish, "proper" animation, aur PDP hover zoom
+   ══════════════════════════════════════════════════════════════════════════
+
+   Owner (R48): "website ke colours achhe karo, proper animation" + "PDP par
+   hover karte hi purani image hat jaani chahiye aur zoom wali dikhni chahiye,
+   cursor hatne par image wapas pehle jaisi".
+
+   Sab kuch CSS me hai (koi naya JS nahi) — static export par bhi chalta hai,
+   aur `prefers-reduced-motion` par khud band ho jaata hai. */
+
+:root {
+  /* warm ivory + gold ramp — maroon (brand) ke saath ye kahin zyada premium lagta hai */
+  --noor-ivory: #fdfaf5;
+  --noor-ivory-deep: #f6efe6;
+  --noor-ink: #2f2a25;
+  --noor-muted: #6b6259;
+  --noor-gold: #a67c2e;
+  --noor-gold-soft: #e6d3a8;
+  --noor-hairline: #ece2d6;
+}
+
+/* body: flat white ki jagah halka warm wash (top par gold ka bohat halka glow) */
+body {
+  background-color: #fff;
+  background-image:
+    radial-gradient(1100px 520px at 50% -12%, rgba(214, 178, 106, 0.14), transparent 72%),
+    linear-gradient(180deg, var(--noor-ivory) 0%, #ffffff 42%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(166, 124, 46, 0.24);
+  color: #5c1010;
+}
+
+/* hare-khaas maroon/gold hairline — sections ke beech nazuk divider */
+.gold-hairline {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, var(--noor-gold-soft), transparent);
+}
+
+/* ---------- CTA: hover par gold sheen (sirf pointer devices) ---------- */
+.cta-sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 238, 200, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cta-sheen:hover::after {
+    opacity: 1;
+    animation: ctaSheen 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes ctaSheen {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* ---------- PDP gallery: hover = base image hat jaye, zoom aaye ---------- */
+.gallery-slide {
+  transition: opacity 0.18s ease;
+  will-change: opacity;
+}
+
+.gallery-zoom {
+  transition: opacity 0.18s ease;
+  will-change: opacity, background-position;
+}
+
+.gallery-frame.is-zoomed {
+  cursor: zoom-in;
+}
+
+/* ---------- nav / footer links: gold underline jo khud ko draw karta hai ---------- */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- buttons / cards: ek hi smooth curve poore site par ---------- */
+a,
+button {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R49 — "har button me feel aaye, colour dikhe, aur bilkul lag na ho"
+
+   Owner (R49): "every button mai feel aye animated, jinme colour hai unko
+   colour se karo, without lag".
+
+   Rules jo poore site par lagti hain (koi JS nahi, sirf transform/opacity —
+   isliye paint/layout dobara nahi hota aur scrolling smooth rehti hai):
+     1. har button/Link: hover par 1.5px uthna, click par dabna (spring curve),
+        gold focus ring (keyboard users ke liye)
+     2. maroon (brand) buttons: gold sheen + halka gradient — "colour wali feel"
+     3. hairlines me gold diamond — Noor ka apna signature ornament
+     4. sab kuch `prefers-reduced-motion` par band */
+
+/* ---------- 1. har button ki tactility ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  button,
+  [role="button"],
+  summary {
+    transition:
+      transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.28s ease,
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.2s ease,
+      opacity 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled):not([aria-disabled="true"]):hover,
+  [role="button"]:not([aria-disabled="true"]):hover {
+    transform: translateY(-1.5px);
+  }
+
+  /* dabaane par turant "press" feel — 90ms, isliye lag nahi lagta */
+  button:not(:disabled):not([aria-disabled="true"]):active,
+  [role="button"]:not([aria-disabled="true"]):active {
+    transform: translateY(0) scale(0.972);
+    transition-duration: 0.09s;
+  }
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid rgba(166, 124, 46, 0.72);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- 2. maroon CTA: sheen + mahogany gradient ---------- */
+button[class*="bg-[#862222]"],
+a[class*="bg-[#862222]"],
+button[class*="bg-maroon"],
+a[class*="bg-maroon"] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(180deg, #9a2b2b 0%, #862222 58%, #741d1d 100%);
+}
+
+@media (hover: hover) {
+  button[class*="bg-[#862222]"]:hover,
+  a[class*="bg-[#862222]"]:hover,
+  button[class*="bg-maroon"]:hover,
+  a[class*="bg-maroon"]:hover {
+    box-shadow:
+      0 10px 24px -12px rgba(134, 34, 34, 0.55),
+      0 0 0 1px rgba(166, 124, 46, 0.35) inset;
+  }
+}
+
+button[class*="bg-[#862222]"]::after,
+a[class*="bg-[#862222]"]::after,
+button[class*="bg-maroon"]::after,
+a[class*="bg-maroon"]::after {
+  content: "";
+  position: absolute;
+  inset: -40% -30%;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 238, 200, 0.5) 50%, transparent 62%);
+  transform: translateX(-130%);
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  button[class*="bg-[#862222]"]:hover::after,
+  a[class*="bg-[#862222]"]:hover::after,
+  button[class*="bg-maroon"]:hover::after,
+  a[class*="bg-maroon"]:hover::after {
+    opacity: 1;
+    animation: ctaSheen 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* ---------- 3. Noor ka signature ornament: hairline ke beech gold diamond ---------- */
+.gold-hairline {
+  position: relative;
+  overflow: visible;
+}
+
+.gold-hairline::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -4px 0 0 -4px;
+  background: linear-gradient(135deg, #e6d3a8, #a67c2e);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ---------- 4. gold kicker text (section labels) ---------- */
+.noor-kicker {
+  letter-spacing: 0.22em;
+  color: var(--noor-gold);
+}
+
+
+
+/* ---------- 6. footer: deep maroon gradient + gold hairline (Noor look) ---------- */
+footer[class*="bg-[#8a000e]"] {
+  background-image: linear-gradient(180deg, #a10d1b 0%, #8a000e 42%, #6d0a12 100%);
+  border-top: 1px solid rgba(230, 211, 168, 0.28);
+}
+
+footer[class*="bg-[#8a000e]"] a {
+  transition: color 0.22s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  footer[class*="bg-[#8a000e]"] a:hover {
+    color: #f2dfae;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   R50 — WhatsApp-first ordering: float button, green CTA, Today's Special,
+   step transitions, bag badge. Sab CSS-only (transform/opacity) → no lag.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ---------- floating WhatsApp button ---------- */
+.wa-fab-btn {
+  background-image: linear-gradient(180deg, #2ee06f 0%, #25d366 46%, #128c4b 100%);
+  box-shadow:
+    0 12px 28px -10px rgba(18, 140, 75, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+  transition:
+    transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
+}
+
+@media (hover: hover) {
+  .wa-fab-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+      0 18px 34px -10px rgba(18, 140, 75, 0.7),
+      0 0 0 1px rgba(255, 255, 255, 0.45) inset;
+  }
+}
+
+.wa-fab-btn:active {
+  transform: scale(0.95);
+}
+
+/* pehli baar par do pulse rings — phir band (scroll disturb na ho) */
+.wa-fab-pulse::before,
+.wa-fab-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid rgba(37, 211, 102, 0.55);
+  animation: waPulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) 3;
+  pointer-events: none;
+}
+
+.wa-fab-pulse::after {
+  animation-delay: 0.7s;
+}
+
+@keyframes waPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.65);
+    opacity: 0;
+  }
+}
+
+.wa-fab svg {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wa-fab-btn:hover svg {
+    transform: rotate(-8deg) scale(1.06);
+  }
+}
+
+/* ---------- green WhatsApp CTA (checkout / order pages) ---------- */
+.wa-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(180deg, #1aa159 0%, #128c4b 60%, #0e723d 100%);
+  transition:
+    box-shadow 0.28s ease,
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (hover: hover) {
+  .wa-cta:hover {
+    box-shadow: 0 12px 26px -12px rgba(18, 140, 75, 0.65);
+  }
+}
+
+/* ---------- Today's Special ribbon: gold sheen sweeps across, slowly ---------- */
+.daily-special::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 38%, rgba(255, 244, 214, 0.85) 50%, transparent 62%);
+  transform: translateX(-110%);
+  animation: specialSheen 7s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+
+@keyframes specialSheen {
+  0%,
+  62% {
+    transform: translateX(-110%);
+  }
+  92%,
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+.daily-special-star {
+  animation: specialStar 3.2s ease-in-out infinite;
+}
+
+@keyframes specialStar {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.22) rotate(18deg);
+    opacity: 1;
+  }
+}
+
+/* ---------- checkout: each step slides in, summary line items settle ---------- */
+.checkout-step-enter {
+  animation: stepIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* order confirmation tick pops once */
+.order-sent-tick {
+  animation: tickPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes tickPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ---------- bag: naya line drawer me halka pop karke aata hai ---------- */
+.cart-line-pop {
+  animation: cartLinePop 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cartLinePop {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- bag badge bump (jab item add ho) ---------- */
+.cart-badge-bump {
+  animation: badgeBump 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes badgeBump {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reduced motion — owner/customer ne system me "motion kam" chuna ho to poori
+   animation band (content turant, bina transition ke). Ye block **sabse aakhir**
+   me hai taaki upar ki saari animation isse override ho jaye.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .cta-sheen::after {
+    display: none;
+  }
+  button[class*="bg-[#862222]"]::after,
+  button[class*="bg-maroon"]::after,
+  a[class*="bg-[#862222]"]::after,
+  a[class*="bg-maroon"]::after {
+    display: none;
+  }
+  .gallery-slide,
+  .gallery-zoom,
+  .link-underline::after {
+    transition: none !important;
+  }
+  button,
+  [role="button"] {
+    transition: none !important;
+  }
+  button:hover,
+  [role="button"]:hover,
+  button:active,
+  [role="button"]:active {
+    transform: none !important;
+  }
+  body {
+    background-attachment: scroll;
+  }
+}

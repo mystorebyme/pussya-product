@@ -1,0 +1,28 @@
+name: Keep warm (cold start hatao)
+
+# Vercel serverless function ~5 min idle rehne par "so" jaata hai; uske baad pehla
+# request (order place / payment page / contact form) 1-3 second leta hai — owner
+# isi ko "step 3 slow hai" kehta hai. Ye workflow har 5 minute me halke requests
+# bhej kar function aur DB connection garam rakhta hai.
+#
+# Public repo par GitHub Actions minutes free hain. Band karna ho to is file ko
+# delete kar dein.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  warm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping key routes
+        env:
+          BASE_URL: https://noor-ethnic-wear.vercel.app
+        run: |
+          for path in "/api/health" "/" "/collections" "/pages/contact" "/checkout"; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 25 "$BASE_URL$path" || echo 000)
+            echo "$path → $code"
+          done

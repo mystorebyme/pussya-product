@@ -1,0 +1,731 @@
+{
+ "groups": {
+  "colour-anarkali-suit-set": {
+   "handle": "light-pink-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Peach",
+     "handle": "light-pink-anarkali-suit-set"
+    },
+    {
+     "name": "Pista",
+     "handle": "pista-colour-anarkali-suit-set"
+    }
+   ]
+  },
+  "luxe-lucknowi-sequence-anarkali-suit-set": {
+   "handle": "black-luxe-lucknowi-sequence-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Black",
+     "handle": "black-luxe-lucknowi-sequence-anarkali-suit-set"
+    },
+    {
+     "name": "Red",
+     "handle": "red-luxe-lucknowi-sequence-anarkali-suit-set"
+    }
+   ]
+  },
+  "premium-anarkali-suit-set": {
+   "handle": "premium-maroon-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Pink",
+     "handle": "premium-pink-anarkali-suit-set"
+    },
+    {
+     "name": "Maroon",
+     "handle": "premium-maroon-anarkali-suit-set"
+    }
+   ]
+  },
+  "coloured-designer-anarkali-suit": {
+   "handle": "red-coloured-designer-anarkali-suit",
+   "colours": [
+    {
+     "name": "Maroon",
+     "handle": "maroon-coloured-designer-anarkali-suit"
+    },
+    {
+     "name": "Red",
+     "handle": "red-coloured-designer-anarkali-suit"
+    }
+   ]
+  },
+  "kishika-color-anarkali-suit-set": {
+   "handle": "kishika-yellow-color-anarkali-suit-set-sleeves-fabric-attached",
+   "colours": [
+    {
+     "name": "Maroon",
+     "handle": "niyara-maroon-color-anarkali-suit-set"
+    },
+    {
+     "name": "Yellow",
+     "handle": "kishika-yellow-color-anarkali-suit-set-sleeves-fabric-attached"
+    }
+   ]
+  },
+  "sandhiya-premium-quality-anarkali-suit-set": {
+   "handle": "priyankas-new-gown-with-dupatta-collaction-lw-9150",
+   "colours": [
+    {
+     "name": "Black",
+     "handle": "sandhiya-black-premium-quality-anarkali-suit-set"
+    },
+    {
+     "name": "Red",
+     "handle": "priyankas-new-gown-with-dupatta-collaction-lw-9150"
+    }
+   ]
+  },
+  "premium-quality-lukhnowi-suit-set": {
+   "handle": "premium-quality-kediya-suit-set-copy-1",
+   "colours": [
+    {
+     "name": "Green",
+     "handle": "premium-quality-lukhnowi-peach-suit-set-copy"
+    },
+    {
+     "name": "Peach",
+     "handle": "premium-quality-kediya-suit-set-copy-1"
+    }
+   ]
+  },
+  "premium-quality-roman-silk-anarkali-suit-set": {
+   "handle": "premium-quality-roman-silk-pink-anarkali-suit-set-copy",
+   "colours": [
+    {
+     "name": "Pink",
+     "handle": "premium-quality-5-layers-orange-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Pista",
+     "handle": "premium-quality-roman-silk-pink-anarkali-suit-set-copy"
+    }
+   ]
+  },
+  "premium-quality-5-layers-anarkali-suit-set": {
+   "handle": "premium-quality-lukhnowi-green-suit-set-copy",
+   "colours": [
+    {
+     "name": "Blue",
+     "handle": "premium-quality-lukhnowi-green-suit-set-copy"
+    },
+    {
+     "name": "Orange",
+     "handle": "premium-quality-5-layers-blue-anarkali-suit-set-copy"
+    }
+   ]
+  },
+  "premium-quality-bandhej-anarkali-suit-set": {
+   "handle": "premium-quality-anarkali-suit-set-copy-3",
+   "colours": [
+    {
+     "name": "Pink",
+     "handle": "premium-quality-bandhej-green-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Red",
+     "handle": "premium-quality-anarkali-suit-set-copy-3"
+    }
+   ]
+  },
+  "colour-readymade-alia-cut-gown-with-dupatta-set-kka-1070": {
+   "handle": "waine-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1071",
+   "colours": [
+    {
+     "name": "Pink",
+     "handle": "pink-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1070"
+    },
+    {
+     "name": "Wine",
+     "handle": "waine-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1071"
+    }
+   ]
+  },
+  "faux-blooming-anarkali-style-sarara-suit-set": {
+   "handle": "black-faux-blooming-anarkali-style-sarara-suit-set-copy",
+   "colours": [
+    {
+     "name": "White",
+     "handle": "black-faux-blooming-anarkali-style-sarara-suit-set-copy"
+    },
+    {
+     "name": "Black",
+     "handle": "black-faux-blooming-anarkali-style-sarara-suit-set"
+    }
+   ]
+  },
+  "peacock-design-heavy-traditional-crop-top-with-shrug": {
+   "handle": "peacock-design-heavy-traditional-crop-top-with-shrug-purple",
+   "colours": [
+    {
+     "name": "Cream",
+     "handle": "peacock-design-heavy-traditional-crop-top-with-shrug-cream"
+    },
+    {
+     "name": "Sky Blue",
+     "handle": "peacock-design-heavy-traditional-crop-top-with-shrug-sky-blue"
+    },
+    {
+     "name": "Purple",
+     "handle": "peacock-design-heavy-traditional-crop-top-with-shrug-purple"
+    }
+   ]
+  },
+  "embroidery-kurta-set": {
+   "handle": "purple-embroidery-kurta-set",
+   "colours": [
+    {
+     "name": "Purple",
+     "handle": "purple-embroidery-kurta-set"
+    },
+    {
+     "name": "Black",
+     "handle": "black-embroidery-kurta-set"
+    }
+   ]
+  },
+  "same-black-cosmo-slit-anarkali-premium-suit-set-anarkali": {
+   "handle": "black-cosmo-slit-anarkali-premium-suit-set",
+   "colours": [
+    {
+     "name": "Black",
+     "handle": "black-cosmo-slit-anarkali-premium-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "black-cosmo-slit-anarkali-premium-suit-set-10521452478596"
+    }
+   ]
+  },
+  "same-myra-cosmo-slit-anarkali-premium-suit-set-anarkali": {
+   "handle": "myra-cosmo-slit-anarkali-premium-suit-set-10521552060548",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "myra-cosmo-slit-anarkali-premium-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "myra-cosmo-slit-anarkali-premium-suit-set-10521552060548"
+    }
+   ]
+  },
+  "same-rang-f-royale-blooming-lehenga-suit-set-lehnga": {
+   "handle": "rang-e-royale-blooming-lehenga-suit-set",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "rang-f-royale-blooming-lehenga-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "rang-e-royale-blooming-lehenga-suit-set"
+    }
+   ]
+  },
+  "same-malveera-premium-quality-anarkali-suit-set-anarkali": {
+   "handle": "malveera-premium-quality-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "malveera-premium-quality-anarkali-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "malveera-premium-quality-anarkali-suit-set-10456594841732"
+    }
+   ]
+  },
+  "same-maroon-trendy-anarkali-suit-set-anarkali": {
+   "handle": "maroon-trendy-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "maroon-trendy-anarkali-suit-set-1"
+    },
+    {
+     "name": "Maroon",
+     "handle": "maroon-trendy-anarkali-suit-set"
+    }
+   ]
+  },
+  "same-premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set-ana": {
+   "handle": "premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Ivory",
+     "handle": "premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set-10456605851780"
+    }
+   ]
+  },
+  "same-niru-s-noir-black-elegance-anarkali-suit-set-anarkali": {
+   "handle": "nirus-noir-black-elegance-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Black",
+     "handle": "nirus-noir-black-elegance-anarkali-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "nirus-noir-black-elegance-anarkali-suit-set-10511760359556"
+    }
+   ]
+  },
+  "same-mita-heavy-traditional-embroidered-koti-anarkali-suit-set-an": {
+   "handle": "mita-heavy-traditional-embroidered-koti-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "mita-heavy-traditional-embroidered-koti-anarkali-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "mita-heavy-traditional-embroidered-koti-anarkali-suit-set-15399230865540"
+    }
+   ]
+  },
+  "same-premium-lakhnavi-embroidered-anarkali-suit-set-anarkali": {
+   "handle": "premium-lakhnavi-embroidered-work-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "premium-lakhnavi-embroidered-work-anarkali-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "premium-lakhnavi-embroidered-anarkali-suit-set"
+    }
+   ]
+  },
+  "same-krishva-s-exclusive-blue-floral-organza-anarkali-suit-set-an": {
+   "handle": "krishvas-exclusive-blue-floral-organza-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Blue",
+     "handle": "krishvas-exclusive-blue-floral-organza-anarkali-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "krishvas-exclusive-blue-floral-organza-anarkali-suit-set-10340442833028"
+    }
+   ]
+  },
+  "same-star-georgette-silk-anarkali-suit-with-skirt-anarkali": {
+   "handle": "star-georgette-slik-anarkali-suit-with-skirt",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "star-georgette-slik-anarkali-suit-with-skirt"
+    },
+    {
+     "name": "Style 2",
+     "handle": "star-georgette-slik-anarkali-suit-with-skirt-10462901338244"
+    }
+   ]
+  },
+  "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka": {
+   "handle": "premium-quality-heavy-traditional-crop-top-with-shrug-5",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "premium-quality-heavy-traditional-crop-top-with-shrug-5"
+    },
+    {
+     "name": "Style 2",
+     "handle": "premium-quality-heavy-traditional-crop-top-with-shrug-3"
+    },
+    {
+     "name": "Style 3",
+     "handle": "premium-quality-heavy-traditional-crop-top-with-shrug-2"
+    },
+    {
+     "name": "Style 4",
+     "handle": "premium-quality-heavy-traditional-crop-top-with-shrug-1"
+    },
+    {
+     "name": "Style 5",
+     "handle": "premium-quality-heavy-traditional-crop-top-with-shrug"
+    }
+   ]
+  },
+  "same-premium-quality-heavy-traditional-lehenga-choli-lehnga": {
+   "handle": "premium-quality-heavy-traditional-lehenga-choli-3",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "premium-quality-heavy-traditional-lehenga-choli-3"
+    },
+    {
+     "name": "Style 2",
+     "handle": "premium-quality-heavy-traditional-lehenga-choli-2"
+    },
+    {
+     "name": "Style 3",
+     "handle": "premium-quality-heavy-traditional-lehenga-choli-1"
+    },
+    {
+     "name": "Style 4",
+     "handle": "premium-quality-heavy-traditional-lehenga-choli"
+    }
+   ]
+  },
+  "same-classic-pink-anarkali-suit-set-anarkali": {
+   "handle": "classic-pink-anarkali-suit-set-15408494084228",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "classic-pink-anarkali-suit-set"
+    },
+    {
+     "name": "Pink",
+     "handle": "classic-pink-anarkali-suit-set-15408494084228"
+    }
+   ]
+  },
+  "same-classic-red-karva-chauth-special-anarkali-suit-set-anarkali": {
+   "handle": "red-chilli-slit-anarkali-premium-suit-set",
+   "colours": [
+    {
+     "name": "Red",
+     "handle": "red-chilli-slit-anarkali-premium-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "classic-red-karva-chauth-special-anarkali-suit-set"
+    }
+   ]
+  },
+  "same-saumya-neon-sharara-suit-set-sharara": {
+   "handle": "saumya-neon-sharara-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "saumya-neon-sharara-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "saumya-neon-sharara-suit-set-10498715058308"
+    }
+   ]
+  },
+  "same-alveera-premium-quality-anarkali-suit-set-with-color-anarkal": {
+   "handle": "alveera-premium-quality-anarkali-suit-set-with-color",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "monshika-premium-quality-maroon-anarkali-suit-set"
+    },
+    {
+     "name": "Style 1",
+     "handle": "alveera-premium-quality-anarkali-suit-set-with-color"
+    }
+   ]
+  },
+  "same-neha-heavy-pure-vichitra-anarkali-suit-set-anarkali": {
+   "handle": "nehas-premium-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "nehas-premium-anarkali-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "neha-heavy-pure-vichitra-anarkali-suit-set"
+    }
+   ]
+  },
+  "same-madhvi-heavy-embroidered-maxi-set-anarkali": {
+   "handle": "madhvi-heavy-embroidered-maxi-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "madhvi-heavy-embroidered-maxi-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "madhvi-heavy-embroidered-maxi-set-10016283328644"
+    }
+   ]
+  },
+  "same-hazel-s-anarkali-party-wear-suit-set-anarkali": {
+   "handle": "hazels-anarkali-partywear-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "hazels-anarkali-partywear-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "hazels-anarkali-partywear-suit-set-8228836245636"
+    }
+   ]
+  },
+  "same-prachi-s-black-heavy-vichitra-royal-elegant-suit-set-anarkal": {
+   "handle": "prachis-pink-havy-vichitra-royal-elegant-suit-set-copy",
+   "colours": [
+    {
+     "name": "Black",
+     "handle": "prachis-pink-havy-vichitra-royal-elegant-suit-set-copy"
+    },
+    {
+     "name": "Style 1",
+     "handle": "prachis-pink-havy-vichitra-royal-elegant-suit-set-copy-8228835983492"
+    }
+   ]
+  },
+  "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali": {
+   "handle": "premium-quality-9-needle-gown-anarkali-suit-set-copy",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "premium-quality-roman-silk-gown-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Style 3",
+     "handle": "premium-quality-gown-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Style 1",
+     "handle": "premium-quality-9-needle-gown-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Style 4",
+     "handle": "premium-quality-roman-silk-gown-anarkali-suit-set-copy-8228835819652"
+    },
+    {
+     "name": "Style 5",
+     "handle": "premium-quality-9-needle-gown-anarkali-suit-set-copy-8228835426436"
+    }
+   ]
+  },
+  "same-premium-quality-anarkali-suit-set-anarkali": {
+   "handle": "premium-quality-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "premium-quality-anarkali-suit-set-copy"
+    },
+    {
+     "name": "Style 3",
+     "handle": "premium-quality-anarkali-suit-set-copy-1"
+    },
+    {
+     "name": "Style 1",
+     "handle": "premium-quality-anarkali-suit-set"
+    }
+   ]
+  },
+  "same-premium-quality-kediya-suit-set-anarkali": {
+   "handle": "premium-quality-anarkali-suit-set-copy-2",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "premium-quality-kediya-suit-set-copy"
+    },
+    {
+     "name": "Style 1",
+     "handle": "premium-quality-anarkali-suit-set-copy-2"
+    }
+   ]
+  },
+  "same-chandni-s-latest-anarkali-suit-set-anarkali": {
+   "handle": "chandnis-latest-anarkali-suit-set",
+   "colours": [
+    {
+     "name": "Style 1",
+     "handle": "chandnis-latest-anarkali-suit-set"
+    },
+    {
+     "name": "Style 2",
+     "handle": "chandnis-latest-anarkali-suit-set-8201648537732"
+    }
+   ]
+  },
+  "same-premium-quality-silk-gown-anarkali-suit-set-anarkali": {
+   "handle": "anarkali-pink-suit",
+   "colours": [
+    {
+     "name": "Red",
+     "handle": "anarkali-pink-suit"
+    },
+    {
+     "name": "DKB-265",
+     "handle": "multi-floral-print-fabric-fully-flair-anarkali-with-duppta-set-pent-ready-to-wear-dkb-265"
+    },
+    {
+     "name": "Style 1",
+     "handle": "pure-soft-fox-georgette-laheriya-print-dkb-264-rani-pink"
+    },
+    {
+     "name": "DKB-264",
+     "handle": "copy-of-pure-soft-fox-georgette-laheriya-print-dkb-264"
+    },
+    {
+     "name": "DKB-262",
+     "handle": "copy-of-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-262"
+    },
+    {
+     "name": "Style 2",
+     "handle": "pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-261-wine"
+    },
+    {
+     "name": "Style 3",
+     "handle": "pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-25"
+    },
+    {
+     "name": "Style 4",
+     "handle": "copy-of-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-27"
+    }
+   ]
+  },
+  "same-light-purple-colour-embroidered-lehenga-choli-lehnga": {
+   "handle": "light-purple-colour-embroidered-lehenga-choli",
+   "colours": [
+    {
+     "name": "Style 170",
+     "handle": "light-purple-colour-embroidered-attractive-faux-georgette-lehenga-choli-lc170"
+    },
+    {
+     "name": "Purple",
+     "handle": "light-purple-colour-embroidered-lehenga-choli"
+    }
+   ]
+  },
+  "same-premium-readymade-anarkali-suit-set-3-pieces-anarkali": {
+   "handle": "premium-readymade-anarkali-suit-set-3-pis-1",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "premium-readymade-anarkali-suit-set-3-pis"
+    },
+    {
+     "name": "Style 1",
+     "handle": "premium-readymade-anarkali-suit-set-3-pis-1"
+    }
+   ]
+  },
+  "same-rang-e-royale-blooming-lehenga-suit-set-lehnga": {
+   "handle": "rang-e-royale-blooming-lehenga-suit-set-10511720087684",
+   "colours": [
+    {
+     "name": "Style 2",
+     "handle": "rang-e-royale-blooming-lehenga-suit-set-1"
+    },
+    {
+     "name": "Style 1",
+     "handle": "rang-e-royale-blooming-lehenga-suit-set-10511720087684"
+    }
+   ]
+  }
+ },
+ "byHandle": {
+  "light-pink-anarkali-suit-set": "colour-anarkali-suit-set",
+  "pista-colour-anarkali-suit-set": "colour-anarkali-suit-set",
+  "black-luxe-lucknowi-sequence-anarkali-suit-set": "luxe-lucknowi-sequence-anarkali-suit-set",
+  "red-luxe-lucknowi-sequence-anarkali-suit-set": "luxe-lucknowi-sequence-anarkali-suit-set",
+  "premium-pink-anarkali-suit-set": "premium-anarkali-suit-set",
+  "premium-maroon-anarkali-suit-set": "premium-anarkali-suit-set",
+  "maroon-coloured-designer-anarkali-suit": "coloured-designer-anarkali-suit",
+  "red-coloured-designer-anarkali-suit": "coloured-designer-anarkali-suit",
+  "niyara-maroon-color-anarkali-suit-set": "kishika-color-anarkali-suit-set",
+  "kishika-yellow-color-anarkali-suit-set-sleeves-fabric-attached": "kishika-color-anarkali-suit-set",
+  "sandhiya-black-premium-quality-anarkali-suit-set": "sandhiya-premium-quality-anarkali-suit-set",
+  "priyankas-new-gown-with-dupatta-collaction-lw-9150": "sandhiya-premium-quality-anarkali-suit-set",
+  "premium-quality-lukhnowi-peach-suit-set-copy": "premium-quality-lukhnowi-suit-set",
+  "premium-quality-kediya-suit-set-copy-1": "premium-quality-lukhnowi-suit-set",
+  "premium-quality-5-layers-orange-anarkali-suit-set-copy": "premium-quality-roman-silk-anarkali-suit-set",
+  "premium-quality-roman-silk-pink-anarkali-suit-set-copy": "premium-quality-roman-silk-anarkali-suit-set",
+  "premium-quality-lukhnowi-green-suit-set-copy": "premium-quality-5-layers-anarkali-suit-set",
+  "premium-quality-5-layers-blue-anarkali-suit-set-copy": "premium-quality-5-layers-anarkali-suit-set",
+  "premium-quality-bandhej-green-anarkali-suit-set-copy": "premium-quality-bandhej-anarkali-suit-set",
+  "premium-quality-anarkali-suit-set-copy-3": "premium-quality-bandhej-anarkali-suit-set",
+  "pink-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1070": "colour-readymade-alia-cut-gown-with-dupatta-set-kka-1070",
+  "waine-colour-readymade-alia-cut-gown-with-dupatta-set-kka-1071": "colour-readymade-alia-cut-gown-with-dupatta-set-kka-1070",
+  "black-faux-blooming-anarkali-style-sarara-suit-set-copy": "faux-blooming-anarkali-style-sarara-suit-set",
+  "black-faux-blooming-anarkali-style-sarara-suit-set": "faux-blooming-anarkali-style-sarara-suit-set",
+  "peacock-design-heavy-traditional-crop-top-with-shrug-cream": "peacock-design-heavy-traditional-crop-top-with-shrug",
+  "peacock-design-heavy-traditional-crop-top-with-shrug-sky-blue": "peacock-design-heavy-traditional-crop-top-with-shrug",
+  "peacock-design-heavy-traditional-crop-top-with-shrug-purple": "peacock-design-heavy-traditional-crop-top-with-shrug",
+  "purple-embroidery-kurta-set": "embroidery-kurta-set",
+  "black-embroidery-kurta-set": "embroidery-kurta-set",
+  "black-cosmo-slit-anarkali-premium-suit-set": "same-black-cosmo-slit-anarkali-premium-suit-set-anarkali",
+  "black-cosmo-slit-anarkali-premium-suit-set-10521452478596": "same-black-cosmo-slit-anarkali-premium-suit-set-anarkali",
+  "myra-cosmo-slit-anarkali-premium-suit-set": "same-myra-cosmo-slit-anarkali-premium-suit-set-anarkali",
+  "myra-cosmo-slit-anarkali-premium-suit-set-10521552060548": "same-myra-cosmo-slit-anarkali-premium-suit-set-anarkali",
+  "rang-f-royale-blooming-lehenga-suit-set": "same-rang-f-royale-blooming-lehenga-suit-set-lehnga",
+  "rang-e-royale-blooming-lehenga-suit-set": "same-rang-f-royale-blooming-lehenga-suit-set-lehnga",
+  "malveera-premium-quality-anarkali-suit-set": "same-malveera-premium-quality-anarkali-suit-set-anarkali",
+  "malveera-premium-quality-anarkali-suit-set-10456594841732": "same-malveera-premium-quality-anarkali-suit-set-anarkali",
+  "maroon-trendy-anarkali-suit-set-1": "same-maroon-trendy-anarkali-suit-set-anarkali",
+  "maroon-trendy-anarkali-suit-set": "same-maroon-trendy-anarkali-suit-set-anarkali",
+  "premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set": "same-premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set-ana",
+  "premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set-10456605851780": "same-premium-ivory-royal-zari-work-kali-cut-anarkali-suit-set-ana",
+  "nirus-noir-black-elegance-anarkali-suit-set": "same-niru-s-noir-black-elegance-anarkali-suit-set-anarkali",
+  "nirus-noir-black-elegance-anarkali-suit-set-10511760359556": "same-niru-s-noir-black-elegance-anarkali-suit-set-anarkali",
+  "mita-heavy-traditional-embroidered-koti-anarkali-suit-set": "same-mita-heavy-traditional-embroidered-koti-anarkali-suit-set-an",
+  "mita-heavy-traditional-embroidered-koti-anarkali-suit-set-15399230865540": "same-mita-heavy-traditional-embroidered-koti-anarkali-suit-set-an",
+  "premium-lakhnavi-embroidered-work-anarkali-suit-set": "same-premium-lakhnavi-embroidered-anarkali-suit-set-anarkali",
+  "premium-lakhnavi-embroidered-anarkali-suit-set": "same-premium-lakhnavi-embroidered-anarkali-suit-set-anarkali",
+  "krishvas-exclusive-blue-floral-organza-anarkali-suit-set": "same-krishva-s-exclusive-blue-floral-organza-anarkali-suit-set-an",
+  "krishvas-exclusive-blue-floral-organza-anarkali-suit-set-10340442833028": "same-krishva-s-exclusive-blue-floral-organza-anarkali-suit-set-an",
+  "star-georgette-slik-anarkali-suit-with-skirt": "same-star-georgette-silk-anarkali-suit-with-skirt-anarkali",
+  "star-georgette-slik-anarkali-suit-with-skirt-10462901338244": "same-star-georgette-silk-anarkali-suit-with-skirt-anarkali",
+  "premium-quality-heavy-traditional-crop-top-with-shrug-5": "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka",
+  "premium-quality-heavy-traditional-crop-top-with-shrug-3": "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka",
+  "premium-quality-heavy-traditional-crop-top-with-shrug-2": "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka",
+  "premium-quality-heavy-traditional-crop-top-with-shrug-1": "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka",
+  "premium-quality-heavy-traditional-crop-top-with-shrug": "same-premium-quality-heavy-traditional-crop-top-with-shrug-anarka",
+  "premium-quality-heavy-traditional-lehenga-choli-3": "same-premium-quality-heavy-traditional-lehenga-choli-lehnga",
+  "premium-quality-heavy-traditional-lehenga-choli-2": "same-premium-quality-heavy-traditional-lehenga-choli-lehnga",
+  "premium-quality-heavy-traditional-lehenga-choli-1": "same-premium-quality-heavy-traditional-lehenga-choli-lehnga",
+  "premium-quality-heavy-traditional-lehenga-choli": "same-premium-quality-heavy-traditional-lehenga-choli-lehnga",
+  "classic-pink-anarkali-suit-set": "same-classic-pink-anarkali-suit-set-anarkali",
+  "classic-pink-anarkali-suit-set-15408494084228": "same-classic-pink-anarkali-suit-set-anarkali",
+  "red-chilli-slit-anarkali-premium-suit-set": "same-classic-red-karva-chauth-special-anarkali-suit-set-anarkali",
+  "classic-red-karva-chauth-special-anarkali-suit-set": "same-classic-red-karva-chauth-special-anarkali-suit-set-anarkali",
+  "saumya-neon-sharara-suit-set": "same-saumya-neon-sharara-suit-set-sharara",
+  "saumya-neon-sharara-suit-set-10498715058308": "same-saumya-neon-sharara-suit-set-sharara",
+  "monshika-premium-quality-maroon-anarkali-suit-set": "same-alveera-premium-quality-anarkali-suit-set-with-color-anarkal",
+  "alveera-premium-quality-anarkali-suit-set-with-color": "same-alveera-premium-quality-anarkali-suit-set-with-color-anarkal",
+  "nehas-premium-anarkali-suit-set": "same-neha-heavy-pure-vichitra-anarkali-suit-set-anarkali",
+  "neha-heavy-pure-vichitra-anarkali-suit-set": "same-neha-heavy-pure-vichitra-anarkali-suit-set-anarkali",
+  "madhvi-heavy-embroidered-maxi-set": "same-madhvi-heavy-embroidered-maxi-set-anarkali",
+  "madhvi-heavy-embroidered-maxi-set-10016283328644": "same-madhvi-heavy-embroidered-maxi-set-anarkali",
+  "hazels-anarkali-partywear-suit-set": "same-hazel-s-anarkali-party-wear-suit-set-anarkali",
+  "hazels-anarkali-partywear-suit-set-8228836245636": "same-hazel-s-anarkali-party-wear-suit-set-anarkali",
+  "prachis-pink-havy-vichitra-royal-elegant-suit-set-copy": "same-prachi-s-black-heavy-vichitra-royal-elegant-suit-set-anarkal",
+  "prachis-pink-havy-vichitra-royal-elegant-suit-set-copy-8228835983492": "same-prachi-s-black-heavy-vichitra-royal-elegant-suit-set-anarkal",
+  "premium-quality-roman-silk-gown-anarkali-suit-set-copy": "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali",
+  "premium-quality-gown-anarkali-suit-set-copy": "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali",
+  "premium-quality-9-needle-gown-anarkali-suit-set-copy": "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali",
+  "premium-quality-roman-silk-gown-anarkali-suit-set-copy-8228835819652": "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali",
+  "premium-quality-9-needle-gown-anarkali-suit-set-copy-8228835426436": "same-premium-quality-roman-silk-gown-anarkali-suit-set-anarkali",
+  "premium-quality-anarkali-suit-set-copy": "same-premium-quality-anarkali-suit-set-anarkali",
+  "premium-quality-anarkali-suit-set-copy-1": "same-premium-quality-anarkali-suit-set-anarkali",
+  "premium-quality-anarkali-suit-set": "same-premium-quality-anarkali-suit-set-anarkali",
+  "premium-quality-kediya-suit-set-copy": "same-premium-quality-kediya-suit-set-anarkali",
+  "premium-quality-anarkali-suit-set-copy-2": "same-premium-quality-kediya-suit-set-anarkali",
+  "chandnis-latest-anarkali-suit-set": "same-chandni-s-latest-anarkali-suit-set-anarkali",
+  "chandnis-latest-anarkali-suit-set-8201648537732": "same-chandni-s-latest-anarkali-suit-set-anarkali",
+  "anarkali-pink-suit": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "multi-floral-print-fabric-fully-flair-anarkali-with-duppta-set-pent-ready-to-wear-dkb-265": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "pure-soft-fox-georgette-laheriya-print-dkb-264-rani-pink": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "copy-of-pure-soft-fox-georgette-laheriya-print-dkb-264": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "copy-of-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-262": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-261-wine": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-25": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "copy-of-pure-soft-organza-anarkali-suit-set-with-fully-stitched-dkb-27": "same-premium-quality-silk-gown-anarkali-suit-set-anarkali",
+  "light-purple-colour-embroidered-attractive-faux-georgette-lehenga-choli-lc170": "same-light-purple-colour-embroidered-lehenga-choli-lehnga",
+  "light-purple-colour-embroidered-lehenga-choli": "same-light-purple-colour-embroidered-lehenga-choli-lehnga",
+  "premium-readymade-anarkali-suit-set-3-pis": "same-premium-readymade-anarkali-suit-set-3-pieces-anarkali",
+  "premium-readymade-anarkali-suit-set-3-pis-1": "same-premium-readymade-anarkali-suit-set-3-pieces-anarkali",
+  "rang-e-royale-blooming-lehenga-suit-set-1": "same-rang-e-royale-blooming-lehenga-suit-set-lehnga",
+  "rang-e-royale-blooming-lehenga-suit-set-10511720087684": "same-rang-e-royale-blooming-lehenga-suit-set-lehnga"
+ }
+}

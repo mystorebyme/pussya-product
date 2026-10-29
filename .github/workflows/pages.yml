@@ -1,0 +1,128 @@
+name: GitHub Pages preview
+
+# GitHub Pages par static preview (browse karne ke liye).
+# Poora site — cart, checkout, payment, order tracking, admin — Render par chalta hai
+# (render.yaml). Pages par Node server nahi chalta, isliye yahan sirf static pages.
+
+on:
+  push:
+    branches:
+      - main
+      - arena/f2c07741-pussya-product
+    paths-ignore:
+      - ".reviews-sync-trigger"
+      - "database/seeds/reviews/**"
+      # live-check workflow report commit karta hai — wo build dobara na chale
+      - "docs/09-devops/live-check.md"
+  workflow_dispatch:
+
+# NOTE: empty commits path filters ke saath workflow trigger nahi karte —
+# rebuild chahiye to koi file change karke push karein.
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build static preview
+        env:
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
+          # Live store (Vercel ya Netlify) ka URL — iske hone se Pages par
+          # checkout/payment/tracking seedha live API par jaate hain.
+          # Live store ka URL. Netlify par shift karne ke baad sirf ek repo variable
+          # set karna hai (Settings → Variables → Actions → STORE_API_URL = Netlify URL)
+          # — koi code change nahi. Variable na ho to purana Vercel URL chalta hai.
+          NEXT_PUBLIC_API_BASE_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
+          NEXT_PUBLIC_LIVE_STORE_URL: ${{ vars.STORE_API_URL || 'https://noor-ethnic-wear.vercel.app' }}
+          # Canonical/OG isi deployment ke hain (preview ko live store ka duplicate na samjha jaye)
+          NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        run: node scripts/pages/build-preview.mjs
+
+      # Pages site pehle se enable hai (Settings → Pages → Source: GitHub Actions).
+      # `enablement: true` se agar enable nahi hai to workflow khud try karta hai.
+      - id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-preview
+          path: dist
+          retention-days: 14
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    # NOTE: `environment: github-pages` jaan-boojh kar nahi lagaya —
+    # us environment par "sirf main branch" protection rule lagi hai, isliye
+    # feature/preview branch se bhi preview deploy ho sake. Live site ka URL
+    # wahi rehta hai: https://<owner>.github.io/<repo>/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Print live URL
+        run: |
+          echo "### Live preview: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
+
+  # Live URL ko CI se check karte hain (runner se internet khulta hai) — warna
+  # "deploy ✓ par site par purana/Jekyll output" wali confusion bani rehti hai.
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Live site check
+        run: |
+          set -uo pipefail
+          URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "checking $URL"
+          CODE=000
+          for attempt in $(seq 1 9); do
+            CODE=$(curl -sL -o page.html -w '%{http_code}' "$URL" || echo 000)
+            echo "attempt $attempt → HTTP $CODE"
+            if [ "$CODE" = "200" ] && grep -qi "Noor Ethnic Wear" page.html; then break; fi
+            sleep 10
+          done
+
+          fail=0
+          if ! grep -qi "Noor Ethnic Wear" page.html; then echo "::error::Live page par Noor ka content nahi mila (HTTP $CODE)"; fail=1; fi
+          if ! grep -q "banner-desktop.webp" page.html; then echo "::error::Hero banner live page par nahi hai"; fail=1; fi
+          if grep -qi "liksha" page.html; then echo "::error::Purana brand (Liksha) live page par hai"; fail=1; fi
+          if grep -qi "free shipping" page.html; then echo "::error::'Free shipping' copy live page par hai"; fail=1; fi
+          if ! grep -q "logo-desktop.png?v=" page.html; then echo "::warning::Naya logo version live page par nahi dikha (cache / purana deploy)"; fi
+          if [ "$fail" = "0" ]; then
+            echo "✔ live site verified: $URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            exit 1
+          fi
+
+      - name: Upload fetched page (debug)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-page
+          path: page.html
+          retention-days: 3

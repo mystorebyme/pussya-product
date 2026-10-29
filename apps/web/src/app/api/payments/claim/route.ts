@@ -1,0 +1,81 @@
+import { preflight, withCors } from "@/lib/cors";
+import { claimPayment, getOrder, OrderError } from "@/lib/orders";
+import { readPhoneToken } from "@/lib/otp";
+import { RATE_LIMITS, enforceRateLimit, hitRateLimit } from "@/lib/rate-limit";
+
+export const dynamic = "force-dynamic";
+
+/**
+ * POST /api/payments/claim  { orderNumber, phoneLast4?, phoneToken?, note? }
+ *
+ * Owner rule (R27): customer **sirf mobile ke last 4 digit** daalta hai aur
+ * "Payment ho gaya — confirm kariye" dabata hai. UTR kabhi nahi maanga jaata;
+ * screenshot chahiye ho to WhatsApp ka rasta alag se dikhta hai.
+ *
+ * Yahan paisa **confirm nahi** hota — order `payment_status = processing`
+ * (verify hona baaki) ho jaata hai, reference khaali. Admin UPI statement se
+ * match karke confirm karta hai (yahi manual UPI ka rule hai).
+ */
+async function handlePost(request: Request) {
+  // IP + order dono par limit: last-4 brute force karke kisi ka order "claimed" na ho jaye
+  const limited = enforceRateLimit(request, RATE_LIMITS.payments);
+  if (limited) return limited;
+
+  let body: { orderNumber?: string; phoneLast4?: string; phoneToken?: string; note?: string };
+  try {
+    body = (await request.json()) as typeof body;
+  } catch {
+    return Response.json({ error: "Invalid request." }, { status: 400 });
+  }
+
+  const orderNumber = String(body.orderNumber ?? "").trim().toUpperCase();
+  if (!/^NE-[A-Z0-9]{4,16}$/.test(orderNumber)) {
+    return Response.json({ error: "Enter a valid order number." }, { status: 400 });
+  }
+
+  // ek order par bhi limited attempts (6 / 10 min) — guessing se bachne ke liye
+  const perOrder = hitRateLimit(`order:${orderNumber}`, { name: "claim", limit: 6, windowMs: 10 * 60_000 });
+  if (!perOrder.ok) {
+    return Response.json(
+      { error: "Too many attempts for this order — please send us the screenshot on WhatsApp." },
+      { status: 429, headers: { "retry-after": String(perOrder.retryAfterSeconds) } },
+    );
+  }
+
+  const order = await getOrder(orderNumber);
+  if (!order) return Response.json({ error: "Order not found." }, { status: 404 });
+
+  const token = readPhoneToken(body.phoneToken);
+  const last4 = String(body.phoneLast4 ?? "").replace(/\D/g, "").slice(-4);
+  const phoneOk = token ? token.phone === order.phone : Boolean(last4) && order.phone.slice(-4) === last4;
+  if (!phoneOk) {
+    return Response.json({ error: "Last 4 digits of the order's mobile number do not match." }, { status: 403 });
+  }
+
+  try {
+    const updated = await claimPayment(orderNumber, { note: body.note ?? null });
+    return Response.json(
+      {
+        ok: true,
+        orderNumber: updated.orderNumber,
+        paymentStatus: updated.paymentStatus,
+        status: "claim_submitted",
+        message:
+          "Your payment claim is saved. Our team verifies it against the bank statement and confirms the order (you get an update on WhatsApp).",
+      },
+      { status: 202 },
+    );
+  } catch (error) {
+    if (error instanceof OrderError) {
+      return Response.json({ error: error.message, code: error.code }, { status: error.status });
+    }
+    console.error("payment claim failed", error);
+    return Response.json({ error: "We could not save the claim — please send us the screenshot on WhatsApp." }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  return withCors(await handlePost(request), request);
+}
+
+export const OPTIONS = preflight;

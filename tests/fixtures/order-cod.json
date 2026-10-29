@@ -1,0 +1,13 @@
+{
+  "customerName": "Aarti Sharma",
+  "email": "aarti@example.com",
+  "phone": "9876543210",
+  "address": "12, MI Road, Near Panch Batti",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pincode": "302001",
+  "notes": "Please pack gift wrap",
+  "couponCode": "NOOR10",
+  "paymentMethod": "cod",
+  "items": [{ "handle": "green-bandhej-maslin-anarkali-suit-set-td-141-copy", "size": "M [38]", "quantity": 1 }]
+}

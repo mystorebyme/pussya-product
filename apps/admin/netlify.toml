@@ -1,0 +1,26 @@
+# Netlify config — admin panel (apps/admin)
+#
+# Netlify UI me doosri site banaiye:
+#   Base directory    : (khaali → repo root)
+#   Package directory : apps/admin
+#
+# `publish` repo root ke hisaab se (base directory = repo root).
+
+[build]
+  command = "npm run build --workspace @noor/admin"
+  publish = "apps/admin/.next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
+  NPM_FLAGS = "--no-audit --no-fund"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Admin kabhi search engine me na aaye
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"

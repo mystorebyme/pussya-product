@@ -1,0 +1,62 @@
+name: Live site check
+
+# Deployed GitHub Pages site par asli HTTP checks (iss runner me internet khulta hai,
+# sandbox se github.io blocked hota hai). Report repo me commit ho jaati hai taaki
+# har run ka proof `docs/09-devops/live-check.md` me rahe.
+#
+#   Actions → Live site check → Run workflow
+#   (workflow_dispatch sirf tab dikhta hai jab ye file default branch par ho, isliye
+#    branch push par bhi chalta hai — report commit par khud ko dobara nahi chalata.)
+
+on:
+  push:
+    branches:
+      - arena/f2c07741-pussya-product
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Site URL"
+        required: false
+        default: "https://mystorebyme.github.io/pussya-product/"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    # report ka apna commit (chore(audit)) loop na banaye
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, 'chore(audit)')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BASE_URL: ${{ inputs.base_url || 'https://mystorebyme.github.io/pussya-product/' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Live checks
+        run: node scripts/audit/live-check.mjs "$BASE_URL" --links=40 --out=docs/09-devops/live-check.md || echo "LIVE_CHECK_FAILED=1" >> "$GITHUB_ENV"
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/09-devops/live-check.md
+          git diff --cached --quiet || git commit -m "chore(audit): live site check report ($BASE_URL)"
+          git push
+
+      - name: Summary
+        run: cat docs/09-devops/live-check.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if checks failed
+        if: env.LIVE_CHECK_FAILED == '1'
+        run: exit 1

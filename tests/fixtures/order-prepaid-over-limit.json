@@ -1,0 +1,11 @@
+{
+  "customerName": "Nisha Verma",
+  "email": "nisha@example.com",
+  "phone": "9812345678",
+  "address": "B-4, Vaishali Nagar, Near Amrapali Circle",
+  "city": "Jaipur",
+  "state": "Rajasthan",
+  "pincode": "302021",
+  "paymentMethod": "prepaid",
+  "items": [{ "handle": "ruhvanya-heavy-wedding-wear-maxi-set", "size": "L [40]", "quantity": 1 }]
+}

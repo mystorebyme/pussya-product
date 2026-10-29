@@ -1,0 +1,55 @@
+name: Cloudflare Worker (storefront)
+
+# Storefront ko Cloudflare Workers par deploy karta hai (vinext build + `cf deploy`).
+#
+# Manual (`workflow_dispatch`) rakha hai — production DNS abhi Vercel par hai, isliye
+# har push par Worker deploy nahi hota. Jab owner Workers par cutover kare, tab
+# `on.push` add kar dein (docs/09-devops/cloudflare-workers.md §7).
+#
+# Zaroori secrets (repo → Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   — Worker deploy permission (Workers Scripts: Edit)
+#   CLOUDFLARE_ACCOUNT_ID  — dashboard → account home → right side "Account ID"
+# Worker ke secrets (DATABASE_URL, ADMIN_API_TOKEN, GOOGLE_SHEETS_*) GitHub me nahi —
+# wo `wrangler secret put` / dashboard se Worker par set hote hain.
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Tests skip karein (sirf deploy karna ho)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: cloudflare-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: build + deploy worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (repo root — npm workspaces)
+        run: npm ci --no-audit --no-fund
+
+      - name: Verify before deploy
+        if: ${{ inputs.skip_tests != true }}
+        run: |
+          npm run typecheck --workspace @noor/web
+          npm run test:unit
+          npm run test:sheets
+
+      # vinext-cloudflare deploy ko apps/web se chalna hota hai (cloudflare.config.ts wahin hai)
+      - name: Deploy to Cloudflare Workers
+        run: SKIP_INSTALL=1 bash scripts/deploy-cloudflare.sh
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

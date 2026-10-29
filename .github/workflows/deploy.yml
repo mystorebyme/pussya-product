@@ -1,0 +1,96 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Kya deploy karna hai"
+        required: true
+        default: all
+        type: choice
+        options: [all, web, admin, api]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Verify before deploy
+        run: |
+          npm run catalog:verify
+          npm run typecheck
+          npm run test:all
+
+      # ───────────────────────────────────────────────────────────────────────
+      # Vercel ke do raaste hain:
+      #   A) Project GitHub se connected hai (recommended) → Vercel khud deploy
+      #      karta hai, is workflow ko token ki zaroorat hi nahi.
+      #   B) Yahan se deploy karna hai → repo secrets me VERCEL_TOKEN,
+      #      VERCEL_ORG_ID, VERCEL_PROJECT_ID_WEB / _ADMIN daaliye.
+      # Token na ho to workflow **fail nahi** hota (red cross se bachne ke liye) —
+      # sirf notice chhod kar aage badh jaata hai.
+      # ───────────────────────────────────────────────────────────────────────
+
+      - name: Deploy storefront (Vercel)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'web' || github.event_name == 'push' }}
+        working-directory: apps/web
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::notice::VERCEL_TOKEN / VERCEL_PROJECT_ID_WEB secret nahi hai — Vercel ki Git integration se deploy hoga (docs/09-devops/vercel-deploy.md). Skip."
+            exit 0
+          fi
+          URL=$(npx vercel deploy --prod --yes --token "$VERCEL_TOKEN" 2>&1 | tee /dev/stderr | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)
+          if [ -n "$URL" ]; then echo "**Storefront:** $URL" >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - name: Deploy admin (Vercel)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'admin' }}
+        working-directory: apps/admin
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::notice::VERCEL_TOKEN / VERCEL_PROJECT_ID_ADMIN secret nahi hai — skip."
+            exit 0
+          fi
+          URL=$(npx vercel deploy --prod --yes --token "$VERCEL_TOKEN" 2>&1 | tee /dev/stderr | grep -Eo 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)
+          if [ -n "$URL" ]; then echo "**Admin:** $URL" >> "$GITHUB_STEP_SUMMARY"; fi
+
+      - name: Trigger API deploy (Render)
+        if: ${{ github.event.inputs.target == 'all' || github.event.inputs.target == 'api' }}
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "::notice::RENDER_DEPLOY_HOOK set nahi hai — API deploy skip."
+            exit 0
+          fi
+          curl -fsS "$RENDER_DEPLOY_HOOK" > /dev/null
+
+      - name: Post-deploy health
+        if: ${{ github.event.inputs.target == 'all' || github.event_name == 'push' }}
+        run: bash infra/monitoring/health.sh || echo "::warning::health check fail — domain/DNS ya env dekh lein"
+        env:
+          WEB_URL: https://noorethnicwear.in
+          ADMIN_URL: https://admin.noorethnicwear.in
+          API_URL: https://api.noorethnicwear.in

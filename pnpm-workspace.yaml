@@ -1,0 +1,4 @@
+# Optional: pnpm use karna ho to yeh file ready hai (default toolchain npm workspaces hai)
+packages:
+  - "apps/*"
+  - "packages/*"
