@@ -5,14 +5,14 @@
   "cdn": "https://cdn.shopify.com/s/files/1/0738/8345/1696/",
   "currency": "INR",
   "moneyUnit": "paise",
-  "builtAt": "2026-10-27T05:04:33.403Z",
+  "builtAt": "2026-10-30T00:05:34.848Z",
   "snapshotAt": "2026-10-24T06:51:35.543Z",
-  "productCount": 446,
+  "productCount": 443,
   "liveProductCount": 287,
-  "extraProductCount": 159,
-  "listedProductCount": 387,
+  "extraProductCount": 156,
+  "listedProductCount": 384,
   "colourGroupCount": 43,
-  "imageCount": 2898
+  "imageCount": 2876
  },
  "collections": [
   {
@@ -21,7 +21,7 @@
    "subtitle": "Freshly dropped festive favourites",
    "image": "https://cdn.shopify.com/s/files/1/0738/8345/1696/files/DSC08096_JPG.jpg",
    "sortOrder": 1,
-   "productCount": 361
+   "productCount": 358
   },
   {
    "handle": "party-wear-gown",
@@ -101,7 +101,7 @@
    "subtitle": "",
    "image": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/IMG_2191.jpg",
    "sortOrder": 101,
-   "productCount": 102
+   "productCount": 99
   }
  ],
  "colourGroups": {
@@ -39057,90 +39057,6 @@
    "publishedAt": "2025-12-04T15:34:31+05:30"
   },
   {
-   "handle": "sona-velvet-royal-elegant-suit-set",
-   "sourceHandle": "sona-velvet-royal-elegant-suit-set",
-   "title": "Sona Velvet Royal Elegant Suit Set",
-   "price": 54900,
-   "compareAtPrice": 183000,
-   "images": [
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2025-11-27at10.38.54AM.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2025-11-27at10.38.57AM.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2025-11-27at10.38.56AM.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2025-11-27at10.38.55AM.jpg"
-   ],
-   "collections": [
-    "new-arrivals",
-    "suit-set-gown"
-   ],
-   "category": "gown",
-   "productType": "suit set",
-   "fabric": "Velvet",
-   "color": "As Shown",
-   "sizes": [
-    "S [36]",
-    "M [38]",
-    "L [40]",
-    "XL [42]",
-    "2XL [44]",
-    "3XL [46]"
-   ],
-   "sizePricing": {
-    "S [36]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    },
-    "M [38]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    },
-    "L [40]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    },
-    "XL [42]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    },
-    "2XL [44]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    },
-    "3XL [46]": {
-     "price": 54900,
-     "compareAtPrice": 183000,
-     "available": true
-    }
-   },
-   "details": [
-    "TOP",
-    "Fabric : Premium Heavy 9000 Velvet with rich embroidery Stitching: Fully stitched for a perfect designer fit",
-    "Top Height: 40 to 41 inches",
-    "Length: 40 inches",
-    "Front Neck: 7 inches",
-    "Back Neck: back less",
-    "Sleeves: Full Embroidered Work Sleeves (21 inches)",
-    "PENT :",
-    "Fabric: Heavy 9000 Velvet with premium embroidery",
-    "Length: 38 inches",
-    "DUPATTA :",
-    "Fabric: Soft, flowing Heavy vichitra Sequins & Zari Thread Embroidery + Heavy Lace Work",
-    "Length: 2.30 meters"
-   ],
-   "description": "TOP Fabric : Premium Heavy 9000 Velvet with rich embroidery Stitching: Fully stitched for a perfect designer fit Top Height: 40 to 41 inches Length: 40 inches Front Neck: 7 inches Back Neck: back less Sleeves: Full Embroidered Work Sleeves (21 inches) PENT : Fabric: Heavy 9000 Velvet with premium embroidery Length: 38 inches DUPATTA : Fabric: Soft, flowing Heavy vichitra Sequins & Zari Thread Embr",
-   "descriptionHtml": "<p><strong>TOP </strong><br><span>Fabric : Premium Heavy 9000 Velvet with rich embroidery Stitching: Fully stitched for a perfect designer fit</span><br><span>Top Height: 40 to 41 inches</span><br><span>Length: 40 inches</span></p>\n<p><span>Front Neck: 7 inches</span><br></p>\n<p><span>Back Neck: back less</span><br></p>\n<p><span>Sleeves: Full Embroidered Work Sleeves (21 inches)</span><br><span><strong>PENT :</strong></span><br></p>\n<p><span>Fabric: Heavy 9000 Velvet with premium embroidery</span><br></p>\n<p><span>Length: 38 inches</span><br><span><strong>DUPATTA :</strong></span><br></p>\n<p><span>Fabric: Soft, flowing Heavy vichitra Sequins &amp; Zari Thread Embroidery + Heavy Lace Work</span><br></p>\n<p><span>Length: 2.30 meters</span><br></p>",
-   "source": "extra",
-   "rating": 0,
-   "reviewCount": 0,
-   "inStock": true,
-   "featured": false,
-   "publishedAt": "2025-11-27T13:03:39+05:30"
-  },
-  {
    "handle": "daisy-purple-designer-embroidered-zari-sequins-work-gown",
    "sourceHandle": "daisy-purple-designer-embroidered-zari-sequins-work-gown",
    "title": "Daisy Purple Designer Embroidered Zari Sequins Work Gown",
@@ -40947,103 +40863,6 @@
    "publishedAt": "2025-07-22T12:01:38+05:30"
   },
   {
-   "handle": "avni-designer-readymade-kurti-plazoo-dupatta-set",
-   "sourceHandle": "avni-designer-readymade-kurti-plazoo-dupatta-set",
-   "title": "Avni Designer Readymade Kurti Palazzo Dupatta Set",
-   "price": 69900,
-   "compareAtPrice": 233000,
-   "images": [
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046023.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046087.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046081.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046082.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046086.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046071.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046065.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046061.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046059.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046057.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046022.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046024.jpg",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6210971092173046020.jpg"
-   ],
-   "collections": [
-    "new-arrivals",
-    "suit-set-gown"
-   ],
-   "category": "anarkali",
-   "productType": "Anarkali suit",
-   "fabric": "Rangoli Silk",
-   "color": "As Shown",
-   "sizes": [
-    "XS [34]",
-    "S [36]",
-    "M [38]",
-    "L [40]",
-    "XL [42]",
-    "2XL [44]",
-    "3XL [46]"
-   ],
-   "sizePricing": {
-    "XS [34]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "S [36]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "M [38]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "L [40]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "XL [42]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "2XL [44]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "3XL [46]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    }
-   },
-   "details": [
-    "TOP:",
-    "FABRIC: Rangoli Silk With Heavy Sequins & Thread Embroidered work",
-    "LENGTH: 52 53",
-    "NECK: Designer Round Neck",
-    "STITCHING: Standard Stitching",
-    "LINING: Micro Cotton (Full Inner Top To Bottom)",
-    "SLEEVES: Full Sleeves [20inches]",
-    "PLAZZO: Fabric & Work: Rangoli Silk With Heavy Sequins & Thread Embroidered work",
-    "Length – 38-42”",
-    "DUPATTA: FABRIC & WORK: Rangoli Silk With Heavy Sequins & Thread Embroidered work",
-    "LENGTH: 2.30 MTR"
-   ],
-   "description": "TOP: FABRIC: Rangoli Silk With Heavy Sequins & Thread Embroidered work LENGTH: 52 53 NECK: Designer Round Neck STITCHING: Standard Stitching LINING: Micro Cotton (Full Inner Top To Bottom) SLEEVES: Full Sleeves [20inches] PLAZZO: Fabric & Work: Rangoli Silk With Heavy Sequins & Thread Embroidered work Length – 38-42” DUPATTA: FABRIC & WORK: Rangoli Silk With Heavy Sequins & Thread Embroidered work",
-   "descriptionHtml": "<p><span>TOP: </span><br><span>FABRIC: Rangoli Silk With Heavy Sequins &amp; Thread Embroidered work</span><br><span>LENGTH: 52 53</span><br><span>NECK: Designer Round Neck</span><br><span>STITCHING: Standard Stitching</span><br><span>LINING: Micro Cotton (Full Inner Top To Bottom)</span><br><span>SLEEVES: Full Sleeves [20inches]</span><br><span>PLAZZO: Fabric &amp; Work: Rangoli Silk With Heavy Sequins &amp; Thread Embroidered work</span><br><span>Length – 38-42”</span><br><span>DUPATTA: FABRIC &amp; WORK: Rangoli Silk With Heavy Sequins &amp; Thread Embroidered work</span><br><span>LENGTH: 2.30 MTR</span><br></p>",
-   "source": "extra",
-   "rating": 0,
-   "reviewCount": 0,
-   "inStock": true,
-   "featured": false,
-   "publishedAt": "2025-07-02T13:26:40+05:30"
-  },
-  {
    "handle": "mustard-premium-quality-anarkali-suit-set",
    "sourceHandle": "mustard-premium-quality-anarkali-suit-set",
    "title": "Mustard Premium Quality Anarkali Suit Set",
@@ -42828,95 +42647,6 @@
    "inStock": true,
    "featured": false,
    "publishedAt": "2024-08-27T20:20:04+05:30"
-  },
-  {
-   "handle": "radiant-dark-maroon-suit-set-ka-1113",
-   "sourceHandle": "radiant-dark-maroon-suit-set-ka-1113",
-   "title": "Radiant Dark Maroon Suit Set",
-   "price": 69900,
-   "compareAtPrice": 233000,
-   "images": [
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/photo_6131790191795488233_y.webp",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/photo_6131790191795488229_y.webp",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/photo_6131790191795488222_y.webp",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/photo_6131790191795488223_y.webp",
-    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/photo_6131790191795488228_y.webp"
-   ],
-   "collections": [
-    "new-arrivals",
-    "suit-set-gown"
-   ],
-   "category": "gown",
-   "productType": "GOWN",
-   "fabric": "Cotton",
-   "color": "Maroon",
-   "sizes": [
-    "XS [34]",
-    "S [36]",
-    "M [38]",
-    "L [40]",
-    "XL [42]",
-    "2XL [44]",
-    "3XL [46]"
-   ],
-   "sizePricing": {
-    "XS [34]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "S [36]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "M [38]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "L [40]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "XL [42]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "2XL [44]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    },
-    "3XL [46]": {
-     "price": 69900,
-     "compareAtPrice": 233000,
-     "available": true
-    }
-   },
-   "details": [
-    "GOWN:",
-    "FABRICS & WORK: Vichitra Shimmer with Rich Sequins Embroidered work",
-    "LENGTH: 56 INCH",
-    "FLAIR: 3.8 MTR",
-    "LINING: Cotton (Full Inner Top To Bottom)",
-    "SLEEVES: Full Sleeves",
-    "NECK TYPE: Fancy V-Neck",
-    "STITCHING TYPE: Stitched with Canvas Patta",
-    "DUPATTA:",
-    "FABRIC & WORK: Vichitra Shimmer with Sequins and Embroidered work and designer lace border.",
-    "LENGTH: 2.3 MTR"
-   ],
-   "description": "GOWN: FABRICS & WORK: Vichitra Shimmer with Rich Sequins Embroidered work LENGTH: 56 INCH FLAIR: 3.8 MTR LINING: Cotton (Full Inner Top To Bottom) SLEEVES: Full Sleeves NECK TYPE: Fancy V-Neck STITCHING TYPE: Stitched with Canvas Patta DUPATTA: FABRIC & WORK: Vichitra Shimmer with Sequins and Embroidered work and designer lace border. LENGTH: 2.3 MTR",
-   "descriptionHtml": "<p>GOWN: <br>FABRICS &amp; WORK: Vichitra Shimmer with Rich Sequins Embroidered work<br>LENGTH: 56 INCH<br>FLAIR: 3.8 MTR <br>LINING: Cotton  (Full Inner Top To Bottom)<br>SLEEVES: Full Sleeves<br>NECK TYPE: Fancy V-Neck<br>STITCHING TYPE: Stitched with Canvas Patta</p>\n<p>DUPATTA: <br>FABRIC &amp; WORK: Vichitra Shimmer with Sequins and Embroidered work and designer lace border.<br>LENGTH: 2.3 MTR</p>",
-   "source": "extra",
-   "rating": 0,
-   "reviewCount": 0,
-   "inStock": true,
-   "featured": false,
-   "publishedAt": "2024-08-23T18:00:02+05:30"
   },
   {
    "handle": "sunheri-fux-georgette-suit-set-6013-7287419895940",
