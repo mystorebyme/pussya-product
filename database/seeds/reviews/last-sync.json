@@ -2,7 +2,7 @@
  "steps": [
   "page-blocked: fetch failed",
   "page: 0 bytes, shop 73883451696",
-  "catalog: 288 product ids, 892 titles, 2898 product images (new sync)",
+  "catalog: 288 product ids, 886 titles, 2876 product images (new sync)",
   "products-with-reviews: 0",
   "probed-endpoints: 18",
   "photo-reviews: 0",
@@ -50,7 +50,7 @@
   "/apps/trustoo/api/v1/reviews/add_review_via_shopify → fetch failed",
   "/apps/trustoo/api/v1/reviews/collect_event → fetch failed"
  ],
- "at": "2026-10-29T05:01:23.357Z",
+ "at": "2026-10-30T00:42:15.288Z",
  "endpointNames": [
   "collect",
   "get_product_list",
