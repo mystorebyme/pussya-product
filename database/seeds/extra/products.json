@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-04T00:46:42.322Z",
+ "fetchedAt": "2026-11-05T00:59:37.562Z",
  "origin": "https://www.thestoreofbufani.com",
  "products": [
   {
@@ -5235,87 +5235,6 @@
     {
      "id": 60861408116868,
      "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6134381938274405412_1.jpg?v=1766739731",
-     "alt": null
-    }
-   ]
-  },
-  {
-   "id": 10188239339652,
-   "title": "Nithya Lehenga Sharara Suit Set",
-   "handle": "nithya-lehenga-sharara-suit-set",
-   "body_html": "<p><span>GOWN :- </span><br><span>FABRIC &amp; WORK:- Fandy with Embroidery Zari with Codding Sequins-work</span><br><span>LINING:-Cotton (Full Inner Top To Bottom)</span><br><span>SLEEVE:-3/4 </span><br><br><span>LENGHA: Fabric – Fandy with Embroidery Zari with Codding Sequins-work</span><br><br><br><span>DUPATTA :-</span><br><span>FABRIC :- Fandy Embroidered Zari with Codding Sequins-work</span><br><span>Length:- 2.20MTR</span><br></p>",
-   "published_at": "2025-12-15T17:43:39+05:30",
-   "created_at": "2025-12-15T17:43:38+05:30",
-   "vendor": "The Store Of Bufani",
-   "product_type": "LEHENGA CHOLI",
-   "tags": [
-    "Anarkali",
-    "Best Seller",
-    "Festive",
-    "GOWN",
-    "NEW"
-   ],
-   "variants": [
-    {
-     "option1": "S",
-     "price": "2799.00",
-     "compare_at_price": "8999.00",
-     "available": true,
-     "sku": null,
-     "image": null
-    },
-    {
-     "option1": "M",
-     "price": "2799.00",
-     "compare_at_price": "8999.00",
-     "available": true,
-     "sku": null,
-     "image": null
-    },
-    {
-     "option1": "L",
-     "price": "2799.00",
-     "compare_at_price": "8999.00",
-     "available": true,
-     "sku": null,
-     "image": null
-    },
-    {
-     "option1": "XL",
-     "price": "2799.00",
-     "compare_at_price": "8999.00",
-     "available": true,
-     "sku": null,
-     "image": null
-    },
-    {
-     "option1": "2XL",
-     "price": "2799.00",
-     "compare_at_price": "8999.00",
-     "available": true,
-     "sku": null,
-     "image": null
-    }
-   ],
-   "images": [
-    {
-     "id": 60758103654532,
-     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6181664344177839116.jpg?v=1765800669",
-     "alt": null
-    },
-    {
-     "id": 60758103687300,
-     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6181664344177839115.jpg?v=1765800669",
-     "alt": null
-    },
-    {
-     "id": 60758103720068,
-     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6181664344177839113.jpg?v=1765800669",
-     "alt": null
-    },
-    {
-     "id": 60758103752836,
-     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/6181664344177839114.jpg?v=1765800669",
      "alt": null
     }
    ]
