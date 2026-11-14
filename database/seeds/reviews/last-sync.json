@@ -50,7 +50,7 @@
   "/apps/trustoo/api/v1/reviews/add_review_via_shopify → fetch failed",
   "/apps/trustoo/api/v1/reviews/collect_event → fetch failed"
  ],
- "at": "2026-11-13T01:44:26.799Z",
+ "at": "2026-11-14T01:21:31.279Z",
  "endpointNames": [
   "collect",
   "get_product_list",
