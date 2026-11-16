@@ -50,7 +50,7 @@
   "/apps/trustoo/api/v1/reviews/reviews → fetch failed",
   "/apps/trustoo/api/v1/reviews/get_review → fetch failed"
  ],
- "at": "2026-11-15T00:54:28.313Z",
+ "at": "2026-11-16T00:52:47.232Z",
  "endpointNames": [
   "get_product_reviews",
   "get_reviews",
