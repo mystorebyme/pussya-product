@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-25T03:39:33.702Z",
+ "fetchedAt": "2026-11-26T02:58:20.727Z",
  "origin": "https://www.thestoreofbufani.com",
  "products": [
   {
@@ -6456,7 +6456,7 @@
    "variants": [
     {
      "option1": "XS [34]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6464,7 +6464,7 @@
     },
     {
      "option1": "S [36]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6472,7 +6472,7 @@
     },
     {
      "option1": "M [38]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6480,7 +6480,7 @@
     },
     {
      "option1": "L [40]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6488,7 +6488,7 @@
     },
     {
      "option1": "XL [42]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6496,7 +6496,7 @@
     },
     {
      "option1": "2XL [44]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6504,7 +6504,7 @@
     },
     {
      "option1": "3XL [46]",
-     "price": "2799.00",
+     "price": "2999.00",
      "compare_at_price": "5999.00",
      "available": true,
      "sku": "KNB103",
@@ -6512,6 +6512,11 @@
     }
    ],
    "images": [
+    {
+     "id": 62827156406404,
+     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/fca7f4e9-4be3-4f2a-b08e-00c85a7621a7.jpg?v=1786016407",
+     "alt": null
+    },
     {
      "id": 62827156242564,
      "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/e1ce7c12-03f2-480c-9c02-3027c85fdb6b.jpg?v=1786016407",
@@ -6535,11 +6540,6 @@
     {
      "id": 62827156373636,
      "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/5f47009b-4bc4-4d9f-bf63-e89cc85165e7.jpg?v=1786016407",
-     "alt": null
-    },
-    {
-     "id": 62827156406404,
-     "src": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/fca7f4e9-4be3-4f2a-b08e-00c85a7621a7.jpg?v=1786016407",
      "alt": null
     },
     {
