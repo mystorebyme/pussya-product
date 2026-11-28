@@ -5,14 +5,14 @@
   "cdn": "https://cdn.shopify.com/s/files/1/0738/8345/1696/",
   "currency": "INR",
   "moneyUnit": "paise",
-  "builtAt": "2026-11-27T03:03:34.994Z",
+  "builtAt": "2026-11-28T02:52:42.400Z",
   "snapshotAt": "2026-10-24T06:51:35.543Z",
-  "productCount": 442,
+  "productCount": 443,
   "liveProductCount": 287,
-  "extraProductCount": 155,
-  "listedProductCount": 383,
+  "extraProductCount": 156,
+  "listedProductCount": 384,
   "colourGroupCount": 43,
-  "imageCount": 2872
+  "imageCount": 2876
  },
  "collections": [
   {
@@ -21,7 +21,7 @@
    "subtitle": "Freshly dropped festive favourites",
    "image": "https://cdn.shopify.com/s/files/1/0738/8345/1696/files/DSC08096_JPG.jpg",
    "sortOrder": 1,
-   "productCount": 357
+   "productCount": 358
   },
   {
    "handle": "party-wear-gown",
@@ -101,7 +101,7 @@
    "subtitle": "",
    "image": "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/IMG_2191.jpg",
    "sortOrder": 101,
-   "productCount": 98
+   "productCount": 99
   }
  ],
  "colourGroups": {
@@ -36148,6 +36148,97 @@
    "publishedAt": "2026-09-08T17:18:48+05:30",
    "colourGroup": "peacock-design-heavy-traditional-crop-top-with-shrug",
    "colourName": "Sky Blue"
+  },
+  {
+   "handle": "zunaira-heavy-wedding-wear-anarkali-suit-set",
+   "sourceHandle": "zunaira-heavy-wedding-wear-anarkali-suit-set",
+   "title": "Zunaira Heavy Wedding Wear Anarkali Suit Set",
+   "price": 54900,
+   "compareAtPrice": 183000,
+   "images": [
+    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2026-11-13at5.14.33PM_1_1.webp",
+    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2026-11-13at5.14.32PM_1.webp",
+    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2026-11-13at5.14.31PM_1_1.webp",
+    "https://cdn.shopify.com/s/files/1/0343/4558/2724/files/WhatsAppImage2026-11-13at5.14.31PM_2.webp"
+   ],
+   "collections": [
+    "new-arrivals",
+    "suit-set-gown"
+   ],
+   "category": "anarkali",
+   "productType": "Anarkali suit",
+   "fabric": "Cotton",
+   "color": "As Shown",
+   "sizes": [
+    "XS [34]",
+    "S [36]",
+    "M [38]",
+    "L [40]",
+    "XL [42]",
+    "2XL [44]",
+    "3XL [46]"
+   ],
+   "sizePricing": {
+    "XS [34]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "S [36]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "M [38]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "L [40]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "XL [42]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "2XL [44]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    },
+    "3XL [46]": {
+     "price": 54900,
+     "compareAtPrice": 183000,
+     "available": true
+    }
+   },
+   "details": [
+    "Product Details",
+    "Color Disclaimer:",
+    "Please that a 5–6% color variation may occur due to differences in screen resolution, lighting, and photography.",
+    "Kurta Details",
+    "Fabric: Heavy Embroidered Crepe",
+    "Inner: Soft Micro Cotton",
+    "Work: Intricate Thread & Sequin Embroidery with Position Print",
+    "Style: Slit Anarkali Pattern with a Flowy Silhouette",
+    "Length: 50 Inches",
+    "Front Neck: 7 Inches",
+    "Back Neck: 10 Inches",
+    "Sleeves: Sleeve Lass",
+    "Pant Details",
+    "Fabric: Micro Cotton"
+   ],
+   "description": "Product Details Color Disclaimer: Please that a 5–6% color variation may occur due to differences in screen resolution, lighting, and photography. Kurta Details Fabric: Heavy Embroidered Crepe Inner: Soft Micro Cotton Work: Intricate Thread & Sequin Embroidery with Position Print Style: Slit Anarkali Pattern with a Flowy Silhouette Length: 50 Inches Front Neck: 7 Inches Back Neck: 10 Inches Sleeve",
+   "descriptionHtml": "<p> <strong>Product Details</strong></p>\n<p><strong>Color Disclaimer:</strong><br>Please that a 5–6% color variation may occur due to differences in screen resolution, lighting, and photography.</p>\n<h3> Kurta Details</h3>\n<ul>\n<li>\n<p><strong>Fabric:</strong>Heavy Embroidered Crepe</p>\n</li>\n<li>\n<p><strong>Inner:</strong>Soft Micro Cotton</p>\n</li>\n<li>\n<p><strong>Work:</strong>Intricate Thread &amp; Sequin Embroidery with Position Print</p>\n</li>\n<li>\n<p><strong>Style:</strong>Slit Anarkali Pattern with a Flowy Silhouette</p>\n</li>\n<li>\n<p><strong>Length:</strong>50 Inches</p>\n</li>\n<li>\n<p><strong>Front Neck:</strong>7 Inches</p>\n</li>\n<li>\n<p><strong>Back Neck:</strong>10 Inches</p>\n</li>\n<li>\n<p><strong>Sleeves:</strong><span>Sleeve Lass</span><br> Pant Details</p>\n</li>\n</ul>\n<ul>\n<li>\n<p><strong>Fabric:</strong>Micro Cotton</p>\n</li>\n<li>\n<p><strong>Length:</strong>38 Inches</p>\n</li>\n<li>\n<p><strong>Fit:</strong>Fully Stitched with a Comfortable Finish</p>\n</li>\n</ul>\n<h3> Additional Information</h3>\n<ul>\n<li>\n<p><strong>Care:</strong>Dry Clean Only</p>\n</li>\n<li>\n<p><strong>Shipping Information:</strong>1/3 days</p>\n</li>\n<li>\n<p><strong>Model Height:</strong>5'5\"</p>\n</li>\n<li>\n<p><strong>Model Is Wearing:</strong>S Size</p>\n</li>\n</ul>\n<p> <strong>Style:</strong><br>A stunning choice for weddings, festive celebrations, receptions, parties, and other special occasions. The elegant slit Anarkali silhouette, intricate thread and sequin embroidery, and beautiful position print create a rich and sophisticated ethnic look.</p>",
+   "source": "extra",
+   "rating": 0,
+   "reviewCount": 0,
+   "inStock": true,
+   "featured": false,
+   "publishedAt": "2026-11-27T13:09:06+05:30"
   },
   {
    "handle": "mita-heavy-traditional-embroidered-koti-anarkali-suit-set-15399230865540",
